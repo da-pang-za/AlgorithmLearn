@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.*;
+
 class AllOne {
     public static void main(String[] args) {
         AllOne allOne=new AllOne();
