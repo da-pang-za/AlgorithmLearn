@@ -1,9 +1,9 @@
-package com.company;
+package com.dpz;
 
+
+import com.dpz.leetcode.Solution;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 

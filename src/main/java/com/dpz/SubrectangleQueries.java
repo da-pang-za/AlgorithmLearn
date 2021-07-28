@@ -1,4 +1,4 @@
-package com.company;
+package com.dpz;
 
 class SubrectangleQueries {
     //可变矩阵

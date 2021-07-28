@@ -1,4 +1,4 @@
-package com.company;
+package com.dpz;
 
 //你可以将以下二叉树：
 //
@@ -10,8 +10,6 @@ package com.company;
 //
 //        序列化为 "[1,2,3,null,null,4,5]"
 
-
-import com.company.Solution.TreeNode;
 
 import java.util.Deque;
 import java.util.LinkedList;

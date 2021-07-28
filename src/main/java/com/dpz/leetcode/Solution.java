@@ -1,5 +1,4 @@
-package com.company;
-
+package com.dpz.leetcode;
 
 import java.util.*;
 
@@ -2709,7 +2708,7 @@ class Solution {
     // 例如，行程 ["JFK", "LGA"] 与 ["JFK", "LGB"] 相比就更小，排序更靠前
     //所有机票必须且只能用一次
     //@官方题解  nb!
-    Map<String, PriorityQueue<String>> map332 = new HashMap<String, PriorityQueue<String>>();
+    Map<String, PriorityQueue<String>> map332 = new HashMap<>();
     List<String> itinerary = new LinkedList<String>();
 
     public List<String> findItinerary(List<List<String>> tickets) {

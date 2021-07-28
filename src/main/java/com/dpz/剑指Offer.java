@@ -1,7 +1,6 @@
-package com.company;
+package com.dpz;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class 剑指Offer {
     static 剑指Offer offer=new 剑指Offer();

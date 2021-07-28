@@ -1,4 +1,4 @@
-package com.company;
+package com.dpz;
 public class WordDictionary {
     private boolean is_string=false;
     private WordDictionary next[]=new WordDictionary[26];

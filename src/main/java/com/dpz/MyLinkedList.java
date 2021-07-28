@@ -1,4 +1,4 @@
-package com.company;
+package com.dpz;
 class MyLinkedList {
 
     int val;

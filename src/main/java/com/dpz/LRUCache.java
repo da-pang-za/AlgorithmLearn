@@ -1,6 +1,4 @@
-package com.company;
-
-import org.w3c.dom.Node;
+package com.dpz;
 
 import java.util.HashMap;
 class LRUCache {
