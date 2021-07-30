@@ -1,8 +1,10 @@
 package com.company;
 
-import org.w3c.dom.Node;
-
 import java.util.HashMap;
+
+/**
+ * 新节点加到头   淘汰尾结点
+ */
 class LRUCache {
 
     public static void main(String[] args) {
