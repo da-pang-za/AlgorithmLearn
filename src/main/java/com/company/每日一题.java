@@ -1,9 +1,6 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class 每日一题 {
 //1104. 二叉树寻路
@@ -21,5 +18,20 @@ public class 每日一题 {
         //非之字顺序 父节点：x/2 向下取整
         Collections.reverse(list);
         return list;
+    }
+    //171. Excel 表列序号
+    public int titleToNumber(String columnTitle) {
+        HashMap<Character,Integer> map=new HashMap<>();
+        int j=1;
+        for(char i='A';i<='Z';i++,j++){
+            map.put(i,j);
+        }
+        int res=0;
+        for(char c:columnTitle.toCharArray()){
+            res=26*res+map.get(c);
+        }
+        return res;
+
+
     }
 }
