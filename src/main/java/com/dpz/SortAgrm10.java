@@ -78,13 +78,13 @@ public class SortAgrm10 {
     }
 
     //堆排序  选择升级版   通过堆的方式选择最大元素 不稳定
-    //大顶堆  一棵树  最大元素是第一个  拿下来放到最后  在此元素之前维护大顶堆
+    //大顶堆  一棵完全二叉树  最大元素是第一个  拿下来放到最后  在此元素之前维护大顶堆
     //int index = nums.length / 2 - 1;//最后一个有子节点的节点   //2个  3个元素 都返回下标0
     void HeapSort(int[] nums) {
 
         //1.构建大顶堆
         int index = nums.length / 2 - 1;//最后一个有子节点的节点   //2个  3个元素 都返回下标0
-        //下沉建堆  判断是否比子元素小
+        //下沉建堆  判断是否比子元素小  todo  这里从小到大或者从大到小应该都行   从大到小 下沉的比较少
         for (; index >= 0; index--) {
             down(nums, index, nums.length);
         }
@@ -107,7 +107,7 @@ public class SortAgrm10 {
             int son = index * 2 + 1;
             //子节点较大的
             if (son + 1 < len && nums[son] < nums[son + 1]) son++;
-            //交换
+            //交换 大的放上面
             if (nums[index] < nums[son]) {
                 swap(nums, index, son);
 
