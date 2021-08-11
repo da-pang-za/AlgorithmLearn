@@ -3,6 +3,12 @@ package com.dpz.leetcode;
 import java.util.*;
 
 public class 每日一题 {
+
+    public static void main(String[] args) {
+        每日一题 solution = new 每日一题();
+        solution.numberOfArithmeticSlices(new int[]{0,2000000000,-294967296});
+    }
+
     //847. 访问所有节点的最短路径
     public int shortestPathLength(int[][] graph) {
         int n = graph.length;
@@ -125,5 +131,40 @@ public class 每日一题 {
         return res;
 
 
+    }
+
+    public int numberOfArithmeticSlices(int[] nums) {
+        //差为d
+        int n = nums.length;
+        List<HashMap<Long, List<Long>>> dp = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            dp.add(new HashMap<>());
+        }
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            HashMap<Long, List<Long>> mapi = dp.get(i);
+            for (int j = 0; j < i; j++) {
+                HashMap<Long, List<Long>> mapj = dp.get(j);
+
+                long d = (long) nums[i] - nums[j];
+                if (!mapi.containsKey(d)) {
+                    mapi.put(d, new ArrayList<>());
+                }
+                mapi.get(d).add(1L);
+                if (mapj.containsKey(d)) {
+                    List<Long> list = mapj.get(d);
+                    for (Long len : list) {
+                        mapi.get(d).add(len + 1);
+                        ans++;
+
+
+                    }
+                }
+
+
+            }
+
+        }
+        return ans;
     }
 }
