@@ -8,6 +8,9 @@ import java.util.*;
  * 重点题目
  */
 public class Solution0725 {
+    public static void main(String[] args) {
+        Solution0725 solution=new Solution0725();
+    }
 
     //42.接雨水
     public int trap(int[] height) {
@@ -105,4 +108,5 @@ public class Solution0725 {
 
 
     }
+
 }
