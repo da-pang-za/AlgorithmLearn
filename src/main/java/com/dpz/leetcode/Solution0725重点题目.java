@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * 重点题目
  */
-public class Solution0725 {
+public class Solution0725重点题目 {
 
     //42.接雨水
     public int trap(int[] height) {
