@@ -8,9 +8,8 @@ import java.util.*;
  * 重点题目
  */
 public class Solution0725重点题目 {
-public class Solution0725 {
     public static void main(String[] args) {
-        Solution0725 solution=new Solution0725();
+        Solution0725重点题目 solution=new Solution0725重点题目();
     }
 
     //42.接雨水
