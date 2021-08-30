@@ -2,7 +2,7 @@ package com.dpz.leetcode;
 
 import java.util.*;
 
-class Solution {
+public class Solution {
 
 
     public String multiply1(String num1, String num2) {

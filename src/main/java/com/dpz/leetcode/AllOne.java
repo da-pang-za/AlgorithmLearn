@@ -1,4 +1,4 @@
-package com.dpz;
+package com.dpz.leetcode;
 
 import java.util.*;
 
