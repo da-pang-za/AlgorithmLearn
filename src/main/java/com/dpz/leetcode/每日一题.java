@@ -167,4 +167,28 @@ public class 每日一题 {
         }
         return ans;
     }
+
+    //https://leetcode-cn.com/problems/ipo/
+    //502 IPO  银行家算法
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital){
+        int n = profits.length;
+        List<int[]> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(new int[]{capital[i], profits[i]});
+        }
+        //list根据cap排序  即 启动资金
+        Collections.sort(list,(a,b)->(a[0]-b[0]));
+        //堆 利润大的在上面
+        PriorityQueue<Integer>queue=new PriorityQueue<>((a,b)-> b-a);
+        int i=0;
+        while(k-->0){
+            while(i<n&&list.get(i)[0]<=w){
+                queue.add(list.get(i++)[1]);
+            }
+            if (queue.isEmpty())break;
+            w+=queue.poll();
+        }
+        return w;
+
+    }
 }
