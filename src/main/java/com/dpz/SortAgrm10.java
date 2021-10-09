@@ -111,7 +111,7 @@ public class SortAgrm10 {
         for (; index >= 0; index--) {
             down(nums, index, nums.length);
         }
-        //n次(n-1)操作 把根元素和最后一个位置交换
+        //i为要交换的位置   位置0不用交换所以是i>0
         for (int i = nums.length - 1; i > 0; i--) {
             swap(nums, 0, i);
             //维护大顶堆
@@ -126,7 +126,7 @@ public class SortAgrm10 {
      */
     void down(int[] nums, int index, int len) {
 
-        while (index * 2 + 1 < len) {
+        while (index * 2 + 1 < len) { //首先判断是否有子节点  有子节点才能下沉
             int son = index * 2 + 1;
             //子节点较大的
             if (son + 1 < len && nums[son] < nums[son + 1]) son++;

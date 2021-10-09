@@ -6,7 +6,28 @@ public class 每日一题 {
 
     public static void main(String[] args) {
         每日一题 solution = new 每日一题();
-        solution.numberOfArithmeticSlices(new int[]{0,2000000000,-294967296});
+//        solution.numberOfArithmeticSlices(new int[]{0,2000000000,-294967296});
+    solution.minSteps(555);
+    }
+
+    static int N=1000;
+    static int[]res=new int[N+1];
+    static{
+        for (int i = 0; i <=N ; i++) {
+            res[i]=i;
+        }
+        res[0]=0;res[1]=0;
+        for(int i=2;i<=N;i++){
+            //i的倍数
+            int base=res[i]+1;//copy
+            for(int k=2;i*k<=N;k++){
+                res[i*k]=Math.min(res[i*k],base+k-1);
+            }
+        }
+    }
+
+    public int minSteps(int n) {
+        return res[n];
     }
 
     //847. 访问所有节点的最短路径
