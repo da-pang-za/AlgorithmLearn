@@ -5,46 +5,45 @@ import com.dpz.dataStructure.TreeNode;
 import java.util.*;
 
 class Solution {
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        solution.verticalTraversal(new TreeNode(0));
-    }
-    int minleft=0;
-    int maxright=0;
-    Map<Integer,List<TreeNode>> map=new HashMap<>();//x-axis,node
-    Map<TreeNode,Integer>nodeDepth=new HashMap<>();
-    public List<List<Integer>> verticalTraversal(TreeNode root) {
-        List<List<Integer>>ans=new ArrayList<>();
-        //node:depth val
-        initMap(root,0,0);
-        for(int i=minleft;i<=maxright;i++){
-            List<TreeNode>xList=map.get(i);
-            //Collections.sort(xList,(a, b)->{
-            xList.sort((a, b) -> {
-                int depthA = nodeDepth.get(a);
-                int depthB = nodeDepth.get(b);
-                //second val
-                if (depthA == depthB) {
-                    return a.val - b.val;
-                }
-                //first depth
-                return depthA - depthB;
-            });
-            List<Integer> result=new ArrayList<>();
-            for(TreeNode node:xList){
-                result.add(node.val);
-            }
-            ans.add(result);
+    public int[] findRedundantConnection(int[][] edges) {
+        //正常：两顶点在不同图(group/leader)上    可能有一个点不在当前任何图上
+        UnionFind unionFind = new UnionFind(2*edges.length);//所有点都不同则有2e个点
+        for (int[] edge : edges) {
+            //注意顶点值从1开始
+           int a= unionFind.find(edge[0]-1);
+           int b= unionFind.find(edge[1]-1);
+            if(a==b )return edge;
+            unionFind.union(a,b);
         }
-        return ans;
+        return null;//never run
     }
-    void initMap(TreeNode root,int x,int depth){
-        if(root==null)return ;
-        nodeDepth.put(root,depth);
-        map.getOrDefault(x,new ArrayList<>()).add(root);
-        if(minleft>x)minleft=x;
-        if(maxright<x)maxright=x;
-        initMap(root.left,x-1,depth+1);
-        initMap(root.right,x+1,depth+1);
+
+    private class UnionFind {
+
+        private int[] parent;
+
+
+        public UnionFind(int n) {
+            this.parent = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+            }
+        }
+
+        public int find(int x) {
+            while (x != parent[x]) {
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+            return x;
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            parent[rootX] = rootY;
+
+        }
     }
+
 }
