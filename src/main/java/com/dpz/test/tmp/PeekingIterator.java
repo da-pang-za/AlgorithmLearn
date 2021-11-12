@@ -7,6 +7,7 @@ import java.util.List;
 class PeekingIterator implements Iterator<Integer> {
 
     List<Integer> list=new ArrayList<>();
+
     int index=0;
     public PeekingIterator(Iterator<Integer> iterator) {
         // initialize any member here.
