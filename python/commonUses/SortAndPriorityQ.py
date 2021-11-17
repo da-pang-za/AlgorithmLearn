@@ -1,6 +1,8 @@
 import heapq
 from typing import List
-#1834. 单线程 CPU
+
+
+# 1834. 单线程 CPU
 class Solution:
     def getOrder(self, tasks: List[List[int]]) -> List[int]:
         n = len(tasks)
@@ -33,4 +35,4 @@ class Solution:
 
 if __name__ == '__main__':
     solution = Solution()
-    print(solution.getOrder([[1,2],[2,4],[3,2],[4,1]]))
+    print(solution.getOrder([[1, 2], [2, 4], [3, 2], [4, 1]]))
