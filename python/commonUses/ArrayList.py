@@ -22,8 +22,6 @@ class Solution88:
         nums1.sort()  # 数组排序
 
 
-# 自定义排序 todo
-
 # 179 最大数
 class Solution179:
     def largestNumber(self, nums: List[int]) -> str:
@@ -41,20 +39,23 @@ class Solution179:
         return ''.join(strs) if strs[0] != '0' else '0'
 
 
-#  todo 自定义排序 此处不对
+# 自定义排序
+# https://blog.csdn.net/song_wheaver/article/details/10933634
 print("==自定义排序==")
 nums = [_ for _ in range(1, 9)]
 print(nums)
 
 
-# def mycmp(a, b):
-#     if a<b:
-#         return 1
-#     return -1
-#
-#
-# sorted(nums, key=functools.cmp_to_key(mycmp))
-# print(nums)
+def mycmp(a, b):
+    return b - a
+
+
+# 以下几句效果相同
+nums.sort(key=functools.cmp_to_key(mycmp))  # 定义复杂排序
+# nums.sort(key=lambda i: -i)
+# nums.sort(reverse=True)
+print(nums)
+
 
 # list操作
 # 全排列II

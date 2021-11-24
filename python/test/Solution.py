@@ -1,19 +1,33 @@
-class Solution:
-    def kInversePairs(self, n: int, k: int) -> int:
-        mod: int = 10 ** 9 + 7
-        dp = [[0 for _ in range(k + 1)] for _ in range(n + 1)]
-        sums = [[0 for _ in range(k + 1)] for _ in range(n + 1)]
-        for i in range(1,n + 1):
-            dp[i][0] = 1
-            sums[i][0] = 1
-            for j in range(1,k + 1):
-                if j - i >= 0:
-                    dp[i][j] = (sums[i - 1][j] - sums[i - 1][j - i] + mod) % mod
-                else:
-                    dp[i][j] = sums[i - 1][j]
-                sums[i][j] = (dp[i][j] + sums[i][j - 1]) % mod
-        return dp[n][k]
+import collections
+import heapq
+import math
+import random
+from typing import List
 
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.kInversePairs(5,7))
+from dataStructure.common import ListNode
+
+
+class Solution:
+    def maxNumber(self, nums1, nums2, k):
+        #数组取k个(顺序不变)的最大值
+        def pick_max(nums, k):
+            stack = []
+            drop = len(nums) - k
+            for num in nums:
+                while drop and stack and stack[-1] < num:
+                    stack.pop()
+                    drop -= 1
+                stack.append(num)
+            return stack[:k]
+
+        def merge(A, B):
+            ans = []
+            while A or B:
+                bigger = A if A > B else B
+                ans.append(bigger[0])
+                bigger.pop(0)
+            return ans
+
+        return max(merge(pick_max(nums1, i), pick_max(nums2, k-i))\
+                   for i in range(k+1) if i <= len(nums1) and k-i <= len(nums2))
+

@@ -1,6 +1,8 @@
-# 浮点数 TODO
+# TODO 浮点数
 
 # max min  支持任意参数个数
+import math
+import random
 from collections import defaultdict
 from typing import List
 
@@ -44,3 +46,20 @@ class Solution318:
                         ans = max(d[other] * len(w), ans)
                 d[h] = len(w)
         return ans
+
+
+# 随机
+# 整数random.randint(1, 3) [1,3]
+list = [random.randint(1, 3) for _ in range(59)]
+print(list)
+# 浮点
+random.random()  # [0.0, 1.0)
+random.uniform(0, 1)  # [0,1]
+
+print([i for i in range(1, 3)])  # [1,3)
+print([i for i in range(3, 1, -1)])  # (1,3]
+
+# 逻辑
+f = False
+f |= True
+print(f)

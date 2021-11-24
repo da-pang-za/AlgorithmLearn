@@ -1,11 +1,12 @@
 # BFS
 
 # 407. 接雨水 II
+import collections
 import heapq
 from typing import List
 
 
-# 接雨水II  dijkstra
+# 接雨水II  dijkstra   优先队列
 class Solution407:
     def trapRainWater(self, heightMap: List[List[int]]) -> int:
         m, n, ans = len(heightMap), len(heightMap[0]), 0
@@ -28,3 +29,56 @@ class Solution407:
                     ans += max(0, h - heightMap[nx][ny])
                     heapq.heappush(pq, (max(h, heightMap[nx][ny]), nx, ny))
         return ans
+
+
+# stack
+
+class Solution946(object):
+    def validateStackSequences(self, pushed, popped):
+        j = 0
+        stack = []
+        for x in pushed:
+            stack.append(x)
+            while stack and j < len(popped) and stack[-1] == popped[j]:
+                stack.pop()
+                j += 1
+
+        return j == len(popped)
+
+
+# deque
+class MyStack:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.queue1 = collections.deque()
+        self.queue2 = collections.deque()
+
+    def push(self, x: int) -> None:
+        """
+        Push element x onto stack.
+        """
+        self.queue2.append(x)
+        while self.queue1:
+            self.queue2.append(self.queue1.popleft())
+        self.queue1, self.queue2 = self.queue2, self.queue1
+
+    def pop(self) -> int:
+        """
+        Removes the element on top of the stack and returns that element.
+        """
+        return self.queue1.popleft()
+
+    def top(self) -> int:
+        """
+        Get the top element.
+        """
+        return self.queue1[0]
+
+    def empty(self) -> bool:
+        """
+        Returns whether the stack is empty.
+        """
+        return not self.queue1
