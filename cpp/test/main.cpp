@@ -1,189 +1,183 @@
 
-#include <stdlib.h>
-#include <time.h>
-#include <iostream>
-#include <map>
 
-using namespace std;
-
-class Node {
-public:
-    int key;
-    int value;
-    Node *next, *prev;
-
-    Node(int k, int v) {
-        key = k;
-        value = v;
-        next = prev = NULL;
-    }
-    //Node(int k, int v, Node* n=NULL, Node* p=NULL): key(k), value(v), next(n), prev(p) {}
-};
-
-// the following double linked list seems a bit commplicated.
-class DoubleLinkedList {
-
-private:
-
-    Node *pHead, *pTail;
-    int size;
-
-
-public:
-
-    DoubleLinkedList() {
-        pHead = pTail = NULL;
-        size = 0;
-    }
-
-    ~DoubleLinkedList() {
-        while (pHead != NULL) {
-            Node *p = pHead;
-            pHead = pHead->next;
-            delete p;
-        }
-    }
-
-    int Size() const {
-        return size;
-    }
-
-    Node *NewAtBegin(int key, int value) {
-        Node *n = new Node(key, value);
-        return AddAtBegin(n);
-    }
-
-    Node *NewAtEnd(int key, int value) {
-        Node *n = new Node(key, value);
-        return AddAtEnd(n);
-    }
-
-    Node *AddAtBegin(Node *n) {
-        size++;
-
-        if (pHead == NULL) {
-            pHead = pTail = n;
-            return n;
-        }
-
-        n->next = pHead;
-        n->prev = NULL;
-        pHead->prev = n;
-        pHead = n;
-        return n;
-    }
-
-    Node *AddAtEnd(Node *n) {
-        size++;
-
-        if (pHead == NULL) {
-            pHead = pTail = n;
-            return n;
-        }
-
-        pTail->next = n;
-        n->prev = pTail;
-        n->next = NULL;
-        pTail = n;
-    }
-
-    void Unlink(Node *n) {
-        Node *before = n->prev;
-        Node *after = n->next;
-
-        if (before) {
-            before->next = after;
-        }
-
-        if (after) {
-            after->prev = before;
-        }
-
-        if (pHead == n) {
-            pHead = pHead->next;
-        } else if (pTail == n) {
-            pTail = pTail->prev;
-        }
-
-        size--;
-    }
-
-    void Delete(Node *n) {
-        Unlink(n);
-        delete n;
-    }
-
-    void TakeToBegin(Node *n) {
-        Unlink(n);
-        AddAtBegin(n);
-    }
-
-    Node *GetTailNode() {
-        return pTail;
-    }
-
-    void DeleteLast() {
-        Delete(pTail);
-    }
-
-    void Print() {
-        Node *p = pHead;
-        while (p != NULL) {
-            cout << "(" << p->key << "," << p->value << ") ";
-            p = p->next;
-        }
-        cout << endl;
-    }
-};
-
-
-class LRUCache {
-
-private:
-    //cacheList - store the date
-    DoubleLinkedList cacheList;
-    //cacheMap - index the date for searching
-    map<int, Node *> cacheMap;
-    //the max capcity of cache
-    int capacity;
-
-public:
-    LRUCache(int capacity) {
-        this->capacity = capacity;
-    }
-
-    void print() {
-        cacheList.Print();
-    }
-
-    int get(int key) {
-        // The accessed node must be up-to-time -- take to the front
-        if (cacheMap.find(key) != cacheMap.end()) {
-            cacheList.TakeToBegin(cacheMap[key]);
-            return cacheMap[key]->value;
-        }
-        return -1;
-
-    }
-
-    void set(int key, int value) {
-        // key found, update the data, and take to the front
-        if (cacheMap.find(key) != cacheMap.end()) {
-            Node *p = cacheMap[key];
-            p->value = value;
-            cacheList.TakeToBegin(cacheMap[key]);
-        } else {
-            // key not found, new a node to store data
-            cacheMap[key] = cacheList.NewAtBegin(key, value);
-            // if the capacity exceed, remove the last one.
-            if (cacheList.Size() > capacity) {
-                int key = cacheList.GetTailNode()->key;
-                cacheMap.erase(key);
-                cacheList.DeleteLast();
-            }
-        }
-    }
-};
+//class Node {
+//public:
+//    int key;
+//    int value;
+//    Node *next, *prev;
+//
+//    Node(int k, int v) {
+//        key = k;
+//        value = v;
+//        next = prev = NULL;
+//    }
+//    //Node(int k, int v, Node* n=NULL, Node* p=NULL): key(k), value(v), next(n), prev(p) {}
+//};
+//
+//// the following double linked list seems a bit commplicated.
+//class DoubleLinkedList {
+//
+//private:
+//
+//    Node *pHead, *pTail;
+//    int size;
+//
+//
+//public:
+//
+//    DoubleLinkedList() {
+//        pHead = pTail = NULL;
+//        size = 0;
+//    }
+//
+//    ~DoubleLinkedList() {
+//        while (pHead != NULL) {
+//            Node *p = pHead;
+//            pHead = pHead->next;
+//            delete p;
+//        }
+//    }
+//
+//    int Size() const {
+//        return size;
+//    }
+//
+//    Node *NewAtBegin(int key, int value) {
+//        Node *n = new Node(key, value);
+//        return AddAtBegin(n);
+//    }
+//
+//    Node *NewAtEnd(int key, int value) {
+//        Node *n = new Node(key, value);
+//        return AddAtEnd(n);
+//    }
+//
+//    Node *AddAtBegin(Node *n) {
+//        size++;
+//
+//        if (pHead == NULL) {
+//            pHead = pTail = n;
+//            return n;
+//        }
+//
+//        n->next = pHead;
+//        n->prev = NULL;
+//        pHead->prev = n;
+//        pHead = n;
+//        return n;
+//    }
+//
+//    Node *AddAtEnd(Node *n) {
+//        size++;
+//
+//        if (pHead == NULL) {
+//            pHead = pTail = n;
+//            return n;
+//        }
+//
+//        pTail->next = n;
+//        n->prev = pTail;
+//        n->next = NULL;
+//        pTail = n;
+//    }
+//
+//    void Unlink(Node *n) {
+//        Node *before = n->prev;
+//        Node *after = n->next;
+//
+//        if (before) {
+//            before->next = after;
+//        }
+//
+//        if (after) {
+//            after->prev = before;
+//        }
+//
+//        if (pHead == n) {
+//            pHead = pHead->next;
+//        } else if (pTail == n) {
+//            pTail = pTail->prev;
+//        }
+//
+//        size--;
+//    }
+//
+//    void Delete(Node *n) {
+//        Unlink(n);
+//        delete n;
+//    }
+//
+//    void TakeToBegin(Node *n) {
+//        Unlink(n);
+//        AddAtBegin(n);
+//    }
+//
+//    Node *GetTailNode() {
+//        return pTail;
+//    }
+//
+//    void DeleteLast() {
+//        Delete(pTail);
+//    }
+//
+//    void Print() {
+//        Node *p = pHead;
+//        while (p != NULL) {
+//            cout << "(" << p->key << "," << p->value << ") ";
+//            p = p->next;
+//        }
+//        cout << endl;
+//    }
+//};
+//
+//
+//class LRUCache {
+//
+//private:
+//    //cacheList - store the date
+//    DoubleLinkedList cacheList;
+//    //cacheMap - index the date for searching
+//    map<int, Node *> cacheMap;
+//    //the max capcity of cache
+//    int capacity;
+//
+//public:
+//    LRUCache(int capacity) {
+//        this->capacity = capacity;
+//    }
+//
+//    void print() {
+//        cacheList.Print();
+//    }
+//
+//    int get(int key) {
+//        // The accessed node must be up-to-time -- take to the front
+//        if (cacheMap.find(key) != cacheMap.end()) {
+//            cacheList.TakeToBegin(cacheMap[key]);
+//            return cacheMap[key]->value;
+//        }
+//        return -1;
+//
+//    }
+//
+//    void set(int key, int value) {
+//        // key found, update the data, and take to the front
+//        if (cacheMap.find(key) != cacheMap.end()) {
+//            Node *p = cacheMap[key];
+//            p->value = value;
+//            cacheList.TakeToBegin(cacheMap[key]);
+//        } else {
+//            // key not found, new a node to store data
+//            cacheMap[key] = cacheList.NewAtBegin(key, value);
+//            // if the capacity exceed, remove the last one.
+//            if (cacheList.Size() > capacity) {
+//                int key = cacheList.GetTailNode()->key;
+//                cacheMap.erase(key);
+//                cacheList.DeleteLast();
+//            }
+//        }
+//    }
+//};
 
 
 //int main(int argc, char **argv) {
@@ -205,6 +199,7 @@ public:
 //
 //    cout << "---------" << endl;
 //    */
+//
 //    srand(time(0));
 //
 //    int capacity = 5;
@@ -231,12 +226,25 @@ public:
 //
 //        cout << endl;
 //    }
+//    cout << __VERSION__ << endl;
 //    return 0;
 //}
 
-#include "Solution.h"
-
+#include "vectorTest.h"
 int main() {
+    Solution solution = Solution();
+    vector<int>vec;
+    for (int i = 1; i < 4; ++i){
+        vec.push_back(i);
+    }
 
+
+    const vector<vector<int> > &permute = solution.permute(vec);
+    for (const auto &item : permute){
+        for(int v:item){
+            cout<<v<<" ";
+        }
+        cout<<endl;
+    }
 
 }
