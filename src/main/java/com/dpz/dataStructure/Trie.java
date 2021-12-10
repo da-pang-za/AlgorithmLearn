@@ -10,6 +10,7 @@ public class Trie {
     public Trie() {
         nodes=new Trie[26];
         flag=false;
+
     }
 
     public void insert(String word) {

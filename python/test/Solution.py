@@ -8,26 +8,32 @@ from dataStructure.common import ListNode
 
 
 class Solution:
-    def maxNumber(self, nums1, nums2, k):
-        #数组取k个(顺序不变)的最大值
-        def pick_max(nums, k):
-            stack = []
-            drop = len(nums) - k
-            for num in nums:
-                while drop and stack and stack[-1] < num:
-                    stack.pop()
-                    drop -= 1
-                stack.append(num)
-            return stack[:k]
+    # log2(10^2000)  2000*3 =7000
+    def superPow(self, a: int, b: List[int]) -> int:
+        def gt0(b: List[int]) -> bool:
+            for i in b:
+                if i != 0:
+                    return True
+            return False
 
-        def merge(A, B):
-            ans = []
-            while A or B:
-                bigger = A if A > B else B
-                ans.append(bigger[0])
-                bigger.pop(0)
-            return ans
+        def isTwo(b: List[int]) -> bool:
+            return b[-1] % 2 == 0
 
-        return max(merge(pick_max(nums1, i), pick_max(nums2, k-i))\
-                   for i in range(k+1) if i <= len(nums1) and k-i <= len(nums2))
+        def half(b: List[int]) -> List[int]:
+            last = 0
+            for i in range(len(b)):
+                cur = b[i]
+                b[i] = (10 * last + cur) // 2
+                last = (10 * last + cur) % 2
+            return b
 
+        mod = 1337
+        ans = 1
+        while gt0(b):
+            if not isTwo(b):
+                ans = ans * a % mod
+            b = half(b)
+            a = a * a % mod
+        return ans
+
+print(len("bbaaAaa1aaaaaaaaacccccc"))
