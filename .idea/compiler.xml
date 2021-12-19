@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="sort" />
+        <module name="Alg" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="sort" target="8" />
+      <module name="Alg" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

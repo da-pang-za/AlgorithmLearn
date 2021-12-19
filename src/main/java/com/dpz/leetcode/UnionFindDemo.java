@@ -1,7 +1,7 @@
 package com.dpz.leetcode;
-
+//并查集demo
 public class UnionFindDemo {
-    //并查集demo
+
 
     private class UnionFind {
 

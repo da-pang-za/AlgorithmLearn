@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Alg.iml" filepath="$PROJECT_DIR$/Alg.iml" />
       <module fileurl="file://$PROJECT_DIR$/python/python.iml" filepath="$PROJECT_DIR$/python/python.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sort.iml" filepath="$PROJECT_DIR$/sort.iml" />
     </modules>
   </component>
 </project>

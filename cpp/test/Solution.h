@@ -10,116 +10,85 @@
 
 
 class Solution {
-public:
-    int wl;
-    bool found;
-    // 记录了单词是从哪些单词扩展而来，key：单词，value：单词列表，这些单词可以变换到 key ，它们是一对多关系
-    unordered_map<string, vector<string>> from;
-    vector<int> step;
-    unordered_set<string> *dict;
-    string beginWord, endWord;
 
-    vector<vector<string> > findLadders(string _beginWord, string _endWord, vector<string> &wordList) {
-        step.resize(2);//0正向
-        beginWord = _beginWord;
-        endWord = _endWord;
-        vector<vector<string> > res;
-        // 因为需要快速判断扩展出的单词是否在 wordList 里，因此需要将 wordList 存入哈希表，这里命名为「字典」
-        unordered_set<string> t = {wordList.begin(), wordList.end()};
-        dict=&t;
-        // 特殊用例判断
-        if (dict->find(endWord) == dict->end()) {
-            return res;
-        }
-        wl = beginWord.length();
-        // 第 1 步：广度优先遍历建图
-        // 记录扩展出的单词是在第几次扩展的时候得到的，key：单词，value：在广度优先遍历的第几层
-        unordered_map<string, int> steps1;
-        unordered_map<string, int> steps2;
-        steps1[beginWord] = 0;
-        steps2[endWord] = 0;
-        deque<string> q1;
-        deque<string> q2;
-        q1.push_back(beginWord);
-        q2.push_back(endWord);
 
-        while (!q1.empty() && !q2.empty() && !found) {
-            if (q1.size() < q2.size()) {
-                update(q1, steps1, steps2, 0);
-            } else {
-                update(q2, steps2, steps1, 1);
-            }
-        }
+    int *parents;
+    int rows, cols;
 
-        // 第 2 步：深度优先遍历找到所有解，从 endWord 恢复到 beginWord ，所以每次尝试操作 path 列表的头部
-        if (found) {
-            deque<string> path;
-            path.push_back(endWord);
-            dfs(from, path, endWord, res);
-        }
-        return res;
-
+// 初始化，每个节点的父节点都是本身
+    void init(int totalNodes) {
+        parents = (int *) malloc(sizeof(int) * totalNodes);
+        for (int i = 0; i < totalNodes; i++)
+            parents[i] = i;
     }
 
-private:
+// 查找 node 的祖先节点
+    int find(int node) {
+        while (parents[node] != node) {
+            // 当前节点的父节点 指向父节点的父节点.
+            // 保证一个连通区域最终的parents只有一个.
+            parents[node] = parents[parents[node]];
+            node = parents[node];
+        }
+        return node;
+    }
 
-    void update(deque<string> &queue, unordered_map<string, int> &steps1, unordered_map<string, int> &steps2, int flag) {
-        step[flag]++;
-        int size = queue.size();
-        for (int i = 0; i < size; i++) {
-            string currWord = queue.front();
-            queue.pop_front();
-            string nextWord = currWord;
-            // 将每一位替换成 26 个小写英文字母
-            for (int j = 0; j < wl; j++) {
-                char origin = currWord[j];
-                for (char c = 'a'; c <= 'z'; c++) {
-                    nextWord[j] = c;
+// 合并
+    void Union(int node1, int node2) {
+        int root1 = find(node1);
+        int root2 = find(node2);
+        if (root1 != root2)
+            parents[root1] = root2;
+    }
 
-                    if (dict->find(nextWord) == dict->end() ||
-                        (steps1.find(nextWord) != steps1.end() && step[flag] > steps1[nextWord])) {
-                        continue;
-                    }
-                    if (steps1.find(nextWord) == steps1.end()
-                        || (steps1.find(nextWord) != steps1.end() && step[flag] == steps1[nextWord])) {
-                        if (flag == 0) {
-                            from[nextWord].push_back(currWord);
-                        } else {
-                            from[currWord].push_back(nextWord);
-                        }
-                    }
+// 判断是否连通
+    bool isConnected(int node1, int node2) {
+        return find(node1) == find(node2);
+    }
 
-                    // 这一层扩展出的单词进入队列
-                    queue.push_back(nextWord);
-                    // 记录 nextWord 的 step
-                    steps1[nextWord] = step[flag];
-                    //当前层找到了
-                    if (steps2.find(nextWord) != steps2.end()) {
-                        found = true;
+// 二维数组转一维数组
+    int node(int i, int j) {
+        return i * cols + j;
+    }
+
+    void solve(char **board, int boardSize, int *boardColSize) {
+        if (board == NULL || strlen(board) == 0)
+            return;
+        rows = boardSize;
+        cols = boardColSize[0];
+        // 用一个虚拟节点, 边界上的O 的⽗节点都是这个虚拟节点
+        init(rows * cols + 1);
+        int dummyNode = rows * cols;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 'O') {
+                    // 边界上和dummyNode连通
+                    if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1)
+                        Union(node(i, j), dummyNode);
+                    else {
+                        // 和四周的 O 连通
+                        if (board[i - 1][j] == 'O')
+                            Union(node(i, j), node(i - 1, j));
+                        if (board[i + 1][j] == 'O')
+                            Union(node(i, j), node(i + 1, j));
+                        if (board[i][j - 1] == 'O')
+                            Union(node(i, j), node(i, j - 1));
+                        if (board[i][j + 1] == 'O')
+                            Union(node(i, j), node(i, j + 1));
                     }
                 }
-                //改回原单词
-                nextWord[j] = origin;
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // 如果是和虚拟节点连通的，就是 O ，其他都是 0
+                if (isConnected(node(i, j), dummyNode))
+                    board[i][j] = 'O';
+                else
+                    board[i][j] = 'X';
             }
         }
     }
-
-
-public:
-
-    void dfs(unordered_map<string, vector<string>> &from, deque<string> &path, string cur, vector<vector<string>> &res) {
-        if (cur==beginWord) {
-            res.push_back({path.begin(), path.end()});
-            return;
-        }
-        for (auto precursor: from[cur]) {
-            path.push_front(precursor);
-            dfs(from, path, precursor, res);
-            path.pop_front();
-        }
-    }
-
 };
-
 
 #endif //LEETCODECPP_SOLUTION_H
