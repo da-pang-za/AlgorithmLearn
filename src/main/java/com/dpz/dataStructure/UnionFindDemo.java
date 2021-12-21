@@ -28,6 +28,9 @@ public class UnionFindDemo {
             int rootY = find(y);
             parent[rootX] = rootY;
         }
+        public boolean isConn(int a,int b){
+            return find(a)==find(b);
+        }
     }
 }
 
