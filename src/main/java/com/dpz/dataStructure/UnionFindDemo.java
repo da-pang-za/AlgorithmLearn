@@ -1,4 +1,4 @@
-package com.dpz.leetcode;
+package com.dpz.dataStructure;
 //并查集demo
 public class UnionFindDemo {
 
