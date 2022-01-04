@@ -14,7 +14,17 @@ class Solution1:
         return []
 
 
-# todo 数组切片
+
+def slice():
+    nums = [0, 1, 2, 3, 4, 5, 6]
+    print(nums)
+    print(nums[1:])  # [1, 2, 3, 4, 5, 6]  [1,len-1]
+    print(nums[:-1])  # [0, 1, 2, 3, 4, 5] [0,len-2]
+
+
+slice()
+
+
 # 合并两个有序数组
 class Solution88:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
@@ -39,22 +49,20 @@ class Solution179:
         return ''.join(strs) if strs[0] != '0' else '0'
 
 
-# 自定义排序
-# https://blog.csdn.net/song_wheaver/article/details/10933634
-print("==自定义排序==")
-nums = [_ for _ in range(1, 9)]
-print(nums)
-
-
 def mycmp(a, b):
     return b - a
 
 
+# 自定义排序
+# https://blog.csdn.net/song_wheaver/article/details/10933634
+# print("==自定义排序==")
+# nums = [_ for _ in range(1, 9)]
+# print(nums)
 # 以下几句效果相同
-nums.sort(key=functools.cmp_to_key(mycmp))  # 定义复杂排序
+# nums.sort(key=functools.cmp_to_key(mycmp))  # 定义复杂排序
 # nums.sort(key=lambda i: -i)
 # nums.sort(reverse=True)
-print(nums)
+# print(nums)
 
 
 # list操作
