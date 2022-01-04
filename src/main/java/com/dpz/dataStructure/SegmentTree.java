@@ -13,6 +13,8 @@ package com.dpz.dataStructure;
  * 不符合区间加法的例子：
  * 众数——只知道左右区间的众数，没法求总区间的众数
  */
+
+
 public abstract class SegmentTree {
 
     int maxn;//元素总个数 / 区间长度
@@ -137,3 +139,4 @@ public abstract class SegmentTree {
         return ANS;
     }
 }
+//todo  线段树 非数组实现

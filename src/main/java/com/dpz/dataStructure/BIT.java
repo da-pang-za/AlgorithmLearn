@@ -4,6 +4,7 @@ package com.dpz.dataStructure;
 public class BIT {
 
     class NumArray {
+        //===============================================
         int[] tree;
         int lowbit(int x) {
             return x & -x;
@@ -16,7 +17,7 @@ public class BIT {
         void add(int x, int u) {
             for (int i = x; i <= n; i += lowbit(i)) tree[i] += u;
         }
-
+        //===============================================
         int[] nums;
         int n;
         public NumArray(int[] _nums) {
