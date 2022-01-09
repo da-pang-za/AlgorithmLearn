@@ -106,26 +106,30 @@ public class SortAgrm10 {
     //int index = nums.length / 2 - 1;//最后一个有子节点的节点   //2个  3个元素 都返回下标0
     void HeapSort(int[] nums) {
 
-        //1.构建大顶堆
-        int index = nums.length / 2 - 1;//最后一个有子节点的节点   //2个  3个元素 都返回下标0
-        //下沉建堆  判断是否比子元素小  todo  这里从小到大或者从大到小应该都行   从大到小 下沉的比较少
-        for (; index >= 0; index--) {
-            down(nums, index, nums.length);
-        }
+        //1.构建大顶堆   复杂度O(N)   算法导论p88
+        build(nums);
         //i为要交换的位置   位置0不用交换所以是i>0
         for (int i = nums.length - 1; i > 0; i--) {
             swap(nums, 0, i);
             //维护大顶堆
-            down(nums, 0, i);
+            heapify(nums, 0, i);
         }
-
-
+    }
+    //建堆
+    private void build(int[] nums) {
+        //找到最后一个有子节点的位置
+        // 这里必须自底向上 反过来是错的
+        //因为heapify只会把当前节点换为两个子节点中更大的，但子节点下方可能还有更大的值
+        for(int i=nums.length/2-1;i>=0;i--){
+            heapify(nums,i,nums.length);
+        }
     }
 
     /**
+     * 堆调整
      * @param len 堆的长度  超过的是排序好的 不动
      */
-    void down(int[] nums, int index, int len) {
+    void heapify(int[] nums, int index, int len) {
 
         while (index * 2 + 1 < len) { //首先判断是否有子节点  有子节点才能下沉
             int son = index * 2 + 1;
