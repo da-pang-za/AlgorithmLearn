@@ -108,6 +108,8 @@ public class SortAgrm10 {
 
         //1.构建大顶堆   复杂度O(N)   算法导论p88
         build(nums);
+
+        //2.排序  复杂度O(NlogN)
         //i为要交换的位置   位置0不用交换所以是i>0
         for (int i = nums.length - 1; i > 0; i--) {
             swap(nums, 0, i);
@@ -138,14 +140,11 @@ public class SortAgrm10 {
             //交换 大的放上面
             if (nums[index] < nums[son]) {
                 swap(nums, index, son);
-
+                //继续下沉
+                index = son;
             }
             //返回
-            else {
-                break;
-            }
-            //继续下沉
-            index = son;
+            else break;
         }
 
     }
