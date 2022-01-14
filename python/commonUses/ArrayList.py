@@ -14,12 +14,12 @@ class Solution1:
         return []
 
 
-
+#切片
 def slice():
     nums = [0, 1, 2, 3, 4, 5, 6]
     print(nums)
     print(nums[1:])  # [1, 2, 3, 4, 5, 6]  [1,len-1]
-    print(nums[:-1])  # [0, 1, 2, 3, 4, 5] [0,len-2]
+    print(nums[:-1])  # [0, 1, 2, 3, 4, 5] [0,len-2]   不包括最后一个位置
 
 
 slice()
