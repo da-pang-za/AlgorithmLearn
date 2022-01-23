@@ -1,4 +1,4 @@
-package com.dpz;
+package com.dpz.dataStructure;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,7 @@ import java.util.Random;
 public class PriorityQueue {
 
     public static void main(String[] args) {
+        //test
         PriorityQueue pq = new PriorityQueue();
         java.util.PriorityQueue<Integer>pq1=new java.util.PriorityQueue<>((a,b)->Integer.compare(b,a));
 
