@@ -1,4 +1,4 @@
-package com.dpz.dataStructure;
+package com.dpz.template;
 
 import java.util.Arrays;
 import java.util.PriorityQueue;
