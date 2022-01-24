@@ -5,32 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+
 /**
  * 手写优先队列  大根堆
  */
 public class PriorityQueue {
 
-    public static void main(String[] args) {
-        //test
-        PriorityQueue pq = new PriorityQueue();
-        java.util.PriorityQueue<Integer>pq1=new java.util.PriorityQueue<>((a,b)->Integer.compare(b,a));
 
-        int error=0;
-        for (int i = 0; i < 1000000; i++) {
-            int v=new Random().nextInt();
-            pq.add(v);
-            pq1.add(v);
-            if(!pq.peek().equals(pq1.peek()))
-                error++;
-        }
-        System.out.println(error);
-        while(!pq1.isEmpty()){
-            if(!pq.poll().equals(pq1.poll()))
-                error++;
-        }
-        System.out.println(error);
-
-    }
     List<Integer> list =new ArrayList<>();
 
     PriorityQueue(){
@@ -49,7 +30,7 @@ public class PriorityQueue {
         return ans;
     }
     /**
-     * 堆调整
+     * 堆调整   复用堆排序的代码
      * @param len 堆的长度  超过的是排序好的 不动
      */
     private void heapify(List<Integer> nums, int index, int len) {
@@ -78,14 +59,39 @@ public class PriorityQueue {
             i=parent(i);
         }
     }
+    int size(){
+        return list.size();
+    }
+    //辅助函数
     int left(int i){
         return 2*i+1;
     }
     int parent(int i){
         return (i-1)>>1;
     }
-    int size(){
-        return list.size();
+
+
+    public static void main(String[] args) {
+        //test
+        PriorityQueue pq = new PriorityQueue();
+        java.util.PriorityQueue<Integer>pq1=new java.util.PriorityQueue<>((a,b)->Integer.compare(b,a));
+
+        int error=0;
+        for (int i = 0; i < 1000000; i++) {
+            int v=new Random().nextInt();
+            pq.add(v);
+            pq1.add(v);
+            if(!pq.peek().equals(pq1.peek()))
+                error++;
+        }
+        System.out.println(error);
+        while(!pq1.isEmpty()){
+            if(!pq.poll().equals(pq1.poll()))
+                error++;
+        }
+        System.out.println(error);
+
     }
 
 }
+
