@@ -8,13 +8,31 @@ public class ListNode {
     public ListNode(int x) {
         val = x;
     }
-    public static ListNode arr2Node(int[]nums){
-        ListNode head=new ListNode(nums[0]);
-        ListNode node=head;
+    ListNode(int[]nums){
+        assert nums.length>0;
+        this.val=nums[0];
+        ListNode node=this;
         for(int i=1;i<nums.length;i++){
             node.next=new ListNode(nums[i]);
             node=node.next;
         }
-        return head;
+
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        ListNode node=this;
+        while (node!=null){
+            sb.append(node.val).append("->");
+            node=node.next;
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        //test
+        ListNode head = new ListNode(new int[]{1, 2, 3, 6, 5, 3});
+        System.out.println(head);
     }
 }
