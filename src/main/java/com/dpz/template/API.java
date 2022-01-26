@@ -1,8 +1,9 @@
-package com.dpz.dataStructure;
+package com.dpz.template;
 
 import java.util.Arrays;
 
 public class API {
+
     //常量
     int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
@@ -108,6 +109,8 @@ public class API {
         }
         return dp[0][n - 1];
     }
+
+
 
 
 }

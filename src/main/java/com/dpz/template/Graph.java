@@ -1,12 +1,14 @@
 package com.dpz.template;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class Graph {
 
     //建图  dijkstra模板
-    class Solution {
+    class Solution1 {
         int N = 110, M = 6010;
         int[] he = new int[N], e = new int[M], ne = new int[M], w = new int[M];
         int[] dist = new int[N];
@@ -54,6 +56,35 @@ public class Graph {
                     }
                 }
             }
+        }
+    }
+    //三色标记
+    //lc.802
+    class Solution802 {
+        public List<Integer> eventualSafeNodes(int[][] graph) {
+            int n = graph.length;
+            int[] color = new int[n];
+            List<Integer> ans = new ArrayList<Integer>();
+            for (int i = 0; i < n; ++i) {
+                if (safe(graph, color, i)) {
+                    ans.add(i);
+                }
+            }
+            return ans;
+        }
+
+        public boolean safe(int[][] graph, int[] color, int x) {
+            if (color[x] > 0) {//访问过了  看是灰还是黑  得出是否安全
+                return color[x] == 2;
+            }
+            color[x] = 1;//入栈
+            for (int y : graph[x]) { //当前点能到达的点
+                if (!safe(graph, color, y)) {
+                    return false;//不安全还是灰色
+                }
+            }
+            color[x] = 2;//如果安全标记为黑
+            return true;
         }
     }
 
