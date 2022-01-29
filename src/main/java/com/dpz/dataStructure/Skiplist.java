@@ -1,6 +1,7 @@
 package com.dpz.dataStructure;
 
 //注意，跳表中可能存在多个相同的值
+
 class Skiplist {
     //至少k+1层的概率 (1-p)^k  至少k+2层的概率 (1-p)^(k+1)    做除法：1-p   这里取3/4
     private static final float SKIPLIST_P = 0.25f;
