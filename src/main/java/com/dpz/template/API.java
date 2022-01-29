@@ -110,7 +110,44 @@ public class API {
         return dp[0][n - 1];
     }
 
+    //下一个排列 O(n)
+    class Solution31 {
+        public void nextPermutation(int[] nums) {
+            int n=nums.length;
+            int i=n-2;
+            while(i>=0&&nums[i]>=nums[i+1])i--;
+            //有较小数 nums[i]
+            if(i>=0){
+                //较大数
+                int j=n-1;
+                while(nums[j]<=nums[i])j--;
+                swap(nums,j,i);
+                reverse(nums,i+1,n-1);
+            }
+            else reverse(nums,0,n-1);
+        }
+        void swap(int[]nums,int i,int j){
+            int t=nums[i];
+            nums[i]=nums[j];
+            nums[j]=t;
+        }
+        void reverse(int[]nums,int l,int r){
+            while(l<r){
+                swap(nums,l++,r--);
+            }
 
+        }
+    }
+    //快速幂 x^k mod p
+    int pow(long x, int k, int p){
+        long res = 1;
+        while (k!=0){
+            if((k&1)!=0) res = res * x % p;
+            x = x * x % p;
+            k >>= 1;
+        }
+        return (int)res;
+    }
 
 
 }
