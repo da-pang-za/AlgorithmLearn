@@ -2,42 +2,12 @@ package com.dpz.dataStructure;
 
 import java.util.Arrays;
 
-//并查集demo
-public class UnionFindDemo {
+/**
+ * 并查集模板   优化版
+ * https://oi-wiki.org/ds/dsu/
+ * https://leetcode-cn.com/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/
+ */
 
-
-    private class UnionFind {
-
-        private int[] parent;
-
-        public UnionFind(int n) {
-            this.parent = new int[n];
-            for (int i = 0; i < n; i++) {
-                parent[i] = i;
-            }
-        }
-
-        //找到leader
-        public int find(int x) {
-            while (x != parent[x]) {
-//                parent[x] = parent[parent[x]];  可有可无
-                x = parent[x];
-            }
-            return x;
-        }
-
-        public void union(int x, int y) {
-            int rootX = find(x);
-            int rootY = find(y);
-            parent[rootX] = rootY;
-        }
-        public boolean isConn(int a,int b){
-            return find(a)==find(b);
-        }
-    }
-
-}
-// 并查集模板   优化版
 class UnionFind {
     int[] parent;
     int[] size;
@@ -56,16 +26,21 @@ class UnionFind {
         }
     }
 
-    public int findset(int x) {
-        return parent[x] == x ? x : (parent[x] = findset(parent[x]));
+    public int find(int x) {
+        //路径压缩  父亲更新为原父亲的祖先
+        if(x!=parent[x])
+            parent[x]=find(parent[x]);
+        return parent[x];
     }
 
-    public boolean unite(int x, int y) {
-        x = findset(x);
-        y = findset(y);
+    public boolean union(int x, int y) {
+        x = find(x);
+        y = find(y);
         if (x == y) {
             return false;
         }
+        //按秩合并  x是size较大的
+        //如果我们将一棵点数与深度都较小的集合树连接到一棵更大的集合树下，显然相比于另一种连接方案
         if (size[x] < size[y]) {
             int temp = x;
             x = y;
@@ -76,10 +51,9 @@ class UnionFind {
         --setCount;
         return true;
     }
+}
 
-    public boolean connected(int x, int y) {
-        x = findset(x);
-        y = findset(y);
-        return x == y;
-    }
+
+public class UnionFindDemo {
+
 }
