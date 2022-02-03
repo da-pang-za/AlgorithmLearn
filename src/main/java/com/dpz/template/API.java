@@ -7,8 +7,8 @@ public class API {
     //常量
     int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
-    int mod=(int)1e9+7;
-    int INF=0x3f3f3f3f;
+    int mod = (int) 1e9 + 7;
+    int INF = 0x3f3f3f3f;
 
     //最大公约数
     int gcd(int a, int b) {
@@ -91,6 +91,7 @@ public class API {
         }
         return s.substring(begin, begin + maxLen);
     }
+
     //最长回文子序列
     public int longestPalindromeSubseq(String s) {
         int n = s.length();
@@ -113,40 +114,42 @@ public class API {
     //下一个排列 O(n)
     class Solution31 {
         public void nextPermutation(int[] nums) {
-            int n=nums.length;
-            int i=n-2;
-            while(i>=0&&nums[i]>=nums[i+1])i--;
+            int n = nums.length;
+            int i = n - 2;
+            while (i >= 0 && nums[i] >= nums[i + 1]) i--;
             //有较小数 nums[i]
-            if(i>=0){
+            if (i >= 0) {
                 //较大数
-                int j=n-1;
-                while(nums[j]<=nums[i])j--;
-                swap(nums,j,i);
-                reverse(nums,i+1,n-1);
-            }
-            else reverse(nums,0,n-1);
+                int j = n - 1;
+                while (nums[j] <= nums[i]) j--;
+                swap(nums, j, i);
+                reverse(nums, i + 1, n - 1);
+            } else reverse(nums, 0, n - 1);
         }
-        void swap(int[]nums,int i,int j){
-            int t=nums[i];
-            nums[i]=nums[j];
-            nums[j]=t;
+
+        void swap(int[] nums, int i, int j) {
+            int t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
         }
-        void reverse(int[]nums,int l,int r){
-            while(l<r){
-                swap(nums,l++,r--);
+
+        void reverse(int[] nums, int l, int r) {
+            while (l < r) {
+                swap(nums, l++, r--);
             }
 
         }
     }
+
     //快速幂 x^k mod p
-    int pow(long x, int k, int p){
+    int pow(long x, int k, int p) {
         long res = 1;
-        while (k!=0){
-            if((k&1)!=0) res = res * x % p;
+        while (k != 0) {
+            if ((k & 1) != 0) res = res * x % p;
             x = x * x % p;
             k >>= 1;
         }
-        return (int)res;
+        return (int) res;
     }
 
     //计算器   表达式问题   究极表达式问题
@@ -248,5 +251,71 @@ public class API {
             return Character.isDigit(c);
         }
     }
+
+    //位运算  位操作
+    class BitOperation {
+        //交换两个数 不用tmp 注意这里int不能传出去
+        void swapWithoutTmp(int a, int b) {
+            a ^= b;//ab
+            b ^= a;//bab=b
+            a ^= b;//ab b
+            System.out.println(a + "," + b);
+        }
+
+        //判断是否同号(0划分到正数)   符号位异或
+        boolean isSameSign(int x, int y) {
+            return (x ^ y) >= 0;
+        }
+
+        //判断一个数是不是2的幂  1个1 后面全是0
+        boolean isFactorialOfTwo(int n) {
+            //   10000 & 01111
+            //   10100 & 10011 如果不全是0 影响不到最高位
+            return n > 0 && (n & (n - 1)) == 0;
+
+        }
+        //2的次方对m取余 // m<n
+        int mod2pow(int n,int m){
+            return m & (n - 1);
+        }
+
+        //从低位到高位,取n的第m位
+        int getBit(int n, int m){
+            return (n >> (m-1)) & 1;
+        }
+        //从低位到高位.将n的第m位置1
+        int setBitToOne(int n, int m){
+            return n | (1 << (m-1));
+        }
+        //从低位到高位,将n的第m位置0
+        int setBitToZero(int n, int m){
+            return n & ~(1 << (m-1));
+        }
+        //从低位到高位,将n的第m位置取反    //一位异或0保持不变  异或1取反
+        int setBitNeg(int n, int m){
+            return n^(1<<(m-1));
+        }
+        void api(){
+            int x=12643;
+            int count = Integer.bitCount(x);//二进制1的个数
+            String binaryString = Integer.toBinaryString(x);//转为二进制字符串
+
+        }
+    }
+
+    class StringOperation {
+       void api(){
+           String s="egherh";
+           int idx = s.indexOf('e');//从左到右 第一次遇到某个字符的下标
+           String trim = s.trim();
+           String[] ss = s.split(" ");
+           int cmp = s.compareTo("fhdfhj");//比较字典序
+       }
+    }
+    //随机  [0,1)
+    double random(){
+        return Math.random();
+    }
+
 
 }
