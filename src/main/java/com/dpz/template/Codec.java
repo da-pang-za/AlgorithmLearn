@@ -1,4 +1,4 @@
-package com.dpz;
+package com.dpz.template;
 
 //你可以将以下二叉树：
 //

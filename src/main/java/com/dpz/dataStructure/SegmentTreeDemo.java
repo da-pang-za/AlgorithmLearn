@@ -1,4 +1,4 @@
-package com.dpz.leetcode;
+package com.dpz.dataStructure;
 
 import java.util.Arrays;
 import java.util.HashMap;

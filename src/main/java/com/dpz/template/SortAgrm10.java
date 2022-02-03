@@ -1,4 +1,4 @@
-package com.dpz.typical;
+package com.dpz.template;
 
 import java.util.*;
 
