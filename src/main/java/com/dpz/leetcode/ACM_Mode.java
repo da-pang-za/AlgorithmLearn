@@ -14,6 +14,8 @@ public class ACM_Mode {
             String likes=scanner.nextLine();
 
             System.out.println(n+","+m+","+cars+","+likes);
+
         }
     }
 }
+
