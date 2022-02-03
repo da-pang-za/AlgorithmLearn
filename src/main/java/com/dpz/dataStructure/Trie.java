@@ -1,6 +1,7 @@
 package com.dpz.dataStructure;
 
 /**
+ * 字典树 or 前缀树
  * word仅有小写英文字母组成
  */
 public class Trie {
