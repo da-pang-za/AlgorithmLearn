@@ -3,8 +3,8 @@ package com.dpz.dataStructure;
 //注意，跳表中可能存在多个相同的值
 
 class Skiplist {
-    //至少k+1层的概率 (1-p)^k  至少k+2层的概率 (1-p)^(k+1)    做除法：1-p   这里取3/4
-    private static final float SKIPLIST_P = 0.25f;
+    //下一层的节点数的期望是上一层的1/4  设最高层有4个点(4^1) 则最低层有4^level个点
+    private static final double SKIPLIST_P = 0.25;
     private static final int MAX_LEVEL = 32;//最大层数
 
     Node head;
