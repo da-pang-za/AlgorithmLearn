@@ -21,8 +21,12 @@ def slice():
     print(nums[1:])  # [1, 2, 3, 4, 5, 6]  [1,len-1]
     print(nums[:-1])  # [0, 1, 2, 3, 4, 5] [0,len-2]   不包括最后一个位置
 
+    print([i for i in range(10)][::2])#[0, 2, 4, 6, 8]
+    print([i for i in range(10)][4:8:2])# [start,end) step   #[4,6]
 
-slice()
+
+
+# slice()
 
 
 # 合并两个有序数组
