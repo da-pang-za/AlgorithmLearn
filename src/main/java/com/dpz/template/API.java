@@ -166,7 +166,7 @@ public class API {
     class Solution227 {
         // 使用 map 维护一个运算符优先级
         // 这里的优先级划分按照「数学」进行划分即可
-        Map<Character, Integer> map = new HashMap<>() {{
+        Map<Character, Integer> map = new HashMap() {{
             put('-', 1);
             put('+', 1);
             put('*', 2);
@@ -274,29 +274,34 @@ public class API {
             return n > 0 && (n & (n - 1)) == 0;
 
         }
+
         //2的次方对m取余 // m<n
-        int mod2pow(int n,int m){
+        int mod2pow(int n, int m) {
             return m & (n - 1);
         }
 
         //从低位到高位,取n的第m位
-        int getBit(int n, int m){
-            return (n >> (m-1)) & 1;
+        int getBit(int n, int m) {
+            return (n >> (m - 1)) & 1;
         }
+
         //从低位到高位.将n的第m位置1
-        int setBitToOne(int n, int m){
-            return n | (1 << (m-1));
+        int setBitToOne(int n, int m) {
+            return n | (1 << (m - 1));
         }
+
         //从低位到高位,将n的第m位置0
-        int setBitToZero(int n, int m){
-            return n & ~(1 << (m-1));
+        int setBitToZero(int n, int m) {
+            return n & ~(1 << (m - 1));
         }
+
         //从低位到高位,将n的第m位置取反    //一位异或0保持不变  异或1取反
-        int setBitNeg(int n, int m){
-            return n^(1<<(m-1));
+        int setBitNeg(int n, int m) {
+            return n ^ (1 << (m - 1));
         }
-        void api(){
-            int x=12643;
+
+        void api() {
+            int x = 12643;
             int count = Integer.bitCount(x);//二进制1的个数
             String binaryString = Integer.toBinaryString(x);//转为二进制字符串
 
@@ -304,18 +309,48 @@ public class API {
     }
 
     class StringOperation {
-       void api(){
-           String s="egherh";
-           int idx = s.indexOf('e');//从左到右 第一次遇到某个字符的下标
-           String trim = s.trim();
-           String[] ss = s.split(" ");
-           int cmp = s.compareTo("fhdfhj");//比较字典序
-       }
+        void api() {
+            String s = "egherh";
+            int idx = s.indexOf('e');//从左到右 第一次遇到某个字符的下标
+            String trim = s.trim();
+            String[] ss = s.split(" ");
+            int cmp = s.compareTo("fhdfhj");//比较字典序
+        }
     }
+
     //随机  [0,1)
-    double random(){
+    double random() {
         return Math.random();
     }
+    //todo  二叉树序列化和反序列化  and 二叉搜索树序列化与反序列化
 
+    //数学
+    //阶乘
+    public long fact(int n) {
+        long ans = 1;
+        while (n > 1) {
+            ans *= n;
+            n--;
+        }
+        return ans;
+    }
 
+    //组合
+    public long combin(int n, int m) {
+        assert n >= m;
+        return fact(n) / (fact(m) * fact(n - m));
+    }
+
+    //枚举子集 遍历子集  非空   复杂度2^(bit_count(state))
+    //如果是遍历n个数的「子集的子集」：\sum_{i=0}^{n} C_{n}^{i} * 2^i  =3^n 二项式公式 (1+2)^n
+    //https://oi-wiki.org/math/bit/#_14
+    void subSet(int state) {
+        for(int i=state;i!=0;i=(i-1)&state){
+            //
+        }
+        //子集的子集
+//        for (int state = 1; state < 1 << n; state++)
+//            for (int u = state; u != 0; u = (u - 1) & state)
+
+    }
 }
