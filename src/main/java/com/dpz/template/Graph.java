@@ -87,28 +87,8 @@ public class Graph {
             return true;
         }
     }
-    //合并区间
-    public int[][] merge56(int[][] intervals) {
-        Arrays.sort(intervals,(a,b)->a[0]-b[0]);
-        List<int[]>ans=new ArrayList<>();
-        ans.add(intervals[0]);
-        for(int i=1;i<intervals.length;i++){
-            int[]last=ans.get(ans.size()-1);
-            if(intervals[i][0]<=last[1]){
-                last[1]=Math.max(last[1],intervals[i][1]);
-            }
-            else{
-                ans.add(intervals[i]);
-            }
-        }
-        int[][]r=new int[ans.size()][2];
-        int i=0;
-        for(int[] v:ans){
-            r[i++]=v;
-        }
-        return r;
 
-    }
+
 
 
 }
