@@ -1,5 +1,6 @@
 package com.dpz.template;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class API {
@@ -326,26 +327,28 @@ public class API {
 
     //数学
     //阶乘
-    public long fact(int n) {
-        long ans = 1;
-        while (n > 1) {
-            ans *= n;
-            n--;
+    public BigInteger fact(BigInteger n) {
+        BigInteger ans = BigInteger.ONE;
+        while (n.compareTo(BigInteger.ONE) > 0) {
+            ans = ans.multiply(n);
+            n = n.add(BigInteger.ONE.negate());
         }
         return ans;
     }
 
     //组合
-    public long combin(int n, int m) {
-        assert n >= m;
-        return fact(n) / (fact(m) * fact(n - m));
+    public BigInteger combin(BigInteger n, BigInteger m) {
+        assert n.compareTo(m) >= 0;
+
+        return fact(n).divide(
+                fact(m).multiply(fact(n.add(m.negate()))));
     }
 
     //枚举子集 遍历子集  非空   复杂度2^(bit_count(state))
     //如果是遍历n个数的「子集的子集」：\sum_{i=0}^{n} C_{n}^{i} * 2^i  =3^n 二项式公式 (1+2)^n
     //https://oi-wiki.org/math/bit/#_14
     void subSet(int state) {
-        for(int i=state;i!=0;i=(i-1)&state){
+        for (int i = state; i != 0; i = (i - 1) & state) {
             //
         }
         //子集的子集
@@ -353,4 +356,49 @@ public class API {
 //            for (int u = state; u != 0; u = (u - 1) & state)
 
     }
+
+    //大数   求幂
+//            return (int) (numberOfGoodSubsets(1, 1, 2, count)
+//                * BigInteger.TWO.modPow(BigInteger.valueOf(count[1]), BigInteger.valueOf(1000000007)).intValue()
+//                % 1000000007);
+
+
+
+    //合并区间
+    public int[][] merge56(int[][] intervals) {
+        Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+        List<int[]>ans=new ArrayList<>();
+        ans.add(intervals[0]);
+        for(int i=1;i<intervals.length;i++){
+            int[]last=ans.get(ans.size()-1);
+            if(intervals[i][0]<=last[1]){
+                last[1]=Math.max(last[1],intervals[i][1]);
+            }
+            else{
+                ans.add(intervals[i]);
+            }
+        }
+        int[][]r=new int[ans.size()][2];
+        int i=0;
+        for(int[] v:ans){
+            r[i++]=v;
+        }
+        return r;
+
+    }
+    //合并区间   求区间长度
+    long calIntervalLen(List<int[]>list){
+        list.sort((a,b)->Integer.compare(a[0],b[0]));//用compare防止溢出
+        //
+        // Calculate query
+        long query = 0;//求区间总长度
+        int cur = -1;//不断移动当前右端点位置
+        for (int[] xs: list) {
+            cur = Math.max(cur, xs[0]);
+            query += Math.max(xs[1] - cur, 0);
+            cur = Math.max(cur, xs[1]);
+        }
+        return query;
+    }
+
 }
