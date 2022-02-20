@@ -17,6 +17,11 @@ public class API {
         return gcd(b, a % b);
     }
 
+    long gcd(long a, long b) {
+        if (b == 0) return a;
+        return gcd(b, a % b);
+    }
+
     //最长上升子序列 最长递增子序列
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
@@ -363,42 +368,48 @@ public class API {
 //                % 1000000007);
 
 
-
     //合并区间
     public int[][] merge56(int[][] intervals) {
-        Arrays.sort(intervals,(a,b)->a[0]-b[0]);
-        List<int[]>ans=new ArrayList<>();
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        List<int[]> ans = new ArrayList<>();
         ans.add(intervals[0]);
-        for(int i=1;i<intervals.length;i++){
-            int[]last=ans.get(ans.size()-1);
-            if(intervals[i][0]<=last[1]){
-                last[1]=Math.max(last[1],intervals[i][1]);
-            }
-            else{
+        for (int i = 1; i < intervals.length; i++) {
+            int[] last = ans.get(ans.size() - 1);
+            if (intervals[i][0] <= last[1]) {
+                last[1] = Math.max(last[1], intervals[i][1]);
+            } else {
                 ans.add(intervals[i]);
             }
         }
-        int[][]r=new int[ans.size()][2];
-        int i=0;
-        for(int[] v:ans){
-            r[i++]=v;
+        int[][] r = new int[ans.size()][2];
+        int i = 0;
+        for (int[] v : ans) {
+            r[i++] = v;
         }
         return r;
 
     }
+
     //合并区间   求区间长度
-    long calIntervalLen(List<int[]>list){
-        list.sort((a,b)->Integer.compare(a[0],b[0]));//用compare防止溢出
+    long calIntervalLen(List<int[]> list) {
+        list.sort((a, b) -> Integer.compare(a[0], b[0]));//用compare防止溢出
         //
         // Calculate query
         long query = 0;//求区间总长度
         int cur = -1;//不断移动当前右端点位置
-        for (int[] xs: list) {
+        for (int[] xs : list) {
             cur = Math.max(cur, xs[0]);
             query += Math.max(xs[1] - cur, 0);
             cur = Math.max(cur, xs[1]);
         }
         return query;
+    }
+
+    //三角函数
+    void getAngle() {
+        //360内的角度   角度制
+//        Double degree = Math.atan2(y - locationY, x - locationX);
+
     }
 
 }
