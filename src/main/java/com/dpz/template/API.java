@@ -22,7 +22,7 @@ public class API {
         return gcd(b, a % b);
     }
 
-    //最长上升子序列 最长递增子序列
+    //最长上升子序列 最长递增子序列 这里是严格递增的
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
 //        int[] f = new int[n];  //以i为结尾的最长递增子序列长度
@@ -148,14 +148,14 @@ public class API {
     }
 
     //快速幂 x^k mod p
-    int pow(long x, int k, int p) {
+    long pow(long x, long k, long p) {
         long res = 1;
         while (k != 0) {
             if ((k & 1) != 0) res = res * x % p;
             x = x * x % p;
             k >>= 1;
         }
-        return (int) res;
+        return  res;
     }
 
     //计算器   表达式问题   究极表达式问题
