@@ -8,7 +8,7 @@ public class ListNode {
     public ListNode(int x) {
         val = x;
     }
-    ListNode(int[]nums){
+    public ListNode(int[]nums){
         assert nums.length>0;
         this.val=nums[0];
         ListNode node=this;
