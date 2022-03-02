@@ -10,7 +10,7 @@ public class SortAgrm10 {
 
     static void test() {
         SortAgrm10 sortAgrm10 = new SortAgrm10();
-        for (int j = 0; j < 1000; j++) {
+        for (int j = 0; j < 100000; j++) {
             int[] nums = new int[30];
             for (int i = 0; i < nums.length; i++) {
                 nums[i] = (int) (100 * Math.random());
@@ -20,9 +20,7 @@ public class SortAgrm10 {
             //*****************************//
             sortAgrm10.quickSort(nums2);
 
-            if (Arrays.equals(nums, nums2)) {
-
-            } else
+            if (!Arrays.equals(nums, nums2))
                 System.out.println(Arrays.toString(nums2));
         }
     }
@@ -43,13 +41,13 @@ public class SortAgrm10 {
     //快速排序   冒泡升级  不稳定
     //引入一个pivot  大的放在一边  小的放在另一边   对每一边进行相同的操作
     void quickSort(int[] nums) {
-        quick2(nums, 0, nums.length - 1);
+        quick(nums, 0, nums.length - 1);
     }
 
     void quick(int[] nums, int start, int end) {
         if (start >= end) return;
         int pivot = new Random().nextInt(end - start + 1) + start;//start -end
-        //轴放到start
+        //轴放到start   注意必须要把pivot放在头上  不能不动 否则中间的不一定是Pivot
         swap(nums, start, pivot);
 
         int v = nums[start];
@@ -67,26 +65,26 @@ public class SortAgrm10 {
     }
 
     //另一种写法
-    void quick2(int[] nums, int start, int end) {
-        if (start >= end) return;
-        int pivot = new Random().nextInt(end - start + 1) + start;//start -end
-        //轴放到start
-        swap(nums, start, pivot);
-
-        int v = nums[start];
-        int left = start ; //注意这里是start 不是上面的 start+1
-        int right = end;
-
-        while (left < right) {
-            while (left < right && nums[right] >= v) right--;//先处理右边  巧妙
-            while (left < right && nums[left] <= v) left++;
-            swap(nums, left, right);
-        }
-        swap(nums, left, start);//left位置必定小于等于start位置
-
-        quick(nums, start, left-1);
-        quick(nums, left+1, end);
-    }
+//    void quick2(int[] nums, int start, int end) {
+//        if (start >= end) return;
+//        int pivot = new Random().nextInt(end - start + 1) + start;//start -end
+//        //轴放到start
+//        swap(nums, start, pivot);
+//
+//        int v = nums[start];
+//        int left = start ; //注意这里是start 不是上面的 start+1
+//        int right = end;
+//
+//        while (left < right) {
+//            while (left < right && nums[right] >= v) right--;//先处理右边  巧妙
+//            while (left < right && nums[left] <= v) left++;
+//            swap(nums, left, right);
+//        }
+//        swap(nums, left, start);//left位置必定小于等于start位置
+//
+//        quick(nums, start, left-1);
+//        quick(nums, left+1, end);
+//    }
 
     //选择  选择最小的 放在最前面  不稳定
     void SelectSort(int[] nums) {
@@ -117,6 +115,7 @@ public class SortAgrm10 {
             heapify(nums, 0, i);
         }
     }
+
     //建堆
     private void build(int[] nums) {
         //找到最后一个有子节点的位置
@@ -125,13 +124,14 @@ public class SortAgrm10 {
 
         //如果从上到下：
         //1->2->3 :  2->3->1  错误
-        for(int i=nums.length/2-1;i>=0;i--){
-            heapify(nums,i,nums.length);
+        for (int i = nums.length / 2 - 1; i >= 0; i--) {
+            heapify(nums, i, nums.length);
         }
     }
 
     /**
      * 堆调整
+     *
      * @param len 堆的长度  超过的是排序好的 不动
      */
     void heapify(int[] nums, int index, int len) {
