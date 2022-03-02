@@ -159,7 +159,7 @@ public class SortAgrm10 {
     }
 
 
-    //插入排序
+    //插入排序 稳定   插入前面的有序部分
     void insertSort(int[] nums) {
         int start = 0;
         int end = nums.length - 1;
@@ -208,7 +208,7 @@ public class SortAgrm10 {
     }
 
 
-    //归并排序
+    //归并排序  稳定
     //1. 二路归并
     //左边排序  右边排序
 
@@ -261,7 +261,7 @@ public class SortAgrm10 {
     //
 
     /**
-     * 基数排序    要求全为正数 或0
+     * 基数排序 根据每一位排序    要求全为正数 或0
      *
      * @time n*10    (int范围~=10^9一共10位十进制)
      * @space n
@@ -294,5 +294,8 @@ public class SortAgrm10 {
             count = new int[10];
         }
     }
+    //计数排序   对范围内的每个数计数
+
+    //桶排序  给数据范围划分为几个部分  每个部分排序
 
 }
