@@ -1,8 +1,8 @@
 package com.dpz.dataStructure;
 //线段树讲解：https://zhuanlan.zhihu.com/p/106118909
-
+//例题：https://leetcode-cn.com/problems/range-sum-query-mutable/
 /**
- * todo 动态开点  lazy标记  数组实现
+ * todo 动态开点
  * 线段树
  * 线段树的用处就是，对编号连续的一些点进行修改或者统计操作，修改和统计的复杂度都是O(log2(n)).
  * 线段树中，每个点代表一条线段（区间）
@@ -16,90 +16,132 @@ package com.dpz.dataStructure;
  * 众数——只知道左右区间的众数，没法求总区间的众数
  */
 
+/**
+ * 线段树 基础版
+ */
+//class SegmentTree {
+//    int sum;
+//    int left;
+//    int right;
+//    SegmentTree lNode;
+//    SegmentTree rNode;
+//
+//    SegmentTree(int l, int r, int[] nums) {
+//        left = l;
+//        right = r;
+//
+//        if (l != r) {
+//            int mid = left + right >> 1;
+//            lNode = new SegmentTree(l, mid, nums);
+//            rNode = new SegmentTree(mid + 1, r, nums);
+//            sum = lNode.sum + rNode.sum;
+//        } else sum = nums[l];
+//    }
+//
+//    void add(int l, int r, int val) {
+//        if (l > right || r < left) return;
+//        if (left == right) sum += val;
+//        else {
+//            lNode.add(l, r, val);
+//            rNode.add(l, r, val);
+//            sum = lNode.sum + rNode.sum;
+//        }
+//    }
+//
+//    int query(int l, int r) {
+//        if (l > right || r < left) return 0;
+//        if (l <= left && right <= r) return sum;
+//        return lNode.query(l, r) + rNode.query(l, r);
+//    }
+//
+//}
+
+
+/**
+ * 数组实现
+ * https://zhuanlan.zhihu.com/p/106118909
+ * https://leetcode-cn.com/problems/range-sum-query-mutable/solution/meng-xin-de-di-yi-ke-xian-duan-shu-by-98-c3es/
+ */
+
+
 class SegmentTree {
-    int sum;
-    int left;
-    int right;
-    SegmentTree lNode;
-    SegmentTree rNode;
+    int MAXN;
+    int[] tree;
+    int[] lazy;
+    int[] nums;
+    int n;
 
-    SegmentTree(int l, int r, int[] nums) {
-        left = l;
-        right = r;
-
-        if (l != r) {
-            int mid = left + right >> 1;
-            lNode = new SegmentTree(l, mid, nums);
-            rNode = new SegmentTree(mid + 1, r, nums);
-            sum = lNode.sum + rNode.sum;
-        } else sum = nums[l];
+    SegmentTree(int[] A) {
+        n=MAXN = A.length;
+        nums = A;
+        tree = new int[MAXN << 2];
+        lazy = new int[MAXN << 2];
+        build(1, 1, n);
     }
 
-    void add(int l, int r, int val) {
-        if (l > right || r < left) return;
-        if (left == right) sum += val;
-        else {
-            lNode.add(l, r, val);
-            rNode.add(l, r, val);
-            sum = lNode.sum + rNode.sum;
-        }
-    }
-
-    int query(int l, int r) {
-        if (l > right || r < left) return 0;
-        if (l <= left && right <= r) return sum;
-        return lNode.query(l, r) + rNode.query(l, r);
-    }
-
-}
-
-class SegmentTreeArr {
-    int MAXN = (int) 1e5 + 5;
-    int[] tree = new int[MAXN << 2], mark = new int[MAXN << 2], A = new int[MAXN];
-    int n, m;
-
-    void push_down(int p, int len) {
-        if (len <= 1) return;
-        tree[p << 1] += mark[p] * (len - len / 2);
-        mark[p << 1] += mark[p];
-        tree[p << 1 | 1] += mark[p] * (len / 2);
-        mark[p << 1 | 1] += mark[p];
-        mark[p] = 0;
-    }
-
-    void build(int p, int cl, int cr) {
-        if (cl == cr) {
-            tree[p] = A[cl];
+    void build(int p, int l, int r) {
+        if (l == r) {
+            tree[p] = nums[l - 1];
             return;
         }
-//      return void(tree[p] = A[cl]);
-        int mid = (cl + cr) >> 1;
-        build(p << 1, cl, mid);
-        build(p << 1 | 1, mid + 1, cr);
-        tree[p] = tree[p << 1] + tree[p << 1 | 1];
+
+        int mid = (l + r) >> 1;
+        build(p << 1, l, mid);
+        build(p << 1 | 1, mid + 1, r);
+        push_up(p);
     }
 
-    int query(int l, int r, int p, int cl, int cr) {
+    long query(int l, int r) {
+        return query(l, r, 1, 1, n);
+    }
+
+    long query(int l, int r, int p, int cl, int cr) {
         if (cl >= l && cr <= r) return tree[p];
-        push_down(p, cr - cl + 1);
-        int mid = (cl + cr) >> 1, ans = 0;
-        if (mid >= l) ans += query(l, r, p << 1, cl, mid);
-        if (mid < r) ans += query(l, r, p << 1 | 1, mid + 1, cr);
+        int mid = (cl + cr) >> 1;
+        push_down(p, cl, cr, mid);
+        long ans = 0;
+        if (mid >= l) ans = merge(ans, query(l, r, p << 1, cl, mid));
+        if (mid < r) ans = merge(ans, query(l, r, p << 1 | 1, mid + 1, cr));
         return ans;
     }
 
+    void update(int l, int r, int val) {
+        update(l, r, val, 1, 1, n);
+    }
+
+    //d 增量
     void update(int l, int r, int d, int p, int cl, int cr) {
         if (cl >= l && cr <= r) {
             tree[p] += d * (cr - cl + 1);
-            mark[p] += d;
+            lazy[p] += d;
+            return;
         }
-//      return void(tree[p] += d * (cr - cl + 1), mark[p] += d);
-        push_down(p, cr - cl + 1);
         int mid = (cl + cr) >> 1;
+        push_down(p, cl, cr, mid);
+
         if (mid >= l) update(l, r, d, p << 1, cl, mid);
         if (mid < r) update(l, r, d, p << 1 | 1, mid + 1, cr);
+        push_up(p);
+    }
+
+    void push_up(int p) {
         tree[p] = tree[p << 1] + tree[p << 1 | 1];
     }
+
+    void push_down(int p, int l, int r, int mid) {
+        if (lazy[p] == 0) return;
+        lazy[p << 1] += lazy[p];
+        lazy[p << 1 | 1] += lazy[p];
+        tree[p << 1] += lazy[p] * (mid - l + 1);
+        tree[p << 1 | 1] += lazy[p] * (r - mid);
+        lazy[p] = 0;
+    }
+
+    long merge(long a, long b) {
+        return a + b;
+    }
 }
+
+
 
 
