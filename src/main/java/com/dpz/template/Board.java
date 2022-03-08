@@ -53,4 +53,8 @@ public class Board {
             return null;
         }
     }
+    //棋盘问题  不出界
+//    boolean validPos(int x, int y){
+//        return x>=0&&x<m&&y>=0&&y<n;
+//    }
 }
