@@ -2,14 +2,10 @@ package com.dpz.template;
 
 import java.math.BigInteger;
 import java.util.*;
-
+//TODO 字符串哈希
 public class API {
 
-    //常量
-    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
-    int mod = (int) 1e9 + 7;
-    int INF = 0x3f3f3f3f;
 
     //最大公约数
     int gcd(int a, int b) {

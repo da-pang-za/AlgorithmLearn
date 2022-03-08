@@ -38,7 +38,7 @@ class Skiplist {
     private Node searchNode(int target){
         if(isEmpty()) return head;
         Node pre = head;
-        //尽量横跳
+        //尽量横跳  最终到达最低层
         for(int i=MAX_LEVEL;i>=0;i--) //垂直向下
             while(pre.next[i]!=null && pre.next[i].val<=target)//尽量横跳
                 pre = pre.next[i];
