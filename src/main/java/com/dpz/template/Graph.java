@@ -1,13 +1,10 @@
 package com.dpz.template;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Graph {
 
-    //建图  dijkstra模板
+    //建图  dijkstra模板  前向星
     class Solution1 {
         int N = 110, M = 6010;
         int[] he = new int[N], e = new int[M], ne = new int[M], w = new int[M];
@@ -57,6 +54,77 @@ public class Graph {
                 }
             }
         }
+    }
+
+    //dijkstra模板 map
+    class Solution6032 {
+        long INF = Long.MAX_VALUE / 3 - 10;
+        int n;
+        public long minimumWeight(int _n, int[][] edges, int src1, int src2, int dest) {
+            n = _n;
+            HashMap<Long, Long> weight = new HashMap<>();
+            HashMap<Long, Long> weightR = new HashMap<>();
+            HashMap<Integer, List<Integer>> adj = new HashMap<>();
+            HashMap<Integer, List<Integer>> adjR = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                adj.putIfAbsent(i, new ArrayList<>());
+                adjR.putIfAbsent(i, new ArrayList<>());
+                weight.put(getKey(i,i), 0L);
+                weightR.put(getKey(i,i), 0L);
+            }
+            for (int[] edge : edges) {
+                int from = edge[0], to = edge[1], w = edge[2];
+                adj.get(from).add(to);
+                adjR.get(to).add(from);
+                weight.put(getKey(from,to), Math.min( w, weight.getOrDefault(getKey(from,to), INF)));
+                weightR.put(getKey(to,from), Math.min( w, weightR.getOrDefault(getKey(to,from), INF)));
+
+            }
+            long[] dd = dijkstra(dest,adjR,weightR);
+            if (dd[src1] == INF || dd[src2] == INF) return -1;
+            long[]s1=dijkstra(src1,adj,weight);
+            long[]s2=dijkstra(src2,adj,weight);
+            System.out.println(Arrays.toString(s1));
+            System.out.println(Arrays.toString(s2));
+            long ans = INF;
+            for (int i = 0; i < n; i++) {
+                ans = Math.min(ans, dd[i] + s1[i]+s2[i]);
+            }
+            return ans;
+        }
+
+
+        long[] dijkstra(int src,HashMap<Integer, List<Integer>> adj,HashMap<Long, Long> weight) {
+            boolean[] vis = new boolean[n];
+            Arrays.fill(vis, false);
+            long[] dist = new long[n];
+//        int[]pre=new int[n];
+//        Arrays.fill(pre,-1);
+            Arrays.fill(dist, INF);
+            dist[src] = 0;
+            PriorityQueue<long[]> q = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));//dist小的先出
+            q.add(new long[]{src, 0});
+            while (!q.isEmpty()) {
+                long[] poll = q.poll();//最小的
+                int id = (int) poll[0];
+                if (vis[id]) continue;
+                vis[id] = true;
+                for (int nx : adj.get(id)) {
+                    long w = weight.get(getKey(id,nx));
+                    if (dist[nx] > dist[id] + w) {
+                        dist[nx] = dist[id] + w;
+//                    pre[nx]=id;
+                        q.add(new long[]{nx, dist[nx]});
+                    }
+                }
+            }
+            return dist;
+        }
+
+        long getKey(int a,int b){
+            return (long)a*1000_000L+b;
+        }
+
     }
     //三色标记
     //lc.802
