@@ -8,8 +8,8 @@
 
 #include "bits/stdc++.h"  //省事版哈哈
 
-#include "./dataStructure/ListNode.h"
-#include "./dataStructure/TreeNode.h"
+//#include "./dataStructure/ListNode.h"
+//#include "./dataStructure/TreeNode.h"
 //#include "./dataStructure/Trie.h"
 //#define PB push_back
 //#define PF push_front
@@ -45,7 +45,6 @@
 
 //template<typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 //const ll mod = 1e9 + 7;
-using namespace std;
 
 
 #endif //LEETCODECPP_IMPORT_H
