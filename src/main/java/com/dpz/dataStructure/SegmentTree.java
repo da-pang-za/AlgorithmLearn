@@ -78,7 +78,7 @@ class SegmentTree {
         lazy = new int[MAXN << 2];
         build(1, 1, n);
     }
-
+    //p:节点idx
     void build(int p, int l, int r) {
         if (l == r) {
             tree[p] = nums[l - 1];
@@ -88,7 +88,7 @@ class SegmentTree {
         int mid = (l + r) >> 1;
         build(p << 1, l, mid);
         build(p << 1 | 1, mid + 1, r);
-        push_up(p);
+        push_up(p);//
     }
 
     long query(int l, int r) {
@@ -123,7 +123,7 @@ class SegmentTree {
         if (mid < r) update(l, r, d, p << 1 | 1, mid + 1, cr);
         push_up(p);
     }
-
+    //利用左右点 更新当前点
     void push_up(int p) {
         tree[p] = tree[p << 1] + tree[p << 1 | 1];
     }
