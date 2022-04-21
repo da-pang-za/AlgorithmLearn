@@ -114,7 +114,7 @@ class SegmentTree1 {
 
     //利用左右点 更新当前点
     void push_up(Node p) {
-        p.val = m.merge(p.left.val, p.right.val);
+        p.val = m.merge(left(p).val, right(p).val);
     }
 
     void push_down(Node p) {
