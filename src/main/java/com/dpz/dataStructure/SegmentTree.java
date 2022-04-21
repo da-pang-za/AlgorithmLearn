@@ -2,7 +2,7 @@ package com.dpz.dataStructure;
 //线段树讲解：https://zhuanlan.zhihu.com/p/106118909
 //例题：https://leetcode-cn.com/problems/range-sum-query-mutable/
 /*
- * todo 动态开点 、Node实现、动态设置幺元
+ * todo 动态设置幺元
  * 线段树
  * 线段树的用处就是，对编号连续的一些点进行修改或者统计操作，修改和统计的复杂度都是O(log2(n)).
  * 线段树中，每个点代表一条线段（区间）
@@ -17,12 +17,6 @@ package com.dpz.dataStructure;
  * <p>
  */
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
-
 /**
  * 数组实现
  * https://zhuanlan.zhihu.com/p/106118909
@@ -31,37 +25,44 @@ import java.util.TreeSet;
 
 public
 class SegmentTree {
-    interface M {
+    public interface M {
         long merge(long a, long b);
     }
 
-    interface MN {
+    public interface MN {
         long mergeN(long a, long count);
     }
 
-    static final int ADD = 0;//增量
-    static final int ASSIGN = 1;//赋值
+    public interface A {
+        long add(long a, long b);
+    }
+
+    public static final int ADD = 0;//增量
+    public static final int ASSIGN = 1;//赋值
     int MAXN;
     long[] tree;
     long[] lazy;
     boolean[] hasLazy;
-    int[] nums;
+    int[] nums;//区间[1,n]的每个位置的值
     int n;
     int mode;
+    A a;
     M m;
     MN mn;
 
-    SegmentTree(int[] A, int _n, M merge, MN mergeN, int mode) {
+
+    public SegmentTree(int[] _nums, int _n, A add, M merge, MN mergeN, int mode) {
         this.m = merge;
         this.mn = mergeN;
+        this.a=add;
         this.mode = mode;
         n = MAXN = _n;
-        nums = A;
+        nums = _nums;
         tree = new long[MAXN << 2];
         lazy = new long[MAXN << 2];
         if (mode == ASSIGN)
             hasLazy = new boolean[MAXN << 2];
-        if (A != null)
+        if (_nums != null)
             build(1, 1, n);
     }
 
@@ -78,12 +79,12 @@ class SegmentTree {
         push_up(p);//
     }
 
-    long query(int l, int r) {
+    public long query(int l, int r) {
         return query(l, r, 1, 1, n);
     }
 
     long query(int l, int r, int p, int nl, int nr) {
-        if (nl >= l && nr <= r) return tree[p];
+        if (l <= nl && nr <= r) return tree[p];
         int mid = (nl + nr) >> 1;
         push_down(p, nl, nr);
         long ans = 0;
@@ -93,15 +94,15 @@ class SegmentTree {
     }
 
 
-    void update(int l, int r, long val) {
+    public void update(int l, int r, long val) {
         update(l, r, val, 1, 1, n);
     }
 
     void update(int l, int r, long d, int p, int nl, int nr) {
         if (l <= nl && nr <= r) {
             if (mode == ADD) {
-                tree[p] = m.merge(tree[p], mn.mergeN(d, nr - nl + 1));
-                lazy[p] = m.merge(lazy[p], d);
+                tree[p] = a.add(tree[p], mn.mergeN(d, nr - nl + 1));
+                lazy[p] = a.add(lazy[p], d);
             } else if (mode == ASSIGN) {
                 tree[p] = mn.mergeN(d, nr - nl + 1);
                 lazy[p] = d;
@@ -128,11 +129,11 @@ class SegmentTree {
         if (l >= r) return;
         int mid = (l + r) >> 1;
         if (mode == ADD) {
-            lazy[p << 1] = m.merge(lazy[p << 1], lazy[p]);
-            lazy[p << 1 | 1] = m.merge(lazy[p << 1 | 1], lazy[p]);
+            lazy[p << 1] = a.add(lazy[p << 1], lazy[p]);
+            lazy[p << 1 | 1] = a.add(lazy[p << 1 | 1], lazy[p]);
 
-            tree[p << 1] = m.merge(tree[p << 1], mn.mergeN(lazy[p], mid - l + 1));
-            tree[p << 1 | 1] = m.merge(tree[p << 1 | 1], mn.mergeN(lazy[p], r - mid));
+            tree[p << 1] = a.add(tree[p << 1], mn.mergeN(lazy[p], mid - l + 1));
+            tree[p << 1 | 1] = a.add(tree[p << 1 | 1], mn.mergeN(lazy[p], r - mid));
         } else if (mode == ASSIGN) {
             if (!hasLazy[p]) return;
             lazy[p << 1] = lazy[p];//此处如果当前节点没有标记  会把子节点的标记给擦除  但当前节点也可能有值为0的标记
@@ -175,6 +176,164 @@ class SegmentTree {
 //        return ans;
 //    }
 //}
+
+//class SegmentTree1 {
+//    interface M {
+//        long merge(long a, long b);
+//    }
+//
+//    interface MN {
+//        long mergeN(long a, long count);
+//    }
+//
+//    interface A {
+//        long add(long a, long b);
+//    }
+//
+//    static final int ADD = 0;//增量
+//    static final int ASSIGN = 1;//赋值
+//    int MAXN;
+//    boolean[] hasLazy;
+//    int[] nums;
+//    int n;
+//    int mode;
+//    M m;
+//    MN mn;
+//    A a;
+//    Node root;
+//
+//    SegmentTree1(int[] _nums, int start, int _n, A add, M merge, MN mergeN, int mode) {
+//        this.m = merge;
+//        this.mn = mergeN;
+//        this.a = add;
+//        this.mode = mode;
+//        n = MAXN = _n;
+//        nums = _nums;
+//        root = new Node(start, n);
+//
+//        if (mode == ASSIGN)
+//            hasLazy = new boolean[MAXN << 2];
+//        if (_nums != null)
+//            build(root);
+//    }
+//
+//    static class Node {
+//        int l, r;
+//        Node left, right;
+//        long val = 0;
+//        long lazy;
+//        boolean hasLazy;
+//
+//        Node(int l, int r) {
+//            this.l = l;
+//            this.r = r;
+//        }
+//    }
+//
+//    void build(Node p) {
+//        int l = p.l, r = p.r;
+//        if (l == r) {
+//            p.val = nums[l - 1];
+//            return;
+//        }
+//
+//        build(left(p));
+//        build(right(p));
+//        push_up(p);//
+//    }
+//
+//    long query(int l, int r) {
+//        return query(l, r, root);
+//    }
+//
+//    long query(int l, int r, Node p) {
+//        int nl = p.l, nr = p.r;
+//        if (nl >= l && nr <= r) return p.val;
+//
+//        push_down(p);
+//        long ans = 0;
+//        int mid = (nl + nr) >> 1;
+//        if (mid >= l) ans = m.merge(ans, query(l, r, left(p)));
+//        if (mid < r) ans = m.merge(ans, query(l, r, right(p)));
+//        return ans;
+//    }
+//
+//
+//    void update(int l, int r, long val) {
+//        update(l, r, val, root);
+//    }
+//
+//    void update(int l, int r, long d, Node p) {
+//        int nl = p.l, nr = p.r;
+////        System.out.println(l+" "+r+" "+nl+" "+nr);
+//        if (l <= nl && nr <= r) {
+//            if (mode == ADD) {
+//                p.val = a.add(p.val, mn.mergeN(d, nr - nl + 1));
+//                p.lazy = a.add(p.lazy, d);
+//            } else if (mode == ASSIGN) {
+//                p.val = mn.mergeN(d, nr - nl + 1);
+//                p.lazy = d;
+//                p.hasLazy = true;
+//            } else System.err.println("[SegmentTree]:unknown mode");
+//
+//            return;
+//        }
+//
+//        push_down(p);
+//
+//        int mid = (nl + nr) >> 1;
+//        if (mid >= l) update(l, r, d, left(p));
+//        if (mid < r) update(l, r, d, right(p));
+//        push_up(p);
+//    }
+//
+//    //利用左右点 更新当前点
+//    void push_up(Node p) {
+//        p.val = m.merge(p.left.val, p.right.val);
+//    }
+//
+//    void push_down(Node p) {
+//        int l = p.l, r = p.r;
+//        if (l >= r) return;
+//        int mid = (l + r) >> 1;
+//        if (mode == ADD) {
+//            left(p).lazy = a.add(p.left.lazy, p.lazy);
+//            right(p).lazy = a.add(p.left.lazy, p.lazy);
+//
+//            p.left.val = a.add(p.left.val, mn.mergeN(p.lazy, mid - l + 1));
+//            p.right.val = a.add(p.right.val, mn.mergeN(p.lazy, r - mid));
+//        } else if (mode == ASSIGN) {
+//            if (!p.hasLazy) return;
+//            left(p).lazy = p.lazy;//此处如果当前节点没有标记  会把子节点的标记给擦除  但当前节点也可能有值为0的标记
+//            right(p).lazy = p.lazy;
+//            p.left.hasLazy = true;
+//            p.right.hasLazy = true;
+//            p.left.val = mn.mergeN(p.lazy, mid - l + 1);
+//            p.right.val = mn.mergeN(p.lazy, r - mid);
+//            p.hasLazy = false;
+//        } else System.err.println("[SegmentTree]:unknown mode");
+//
+//        p.lazy = 0;
+//    }
+//
+//    Node right(Node p) {
+//        if (p.right != null) return p.right;
+//        int l = p.l, r = p.r;
+//        int mid = (l + r) >> 1;
+//        p.right = new Node(mid + 1, r);
+//        return p.right;
+//    }
+//
+//    Node left(Node p) {
+//        if (p.left != null) return p.left;
+//        int l = p.l, r = p.r;
+//        int mid = (l + r) >> 1;
+//        p.left = new Node(l, mid);
+//        return p.left;
+//    }
+//
+//}
+
 
 
 
