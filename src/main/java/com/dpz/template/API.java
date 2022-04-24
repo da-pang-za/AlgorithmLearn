@@ -2,10 +2,59 @@ package com.dpz.template;
 
 import java.math.BigInteger;
 import java.util.*;
-//TODO 字符串哈希
+
 public class API {
 
+    //二分查找
+    //第一个>=x的元素的idx(下标)
+    public Integer ceiling(int[] nums, int start, int end, int x) {
+        if (x > nums[end]) return null;
+        int l = start, r = end;
+        while (l < r) {
+            int mid = l + r >> 1;
+            if (nums[mid] >= x) r = mid;
+            else l = mid + 1;
+        }
+        return l;
+    }
 
+    //第一个<=x的元素
+    public Integer floor(List<Integer> nums, int start, int end, int x) {
+        if (x < nums.get(start)) return null;
+        int l = start, r = end;
+        while (l < r) {
+            int mid = l + r + 1 >> 1;
+            if (nums.get(mid) <= x) l = mid;
+            else r = mid - 1;
+        }
+        return l;
+
+    }
+
+    //第一个>=x的元素的idx(下标)
+    public Integer ceiling(List<Integer> nums, int start, int end, int x) {
+        if (x > nums.get(end)) return null;
+        int l = start, r = end;
+        while (l < r) {
+            int mid = l + r >> 1;
+            if (nums.get(mid) >= x) r = mid;
+            else l = mid + 1;
+        }
+        return l;
+    }
+
+    //第一个<=x的元素
+    public Integer floor(int[] nums, int start, int end, int x) {
+        if (x < nums[start]) return null;
+        int l = start, r = end;
+        while (l < r) {
+            int mid = l + r + 1 >> 1;
+            if (nums[mid] <= x) l = mid;
+            else r = mid - 1;
+        }
+        return l;
+
+    }
 
     //最大公约数
     int gcd(int a, int b) {
@@ -151,7 +200,7 @@ public class API {
             x = x * x % p;
             k >>= 1;
         }
-        return  res;
+        return res;
     }
 
     //计算器   表达式问题   究极表达式问题
