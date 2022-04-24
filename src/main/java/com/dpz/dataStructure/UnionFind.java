@@ -7,7 +7,7 @@ import java.util.Arrays;
  * https://oi-wiki.org/ds/dsu/
  * https://leetcode-cn.com/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/
  */
-
+public
 class UnionFind {
     int[] parent;
     int[] size;
@@ -54,6 +54,3 @@ class UnionFind {
 }
 
 
-public class UnionFindDemo {
-
-}
