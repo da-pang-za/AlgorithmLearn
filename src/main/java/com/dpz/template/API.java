@@ -386,6 +386,7 @@ public class API {
         return ans;
     }
 
+    //组合数递推公式： C(a,b)=C(a-b,b-1)+C(a-1,b)    //根据是否取当前位置划分
     //组合
     public BigInteger combin(BigInteger n, BigInteger m) {
         assert n.compareTo(m) >= 0;
