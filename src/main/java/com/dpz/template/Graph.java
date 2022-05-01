@@ -96,7 +96,6 @@ public class Graph {
 
         long[] dijkstra(int src,HashMap<Integer, List<Integer>> adj,HashMap<Long, Long> weight) {
             boolean[] vis = new boolean[n];
-            Arrays.fill(vis, false);
             long[] dist = new long[n];
 //        int[]pre=new int[n];
 //        Arrays.fill(pre,-1);
