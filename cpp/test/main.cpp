@@ -1,66 +1,71 @@
-#include "Solution.h"
+
+//#include "Solution.cpp"
+
+//#include "dataStructure/SegmentTree-test.h"
+
+#include <bits/stdc++.h>
 
 
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
+
 
 using namespace std;
 
-//ACM mode
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    int n, q;
-    cin >> n >> q;
+const int N = 2e4 + 10;
+int ne[N * 20][2], cnt[N * 15], idx;
 
-    int dir[8][2] = {{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
-    int r = 100;
-    int w = r * 2 + 1;
-    vector<vector<int> > map(w, vector<int>(w, 0));
-    map[r][r] = n;
+class Solution {
+public:
+    // 在字典数中插入一个数
+    void insert(int x) {
+        int p = 0;
+        for (int i = 15; i >= 0; i--) {
+            int j = x >> i & 1;
+            if (!ne[p][j]) ne[p][j] = ++idx;
+            p = ne[p][j];
+            // 注意这里cnt记录的是该节点向下总数字的个数
+            cnt[p]++;
+        }
+    }
 
-    bool f = true;
-    while (f) {
-        f = false;
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < w; y++) {
-                if (map[x][y] >= 8) {
-                    f = true;
-                    for (int i = 0; i < 8; i++) {
-                        int nx = x + dir[i][0];
-                        int ny = y + dir[i][1];
-                        map[nx][ny] += map[x][y] / 8;
-                    }
-                    map[x][y] %= 8;
-                }
+    int query(int x, int hi) {
+        int p = 0;
+        int res = 0;
+        for (int i = 15; i >= 0; i--) {
+            int j = x >> i & 1, k = hi >> i & 1;
+            // hi的当前位为1，则下一步可以往异或结果为1也可以往为0的方向走，往0的方向剪枝，因为亦或后的结果最大不可能超过hi了
+            if (k) {
+                // 相同的值，异或结果为0，可以直接剪枝
+                if (ne[p][j]) res += cnt[ne[p][j]];
+                // 如果不同值不存在，则直接返回
+                if (!ne[p][1 - j]) return res;
+                // 继续向下
+                p = ne[p][1 - j];
+            } else {
+                // k为0，只能往抑或结果为0的方向走，不存在的话直接返回
+                if (!ne[p][j]) return res;
+                p = ne[p][j];
             }
         }
+        // 不要忘记加上最后叶节点的结果
+        res += cnt[p];
+        return res;
     }
 
-    vector<vector<int> > sum(w, vector<int>(w));
-    for (int x = 0; x < w; x++) {
-        for (int y = 0; y < w; y++) {
-            if (x == 0 && y == 0) sum[x][y] = map[x][y];
-            else if (x == 0) sum[x][y] = map[x][y] + sum[x][y - 1];
-            else if (y == 0) sum[x][y] = map[x][y] + sum[x - 1][y];
-            else sum[x][y] = map[x][y] + sum[x - 1][y] + sum[x][y - 1] - sum[x - 1][y - 1];
+    int countPairs(vector<int>& nums, int low, int high) {
+        memset(ne, 0, sizeof ne);
+        memset(cnt, 0, sizeof cnt);
+        idx = 0;
+
+        int n = nums.size();
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            int a = nums[i];
+            insert(a);
+            res += query(a, high) - query(a, low - 1);
         }
-    }
 
-    while (q--) {
-        int x1, y1, x2, y2;
-        cin >> x1 >> y1 >> x2 >> y2;
-        x1 = max(x1 + r, 1);
-        y1 = max(y1 + r, 1);
-        x2 = min(x2 + r, w - 1);
-        y2 = min(y2 + r, w - 1);
-        if (x1 > x2 || y1 > y2) {
-            cout << 0 << endl;
-        } else {
-            cout << sum[x2][y2] - sum[x2][y1-1] - sum[x1-1][y2] + sum[x1-1][y1-1] << endl;
-        }
+        return res;
     }
-
-    return 0;
-}
+};
 
