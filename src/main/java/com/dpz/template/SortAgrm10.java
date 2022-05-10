@@ -40,50 +40,28 @@ public class SortAgrm10 {
     //快速排序   冒泡升级  不稳定
     //引入一个pivot  大的放在一边  小的放在另一边   对每一边进行相同的操作
     void quickSort(int[] nums) {
-        quick(nums, 0, nums.length - 1);
+        quickSort(nums, 0, nums.length - 1);
     }
 
-    void quick(int[] nums, int start, int end) {
-        if (start >= end) return;
-        int pivot = new Random().nextInt(end - start + 1) + start;//start -end
-        //轴放到start   注意必须要把pivot放在头上  不能不动 否则中间的不一定是Pivot
-        swap(nums, start, pivot);
 
-        int v = nums[start];
-        int left = start + 1;
-        int right = end;
-        while (left <= right) {
-            if (nums[left] > v) {
-                swap(nums, left, right);
-                right--;
-            } else left++;
+    static Random random = new Random();
+
+    void quickSort(int[] nums, int left, int right) {
+        if (left >= right) return;
+        int l = left - 1, r = right + 1;
+        //选一个轴
+        int pivot = left + random.nextInt(right - left + 1);
+        pivot = left + right >> 1;
+        int v = nums[pivot];
+        while (l < r) {
+            do l++; while (nums[l] < v);
+            do r--; while (nums[r] > v);
+            if (l < r) swap(nums, l, r);
         }
-        swap(nums, start, right);
-        quick(nums, start, right - 1);
-        quick(nums, right + 1, end);
+        quickSort(nums, left, r);
+        quickSort(nums, r + 1, right);
     }
 
-    //另一种写法
-//    void quick2(int[] nums, int start, int end) {
-//        if (start >= end) return;
-//        int pivot = new Random().nextInt(end - start + 1) + start;//start -end
-//        //轴放到start
-//        swap(nums, start, pivot);
-//
-//        int v = nums[start];
-//        int left = start ; //注意这里是start 不是上面的 start+1
-//        int right = end;
-//
-//        while (left < right) {
-//            while (left < right && nums[right] >= v) right--;//先处理右边  巧妙
-//            while (left < right && nums[left] <= v) left++;
-//            swap(nums, left, right);
-//        }
-//        swap(nums, left, start);//left位置必定小于等于start位置
-//
-//        quick(nums, start, left-1);
-//        quick(nums, left+1, end);
-//    }
 
     //选择  选择最小的 放在最前面  不稳定
     void SelectSort(int[] nums) {
