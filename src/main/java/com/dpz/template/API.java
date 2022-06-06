@@ -5,6 +5,18 @@ import java.util.*;
 
 //todo  ACWing 系统学习算法    算法基础课&提高课  https://www.acwing.com/blog/content/8368/
 public class API {
+    //多个数比大小
+    long min(long... nums) {
+        long ans = Long.MAX_VALUE;
+        for (var a : nums) ans = Math.min(ans, a);
+        return ans;
+    }
+
+    long max(long... nums) {
+        long ans = Long.MIN_VALUE;
+        for (var a : nums) ans = Math.max(ans, a);
+        return ans;
+    }
     //字母表  counter   小写字母
     int[]counter(String s){
         int[]ab=new int[26];
