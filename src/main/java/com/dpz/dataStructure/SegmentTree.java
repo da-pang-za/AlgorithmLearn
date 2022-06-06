@@ -148,6 +148,7 @@ class SegmentTree {
         lazy[p] = 0;
     }
 }
+
 //demo:690.掉落的方块
 //class Solution {
 //    public List<Integer> fallingSquares(int[][] positions) {
