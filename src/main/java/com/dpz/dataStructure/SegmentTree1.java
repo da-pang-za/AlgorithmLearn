@@ -3,14 +3,24 @@ package com.dpz.dataStructure;
 /**
  * 线段树-动态开点
  * 例题：https://leetcode-cn.com/problems/my-calendar-iii/
+ * todo 合并前的初始值ans不一定是0
  */
 public
 class SegmentTree1 {
     public interface M {
+        /**
+         * 合并两个区间的结果
+         */
         long merge(long a, long b);
     }
 
+
     public interface MN {
+        /**
+         * @return 区间count个a 合并的结果
+         * @param a     增量或赋值的值
+         * @param count 区间长度
+         */
         long mergeN(long a, long count);
     }
 
@@ -29,12 +39,12 @@ class SegmentTree1 {
     A a;
     Node root;
 
-    public SegmentTree1(int[] _nums, int start, int _n, A add, M merge, MN mergeN, int mode) {
-        this.m = merge;
-        this.mn = mergeN;
-        this.a = add;
-        this.mode = mode;
-        n = MAXN = _n;
+    public SegmentTree1(int[] _nums, int start, int end, A add, M merge, MN mergeN, int mode) {
+        this.m = merge;//合并左右两侧
+        this.mn = mergeN;//区间count个a 合并的结果
+        this.a = add;//只有add模式用到 累加方式
+        this.mode = mode;//累加 or 赋值
+        n = MAXN = end;
         nums = _nums;
         root = new Node(start, n);
 
