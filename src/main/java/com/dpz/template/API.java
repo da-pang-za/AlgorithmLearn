@@ -3,8 +3,16 @@ package com.dpz.template;
 import java.math.BigInteger;
 import java.util.*;
 
+//todo  ACWing 系统学习算法    算法基础课&提高课  https://www.acwing.com/blog/content/8368/
 public class API {
-    //todo 三进制
+    //字母表  counter   小写字母
+    int[]counter(String s){
+        int[]ab=new int[26];
+        for (char c : s.toCharArray()) {
+            ab[c-'a']++;
+        }
+        return ab;
+    }
 
     //二分查找
     //第一个>=x的元素的idx(下标)
