@@ -5,6 +5,11 @@ import java.util.*;
 
 //todo  ACWing 系统学习算法    算法基础课&提高课  https://www.acwing.com/blog/content/8368/
 public class API {
+    //字符集
+    String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String lower = "abcdefghijklmnopqrstuvwxyz";
+    String digit = "0123456789";
+
     //多个数比大小
     long min(long... nums) {
         long ans = Long.MAX_VALUE;
@@ -17,11 +22,12 @@ public class API {
         for (var a : nums) ans = Math.max(ans, a);
         return ans;
     }
+
     //字母表  counter   小写字母
-    int[]counter(String s){
-        int[]ab=new int[26];
+    int[] counter(String s) {
+        int[] ab = new int[26];
         for (char c : s.toCharArray()) {
-            ab[c-'a']++;
+            ab[c - 'a']++;
         }
         return ab;
     }
@@ -40,12 +46,12 @@ public class API {
     }
 
     //第一个<=x的元素
-    public Integer floor(List<Integer> nums, int start, int end, int x) {
-        if (x < nums.get(start)) return null;
+    public Integer floor(int[] nums, int start, int end, int x) {
+        if (x < nums[start]) return null;
         int l = start, r = end;
         while (l < r) {
             int mid = l + r + 1 >> 1;
-            if (nums.get(mid) <= x) l = mid;
+            if (nums[mid] <= x) l = mid;
             else r = mid - 1;
         }
         return l;
@@ -65,17 +71,18 @@ public class API {
     }
 
     //第一个<=x的元素
-    public Integer floor(int[] nums, int start, int end, int x) {
-        if (x < nums[start]) return null;
+    public Integer floor(List<Integer> nums, int start, int end, int x) {
+        if (x < nums.get(start)) return null;
         int l = start, r = end;
         while (l < r) {
             int mid = l + r + 1 >> 1;
-            if (nums[mid] <= x) l = mid;
+            if (nums.get(mid) <= x) l = mid;
             else r = mid - 1;
         }
         return l;
 
     }
+
 
     //最大公约数
     int gcd(int a, int b) {
