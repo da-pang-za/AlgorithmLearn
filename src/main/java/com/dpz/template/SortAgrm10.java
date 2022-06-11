@@ -209,7 +209,7 @@ public class SortAgrm10 {
 
     static int[] mergeHelp;
 
-    static void MergetSort(int[] nums) {
+    static void mergeSort(int[] nums) {
         mergeHelp = new int[nums.length];
         merge(nums, 0, nums.length - 1);
     }
