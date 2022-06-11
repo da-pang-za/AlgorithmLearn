@@ -4,40 +4,42 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static InputStream is;
-    static PrintWriter out;
-    //	static String INPUT = "";
-//	static String INPUT = "10 60 1 60 2 60 3 60 4 60 5 60 6 60 7 60 8 60 9 60 10";
-    static String INPUT = "";
+    //	static String INPUT = "10 60 1 60 2 60 3 60 4 60 5 60 6 60 7 60 8 60 9 60 10";
+    static String INPUT = "12\n" +
+            "23";
 
     static void solve() {
         for (int T = 1; T > 0; T--) go();
     }
 
-    static void go(){
-        int mod = 1000_000_007;
-        String s = ns(), t = ns();
-        int m = s.length(), n = t.length();
-        int[][] dp = new int[m + 1][n + 1];
-
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                char a = s.charAt(i - 1);
-                char b = t.charAt(j - 1);
-                if (a == b) {
-                    dp[i][j] = dp[i][j - 1] + 1 + dp[i - 1][j - 1];
-                } else {
-                    dp[i][j] = dp[i][j - 1];
-                }
-                if (dp[i][j] >= mod) dp[i][j] -= mod;
-            }
+    static String add(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int carry = 0;
+        int alen = a.length();
+        int blen = b.length();
+        int i = 0;
+        for (; i < Math.min(alen, blen); i++) {
+            int v = a.charAt(alen - i - 1) - '0' + b.charAt(blen - i - 1) - '0' + carry;
+            carry = v / 10;
+            sb.append(v % 10);
         }
-        int ans = 0;
-        for (int i = 1; i <= m; i++)ans=(ans+dp[i][n])%mod;
-        out.println(ans);
+        for (; i < alen; i++) {
+            int v = a.charAt(alen - i - 1) - '0' + carry;
+            carry = v / 10;
+            sb.append(v % 10);
+        }
+        for (; i < blen; i++) {
+            int v = b.charAt(blen - i - 1) - '0' + carry;
+            carry = v / 10;
+            sb.append(v % 10);
+        }
+        if (carry > 0) sb.append(carry);
+        return sb.reverse().toString();
     }
 
-
+    static void go() {
+        System.out.println(add(ns(), ns()));
+    }
 
     public static void main(String[] args) throws Exception {
         long S = System.currentTimeMillis();
@@ -47,8 +49,12 @@ public class Main {
         solve();
         out.flush();
         long G = System.currentTimeMillis();
-        tr(G - S + "ms");
+        tr(G - S + "ms 提交时记得清空INPUT！");
     }
+
+    static InputStream is;
+    static PrintWriter out;
+
 
     private static boolean eof() {
         if (lenbuf == -1) return true;
