@@ -25,7 +25,7 @@ public class SortAgrm10 {
     }
 
     //冒泡  稳定
-    void Bubble(int[] nums) {
+    static void Bubble(int[] nums) {
         //每次产生一个最大的数 放在末尾
         for (int i = nums.length - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
@@ -46,12 +46,12 @@ public class SortAgrm10 {
 
     static Random random = new Random();
 
-    void quickSort(int[] nums, int left, int right) {
+    static void quickSort(int[] nums, int left, int right) {
         if (left >= right) return;
         int l = left - 1, r = right + 1;
         //选一个轴
         int pivot = left + random.nextInt(right - left + 1);
-        pivot = left + right >> 1;
+//        pivot = left + right >> 1;
         int v = nums[pivot];
         while (l < r) {
             do l++; while (nums[l] < v);
@@ -62,9 +62,27 @@ public class SortAgrm10 {
         quickSort(nums, r + 1, right);
     }
 
+    //快速选择 排序后下标k位置的数
+    static int quick(int[] nums, int left, int right, int k) {
+        if (left >= right) return nums[left];
+        int l = left - 1, r = right + 1;
+        //选一个轴
+        int pivot = left + random.nextInt(right - left + 1);
+//        pivot = left + right >> 1;
+        int v = nums[pivot];
+
+        while (l < r) {
+            do l++; while (nums[l] < v);
+            do r--; while (nums[r] > v);
+            if (l < r) swap(nums, l, r);
+        }
+        if (r >= k) return quick(nums, left, r, k);
+        else return quick(nums, r + 1, right, k);
+    }
+
 
     //选择  选择最小的 放在最前面  不稳定
-    void SelectSort(int[] nums) {
+    static void SelectSort(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             int min = i;
             for (int j = i + 1; j < nums.length; j++) {
@@ -79,7 +97,7 @@ public class SortAgrm10 {
     //堆排序  选择排序的升级版   通过堆的方式选择最大元素 不稳定
     //大顶堆  一棵完全二叉树  最大元素是第一个  拿下来放到最后  在此元素之前维护大顶堆
     //int index = nums.length / 2 - 1;//最后一个有子节点的节点   //2个  3个元素 都返回下标0
-    void HeapSort(int[] nums) {
+    static void HeapSort(int[] nums) {
 
         //1.构建大顶堆   复杂度O(N)   算法导论p88
         build(nums);
@@ -94,7 +112,7 @@ public class SortAgrm10 {
     }
 
     //建堆
-    private void build(int[] nums) {
+    static private void build(int[] nums) {
         //找到最后一个有子节点的位置
         // 这里必须自底向上 反过来是错的
         //因为heapify只会把当前节点换为两个子节点中更大的，但子节点下方可能还有更大的值
@@ -111,7 +129,7 @@ public class SortAgrm10 {
      *
      * @param len 堆的长度  超过的是排序好的 不动
      */
-    void heapify(int[] nums, int index, int len) {
+    static void heapify(int[] nums, int index, int len) {
 
         while (index * 2 + 1 < len) { //首先判断是否有子节点  有子节点才能下沉
             int son = index * 2 + 1;
@@ -129,7 +147,7 @@ public class SortAgrm10 {
 
     }
 
-    void swap(int[] arr, int i, int j) {
+    static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -137,7 +155,7 @@ public class SortAgrm10 {
 
 
     //插入排序 稳定   插入前面的有序部分
-    void insertSort(int[] nums) {
+    static void insertSort(int[] nums) {
         int start = 0;
         int end = nums.length - 1;
         for (int i = 1; i <= end; i++) {
@@ -158,11 +176,11 @@ public class SortAgrm10 {
     }
 
     //shell   改良版插入
-    void shell(int[] nums) {
+    static void shell(int[] nums) {
         shellSort(nums, 0, nums.length - 1);
     }
 
-    void shellSort(int[] nums, int start, int end) {
+    static void shellSort(int[] nums, int start, int end) {
         int increment = end - start + 1;
         while (increment > 1) {
             increment = increment / 3 + 1;
@@ -189,14 +207,14 @@ public class SortAgrm10 {
     //1. 二路归并
     //左边排序  右边排序
 
-    int[] mergeHelp;
+    static int[] mergeHelp;
 
-    void MergetSort(int[] nums) {
+    static void MergetSort(int[] nums) {
         mergeHelp = new int[nums.length];
         merge(nums, 0, nums.length - 1);
     }
 
-    void merge(int[] nums, int l, int r) {
+    static void merge(int[] nums, int l, int r) {
         //结束条件
         if (l >= r) return;
         //排序两个子数组
@@ -243,7 +261,7 @@ public class SortAgrm10 {
      * @time n*10    (int范围~=10^9一共10位十进制)
      * @space n
      */
-    void baseSort(int[] nums) {
+    static void baseSort(int[] nums) {
         int n = nums.length;
         int[] tmp = new int[n];
         int[] count = new int[10];//0-9个数
