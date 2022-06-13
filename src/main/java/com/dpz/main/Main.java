@@ -5,40 +5,37 @@ import java.util.*;
 
 public class Main {
     //	static String INPUT = "10 60 1 60 2 60 3 60 4 60 5 60 6 60 7 60 8 60 9 60 10";
-    static String INPUT = "12\n" +
-            "23";
+    static String INPUT = "";
 
     static void solve() {
         for (int T = 1; T > 0; T--) go();
     }
-
-    static String add(String a, String b) {
-        StringBuilder sb = new StringBuilder();
-        int carry = 0;
-        int alen = a.length();
-        int blen = b.length();
-        int i = 0;
-        for (; i < Math.min(alen, blen); i++) {
-            int v = a.charAt(alen - i - 1) - '0' + b.charAt(blen - i - 1) - '0' + carry;
-            carry = v / 10;
-            sb.append(v % 10);
-        }
-        for (; i < alen; i++) {
-            int v = a.charAt(alen - i - 1) - '0' + carry;
-            carry = v / 10;
-            sb.append(v % 10);
-        }
-        for (; i < blen; i++) {
-            int v = b.charAt(blen - i - 1) - '0' + carry;
-            carry = v / 10;
-            sb.append(v % 10);
-        }
-        if (carry > 0) sb.append(carry);
-        return sb.reverse().toString();
+    //给定两个非负整数（不含前导 0） A，B，请你计算 A/B 的商和余数。 1≤A的长度≤100000,0≤B≤10000
+    static String[] divide(String a, String b) {
+        return divide(a, Integer.parseInt(b));
     }
 
+
+    static String[] divide(String a, int b) {
+        StringBuilder sb = new StringBuilder();
+        int n = a.length();
+        int r = 0;
+        for (int i = 0; i < n; i++) {
+            r = r * 10 + (a.charAt(i) - '0');
+
+            int v = r / b;
+            if (v != 0 || sb.length() != 0)
+                sb.append(r / b);
+
+            r = (r - v * b);
+        }
+        return new String[]{sb.length() == 0 ? "0" : sb.toString(), String.valueOf(r)};
+    }
+
+
     static void go() {
-        System.out.println(add(ns(), ns()));
+        String[] ans = divide(ns(), ns());
+        System.out.println(ans[0]+" "+ans[1]);
     }
 
     public static void main(String[] args) throws Exception {

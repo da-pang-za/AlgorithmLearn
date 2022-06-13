@@ -5,7 +5,7 @@ public class Debug {
      * 生成main函数
      */
     public static void main(String[] args) {
-        genMain("[[4,1,0,4,0],[1,0,4,0,5],[1,3,0,4,1],[4,4,0,4,0]]");
+        genMain("[\"coffee\",\"donuts\",\"time\",\"toffee\"]");
     }
 
 

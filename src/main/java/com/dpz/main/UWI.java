@@ -2,6 +2,7 @@ package com.dpz.main;
 
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class UWI {
@@ -54,6 +55,16 @@ public class UWI {
         return sb.toString();
     }
 
+    private String nextLine() {
+        int b = skip();
+        StringBuilder sb = new StringBuilder();
+        while (!(isSpaceChar(b) && b != ' ')) {
+            sb.appendCodePoint(b);
+            b = readByte();
+        }
+        return sb.toString();
+    }
+
     private char[] ns(int n) {
         char[] buf = new char[n];
         int b = skip(), p = 0;
@@ -76,6 +87,7 @@ public class UWI {
         return a;
     }
 
+    //二维数组
     private char[][] nm(int n, int m) {
         char[][] map = new char[n][];
         for (int i = 0; i < n; i++) map[i] = ns(m);
@@ -88,10 +100,12 @@ public class UWI {
         return map;
     }
 
+    //int
     private int ni() {
         return (int) nl();
     }
 
+    //long
     private long nl() {
         long num = 0;
         int b;
@@ -459,6 +473,7 @@ public class UWI {
 
     private boolean oj = System.getProperty("ONLINE_JUDGE") != null || ojFlag;
 
+    //调试的时候打印
     private void tr(Object... o) {
         if (!oj) System.out.println(Arrays.deepToString(o));
     }
@@ -481,21 +496,45 @@ public class UWI {
     }
 
 
-    int mod = (int) 1e9 + 7;
-    long INF = Long.MAX_VALUE / 3;
-
     static boolean ojFlag = false;
 
     void solve() {
-        for (int T = ni(); T > 0; T--) go();
+        for (int T = 1; T > 0; T--) go();
     }
 
+    int[] nums = new int[500_000];
+    DecimalFormat df = new DecimalFormat("#0.00000000");
+
+    //#0.00代表保留两位小数
     void go() {
-        long n = nl();
-        long x = n;
-        while (x % 2 == 0) x /= 2;
-        if (x == 1) out.println(-1);
-        else out.println(Math.min(2 * n / x,x));
+        int n = ni() - 1;
+        ni();
+        int p = 0;
+        nums[p++] = ni();
+        double ans = 0;
+        double sum = nums[0];
+        int i = 1;
+
+        while (n-- > 0) {
+            int opt = ni();
+            if (opt == 1) {
+                int x = ni();
+                nums[p++] = x;
+                int cnt = i + 1;
+                double s = sum + x;
+                while (s / cnt > (s + nums[i]) / (cnt + 1)) {
+                    s += nums[i];
+                    sum += nums[i];
+                    i++;
+                    cnt++;
+                }
+                ans = Math.max(ans, x - s / cnt);
+            } else {
+                out.println(df.format(ans));
+            }
+
+        }
+
     }
 
 }

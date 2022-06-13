@@ -13,16 +13,16 @@ import os
 # problems = open('./tmp/problems.csv', 'w')
 # exit(0)
 driver = selenium.webdriver.Chrome()
-addr="https://leetcode-cn.com/contest/weekly-contest-292/ranking/"
-page=1
-while page<=100:
+addr="https://leetcode-cn.com/contest/weekly-contest-293/ranking/"
+page=12
+while page<=40:
     driver.get(addr+str(page)+'/')
-    if page==1:
+    if page==12:
         time.sleep(2)
     else:time.sleep(0.5)
     s= driver.find_element(By.TAG_NAME,"body").text
 
-    if(s.__contains__('𝓧𝓨𝓕𝓢 🍀')):
+    if(s.__contains__('可爱抱抱呀😥')):
         print(page)
         exit(0)
     page+=1
