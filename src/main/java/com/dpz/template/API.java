@@ -5,6 +5,23 @@ import java.util.*;
 
 //todo  ACWing 系统学习算法    算法基础课&提高课  https://www.acwing.com/blog/content/8368/
 public class API {
+    static class Pair<A,B>{
+        A a;
+        B b;
+
+        public Pair(A a, B b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+    //List转数组
+    int[]list2Num(List<Integer>list){
+        int[]ans=new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ans[i]=list.get(i);
+        }
+        return ans;
+    }
     //字符集
     String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String lower = "abcdefghijklmnopqrstuvwxyz";
