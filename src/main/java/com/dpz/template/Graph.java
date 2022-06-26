@@ -3,6 +3,28 @@ package com.dpz.template;
 import java.util.*;
 
 public class Graph {
+    //todo 图论模板   建图+算法
+    //建图 1
+    ArrayList<Integer>[] build1(int n, int[][] edges) {
+        ArrayList<Integer>[] adj = new ArrayList[n];
+
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+        }
+        return adj;
+    }
+
+    //建图 2
+    HashSet<Integer>[] build2(int n, int[][] edges) {
+        HashSet<Integer>[] adj = new HashSet[n];
+
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+        }
+        return adj;
+    }
 
     //建图  dijkstra模板  前向星
     class Solution1 {
@@ -20,8 +42,10 @@ public class Graph {
             w[idx] = c;
             idx++;
         }
+
         public int networkDelayTime(int[][] ts, int _n, int _k) {
-            n = _n; k = _k;
+            n = _n;
+            k = _k;
             Arrays.fill(he, -1);
             for (int[] t : ts) {
                 int u = t[0], v = t[1], c = t[2];
@@ -34,11 +58,12 @@ public class Graph {
             }
             return ans > INF / 2 ? -1 : ans;
         }
+
         void dijkstra() {
             Arrays.fill(vis, false);
             Arrays.fill(dist, INF);
             dist[k] = 0;
-            PriorityQueue<int[]> q = new PriorityQueue<>((a, b)->a[1]-b[1]);//dist小的先出
+            PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[1] - b[1]);//dist小的先出
             q.add(new int[]{k, 0});
             while (!q.isEmpty()) {
                 int[] poll = q.poll();//最小的
@@ -60,6 +85,7 @@ public class Graph {
     class Solution6032 {
         long INF = Long.MAX_VALUE / 3 - 10;
         int n;
+
         public long minimumWeight(int _n, int[][] edges, int src1, int src2, int dest) {
             n = _n;
             HashMap<Long, Long> weight = new HashMap<>();
@@ -69,32 +95,32 @@ public class Graph {
             for (int i = 0; i < n; i++) {
                 adj.putIfAbsent(i, new ArrayList<>());
                 adjR.putIfAbsent(i, new ArrayList<>());
-                weight.put(getKey(i,i), 0L);
-                weightR.put(getKey(i,i), 0L);
+                weight.put(getKey(i, i), 0L);
+                weightR.put(getKey(i, i), 0L);
             }
             for (int[] edge : edges) {
                 int from = edge[0], to = edge[1], w = edge[2];
                 adj.get(from).add(to);
                 adjR.get(to).add(from);
-                weight.put(getKey(from,to), Math.min( w, weight.getOrDefault(getKey(from,to), INF)));
-                weightR.put(getKey(to,from), Math.min( w, weightR.getOrDefault(getKey(to,from), INF)));
+                weight.put(getKey(from, to), Math.min(w, weight.getOrDefault(getKey(from, to), INF)));
+                weightR.put(getKey(to, from), Math.min(w, weightR.getOrDefault(getKey(to, from), INF)));
 
             }
-            long[] dd = dijkstra(dest,adjR,weightR);
+            long[] dd = dijkstra(dest, adjR, weightR);
             if (dd[src1] == INF || dd[src2] == INF) return -1;
-            long[]s1=dijkstra(src1,adj,weight);
-            long[]s2=dijkstra(src2,adj,weight);
+            long[] s1 = dijkstra(src1, adj, weight);
+            long[] s2 = dijkstra(src2, adj, weight);
             System.out.println(Arrays.toString(s1));
             System.out.println(Arrays.toString(s2));
             long ans = INF;
             for (int i = 0; i < n; i++) {
-                ans = Math.min(ans, dd[i] + s1[i]+s2[i]);
+                ans = Math.min(ans, dd[i] + s1[i] + s2[i]);
             }
             return ans;
         }
 
 
-        long[] dijkstra(int src,HashMap<Integer, List<Integer>> adj,HashMap<Long, Long> weight) {
+        long[] dijkstra(int src, HashMap<Integer, List<Integer>> adj, HashMap<Long, Long> weight) {
             boolean[] vis = new boolean[n];
             long[] dist = new long[n];
 //        int[]pre=new int[n];
@@ -109,7 +135,7 @@ public class Graph {
                 if (vis[id]) continue;
                 vis[id] = true;
                 for (int nx : adj.get(id)) {
-                    long w = weight.get(getKey(id,nx));
+                    long w = weight.get(getKey(id, nx));
                     if (dist[nx] > dist[id] + w) {
                         dist[nx] = dist[id] + w;
 //                    pre[nx]=id;
@@ -120,11 +146,12 @@ public class Graph {
             return dist;
         }
 
-        long getKey(int a,int b){
-            return (long)a*1000_000L+b;
+        long getKey(int a, int b) {
+            return (long) a * 1000_000L + b;
         }
 
     }
+
     //三色标记
     //lc.802
     class Solution802 {
@@ -154,8 +181,6 @@ public class Graph {
             return true;
         }
     }
-
-
 
 
 }
