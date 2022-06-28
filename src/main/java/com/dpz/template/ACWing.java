@@ -23,6 +23,7 @@ public class ACWing {
      * 基础算法
      */
     static class Basic {
+        //todo  待整理：第k个数  浮点二分 区间合并 差分
         //高精度加减乘除
         //加
         static String add(String a, String b) {
@@ -169,6 +170,38 @@ public class ACWing {
             return s > 1;
         }
 
+        //埃氏筛求质数 O(nloglogn)
+        void prime(int n) {
+            boolean[] prim = new boolean[n + 1];
+            Arrays.fill(prim, true);
+            int ans = 0;//质数的个数
+            for (int v = 2; v <= n; v++) {
+                if (!prim[v]) continue;
+                ans++;
+                //注意这里是v*v
+                for (long k = (long) v * v; k <= n; k += v) prim[(int) k] = false;
+            }
+        }
+
+        //埃氏筛其实还是存在冗余的标记操作，比如对于 4545 这个数，它会同时被 3,53,5 两个数标记为合数，
+        // 因此我们优化的目标是让每个合数只被标记一次，这样时间复杂度即能保证为 O(n)
+        //线性筛   每次筛只与质数相乘   每个合数只会被其最小质因子筛掉
+        static public int countPrimes(int n) {
+            List<Integer> primes = new ArrayList<>();
+            boolean[] isPrime = new boolean[n + 1];
+            Arrays.fill(isPrime, true);
+            for (int v = 2; v <= n; ++v) {
+                if (isPrime[v]) primes.add(v);
+                //不管质数还是合数 都与质数相乘
+                for (int j = 0; j < primes.size() && primes.get(j) <= n / v; ++j) {
+                    isPrime[v * primes.get(j)] = false;
+                    if (v % primes.get(j) == 0) break;//primes[j]一定是v的最小质因子
+                }
+            }
+            return primes.size();
+        }
+
+
         //质因数分解  列表中每一项是<因数，因数的指数>
         static List<List<Integer>> primeFact(int s) {
             var list = new ArrayList<List<Integer>>();
@@ -185,7 +218,52 @@ public class ACWing {
             return list;
         }
 
+        //欧拉函数   [1,N]中和N互质的数的个数
+        //需要求出所有的质因子 公式见：https://www.acwing.com/problem/content/875/
+        static int EulerFun(int n) {
+            var list = primeFact(n);
+            long ans = n;
+            for (var e : list) ans = ans / e.get(0) * (e.get(0) - 1);
+            return (int) ans;
+        }
+
+        //筛法求欧拉函数    利用递推公式+线性筛
+        //https://www.acwing.com/video/299/
+        //求 1∼n 中每个数的欧拉函数之和
+        static long EulerSum(int n) {
+            List<Integer> primes = new ArrayList<>();
+            boolean[] isPrime = new boolean[n + 1];
+            int[] el = new int[n + 1];
+            el[1] = 1;
+            Arrays.fill(isPrime, true);
+            for (int v = 2; v <= n; ++v) {
+                if (isPrime[v]) {
+                    primes.add(v);
+                    el[v] = v - 1;//质数
+                }
+                //不管质数还是合数 都与质数相乘
+                for (int j = 0; j < primes.size() && primes.get(j) <= n / v; ++j) {
+                    isPrime[v * primes.get(j)] = false;
+                    int ne = v * primes.get(j);
+                    if (v % primes.get(j) == 0) {
+                        //gcd(v,p[j])=p[j]  分子分母各消去一项
+                        el[ne] = el[v] * primes.get(j);
+                        break;//primes[j]一定是v的最小质因子
+                    } else {//互质 gcd(v,p[j])=1
+                        el[ne] = el[v] * (primes.get(j) - 1);
+                    }
+                }
+            }
+            long ans = 0;
+            for (int i = 1; i <= n; i++) {
+                ans += el[i];
+            }
+            return ans;
+        }
+
+
     }
+
 
     /**
      * 数据结构
