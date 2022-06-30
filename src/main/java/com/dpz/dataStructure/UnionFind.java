@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * 并查集模板   优化版
  * https://oi-wiki.org/ds/dsu/
- * https://leetcode-cn.com/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/
+ * 复杂度科普：https://leetcode-cn.com/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/
  */
 public
 class UnionFind {
@@ -28,8 +28,8 @@ class UnionFind {
 
     public int find(int x) {
         //路径压缩  父亲更新为原父亲的祖先
-        if(x!=parent[x])
-            parent[x]=find(parent[x]);
+        if (x != parent[x])
+            parent[x] = find(parent[x]);
         return parent[x];
     }
 
@@ -54,3 +54,30 @@ class UnionFind {
 }
 
 
+//带权/距离并查集  dist[i]代表i到p[i]的距离
+//https://www.acwing.com/problem/content/description/242/
+//带权/距离并查集  只是用路径压缩优化
+class UnionFind_d {
+    int[] parent;
+    int[] dist;
+    int n;
+
+    public UnionFind_d(int n) {
+        this.n = n;
+        this.parent = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+        dist = new int[n];
+    }
+
+    public int find(int x) {
+        //路径压缩  父亲更新为原父亲的祖先
+        if (x != parent[x]) {
+            int p = find(parent[x]);
+            dist[x] += dist[parent[x]];
+            parent[x] = p;
+        }
+        return parent[x];
+    }
+}
