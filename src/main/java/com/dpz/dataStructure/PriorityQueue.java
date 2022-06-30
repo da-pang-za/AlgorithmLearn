@@ -11,26 +11,29 @@ import java.util.Random;
  */
 public class PriorityQueue {
 
+    List<Integer> list = new ArrayList<>();
 
-    List<Integer> list =new ArrayList<>();
-
-    PriorityQueue(){
+    PriorityQueue() {
 
     }
-    Integer peek(){
-        if(size()==0)return null;
+
+    Integer peek() {
+        if (size() == 0) return null;
         return list.get(0);
     }
-    Integer poll(){
-        if(size()==0)return null;
-        int ans= list.get(0);
-        list.set(0,list.get(size()-1));//赋值为最后一个 然后去掉最后一个
-        heapify(list,0, list.size());
-        list.remove(list.size()-1);
+
+    Integer poll() {
+        if (size() == 0) return null;
+        int ans = list.get(0);
+        list.set(0, list.get(size() - 1));//赋值为最后一个 然后去掉最后一个
+        heapify(list, 0, list.size());
+        list.remove(list.size() - 1);
         return ans;
     }
+
     /**
-     * 堆调整   复用堆排序的代码
+     * 堆调整/下沉   复用堆排序的代码
+     *
      * @param len 堆的长度  超过的是排序好的 不动
      */
     private void heapify(List<Integer> nums, int index, int len) {
@@ -50,43 +53,47 @@ public class PriorityQueue {
         }
 
     }
-    void add(int v){
+
+    void add(int v) {
         list.add(v);
         //上浮最后一个
-        int i=size()-1;
-        while(parent(i)>=0&& list.get(parent(i))<v){
-            Collections.swap(list,i,parent(i));
-            i=parent(i);
+        int i = size() - 1;
+        while (parent(i) >= 0 && list.get(parent(i)) < v) {
+            Collections.swap(list, i, parent(i));
+            i = parent(i);
         }
     }
-    int size(){
+
+    int size() {
         return list.size();
     }
+
     //辅助函数
-    int left(int i){
-        return 2*i+1;
+    int left(int i) {
+        return 2 * i + 1;
     }
-    int parent(int i){
-        return (i-1)>>1;
+
+    int parent(int i) {
+        return (i - 1) >> 1;
     }
 
 
     public static void main(String[] args) {
         //test
         PriorityQueue pq = new PriorityQueue();
-        java.util.PriorityQueue<Integer>pq1=new java.util.PriorityQueue<>((a,b)->Integer.compare(b,a));
+        java.util.PriorityQueue<Integer> pq1 = new java.util.PriorityQueue<>((a, b) -> Integer.compare(b, a));
 
-        int error=0;
+        int error = 0;
         for (int i = 0; i < 1000000; i++) {
-            int v=new Random().nextInt();
+            int v = new Random().nextInt();
             pq.add(v);
             pq1.add(v);
-            if(!pq.peek().equals(pq1.peek()))
+            if (!pq.peek().equals(pq1.peek()))
                 error++;
         }
         System.out.println(error);
-        while(!pq1.isEmpty()){
-            if(!pq.poll().equals(pq1.poll()))
+        while (!pq1.isEmpty()) {
+            if (!pq.poll().equals(pq1.poll()))
                 error++;
         }
         System.out.println(error);
