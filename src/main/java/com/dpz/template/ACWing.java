@@ -327,6 +327,99 @@ public class ACWing {
             else if (opt == '/') nums.addLast(a / b);
         }
 
+        //单调栈  左边第一个小于当前位置的数
+        int[] MonoStack(int[] nums, int n) {
+            Deque<Integer> dq = new ArrayDeque<>();
+            int[] ans = new int[n];
+            //维护递增栈
+            for (int i = 0; i < n; i++) {
+                int v = nums[i];
+                while (!dq.isEmpty() && dq.peekLast() >= v) dq.pollLast();
+                if (dq.isEmpty()) ans[i] = -1;
+                else ans[i] = dq.peekLast();
+                dq.addLast(v);
+            }
+            return ans;
+        }
+
+        //单调队列 滑动窗口最大值最小值   区间长度为k
+        void MonoDeque(int n, int k, int[] nums) {
+            Deque<Integer> deque1 = new ArrayDeque<>();//维护递减队列 求最大值
+            int[] max = new int[n - k + 1];
+
+            for (int i = 0; i < n; i++) {
+                int v = nums[i];
+                while (!deque1.isEmpty() && i - deque1.peekFirst() >= k) deque1.pollFirst();
+                while (!deque1.isEmpty() && v > nums[deque1.peekLast()]) deque1.pollLast();
+                deque1.addLast(i);
+                if (i >= k - 1) max[i - k + 1] = nums[deque1.peekFirst()];
+            }
+
+            Deque<Integer> deque2 = new ArrayDeque<>();//维护递增队列 求最小值
+            int[] min = new int[n - k + 1];
+            for (int i = 0; i < n; i++) {
+                int v = nums[i];
+                while (!deque2.isEmpty() && i - deque2.peekFirst() >= k) deque2.pollFirst();
+                while (!deque2.isEmpty() && v < nums[deque2.peekLast()]) deque2.pollLast();
+                deque2.addLast(i);
+                if (i >= k - 1) min[i - k + 1] = nums[deque2.peekFirst()];
+            }
+        }
+
+        //字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+        //单哈希
+        void StringHash1(int n, int m, String s, List<int[]> questions) {
+            int base1 = 1313131;
+            int mod = (int) 1e9 + 7;
+            long[] hash1 = new long[n + 1];
+            long[] p1 = new long[n + 1];
+            p1[0] = 1;
+            for (int i = 0; i < n; i++) {
+                hash1[i + 1] = (base1 * hash1[i] + s.charAt(i)) % mod;
+                p1[i + 1] = p1[i] * base1 % mod;
+            }
+
+            for (var q : questions) {
+                int l1 = q[0], r1 = q[1], l2 = q[2], r2 = q[3];
+
+                long h1 = (hash1[r1] - hash1[l1 - 1] * p1[r1 - l1 + 1] % mod + mod) % mod;
+                long h2 = (hash1[r2] - hash1[l2 - 1] * p1[r2 - l2 + 1] % mod + mod) % mod;
+                if (h1 == h2) System.out.println("Yes");
+                else System.out.println("No");
+            }
+        }
+
+        void StringHash2(int n, int m, String s, List<int[]> questions) {
+            int base1 = 1313131;
+            int base2 = 500007;
+            int mod = (int) 1e9 + 7;
+            long[] hash1 = new long[n + 1];
+            long[] p1 = new long[n + 1];
+            p1[0] = 1;
+            long[] hash2 = new long[n + 1];
+            long[] p2 = new long[n + 1];
+            p2[0] = 1;
+            for (int i = 0; i < n; i++) {
+                hash1[i + 1] = (base1 * hash1[i] + s.charAt(i)) % mod;
+                p1[i + 1] = p1[i] * base1 % mod;
+                hash2[i + 1] = (base2 * hash2[i] + s.charAt(i)) % mod;
+                p2[i + 1] = p2[i] * base2 % mod;
+            }
+            for (var q : questions) {
+                int l1 = q[0], r1 = q[1], l2 = q[2], r2 = q[3];
+
+                long h1 = (hash1[r1] - hash1[l1 - 1] * p1[r1 - l1 + 1] % mod + mod) % mod;
+                long h2 = (hash1[r2] - hash1[l2 - 1] * p1[r2 - l2 + 1] % mod + mod) % mod;
+                if (h1 == h2) {
+                    h1 = (hash2[r1] - hash2[l1 - 1] * p2[r1 - l1 + 1] % mod + mod) % mod;
+                    h2 = (hash2[r2] - hash2[l2 - 1] * p2[r2 - l2 + 1] % mod + mod) % mod;
+
+                    if (h1 == h2)
+                        System.out.println("Yes");
+                    else System.out.println("No");
+                } else System.out.println("No");
+            }
+        }
     }
 
     static class Greedy {
