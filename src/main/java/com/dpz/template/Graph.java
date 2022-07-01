@@ -4,9 +4,11 @@ import java.util.*;
 
 public class Graph {
     //todo 图论模板   建图+算法
-    //建图 1
-    ArrayList<Integer>[] build1(int n, int[][] edges) {
-        ArrayList<Integer>[] adj = new ArrayList[n];
+    //建图模板    注意！！！  这里是无向图！！！
+    //建图 1 list
+    List<Integer>[] build1(int n, int[][] edges) {
+        List<Integer>[] adj = new ArrayList[n];
+        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
 
         for (int[] edge : edges) {
             adj[edge[0]].add(edge[1]);
@@ -15,15 +17,53 @@ public class Graph {
         return adj;
     }
 
-    //建图 2
+    //建图 2  set
     HashSet<Integer>[] build2(int n, int[][] edges) {
         HashSet<Integer>[] adj = new HashSet[n];
-
+        for (int i = 0; i < n; i++) adj[i] = new HashSet<>();
         for (int[] edge : edges) {
             adj[edge[0]].add(edge[1]);
             adj[edge[1]].add(edge[0]);
         }
         return adj;
+    }
+
+    //建图3 带权
+    List<int[]>[] build3(int n, int[][] edges) {
+        List<int[]>[] adj = new ArrayList[n];
+        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+        for (int[] edge : edges) {
+            adj[edge[0]].add(new int[]{edge[1], edge[2]});
+            adj[edge[1]].add(new int[]{edge[0], edge[2]});
+        }
+        return adj;
+    }
+
+    //Dijkstra 单源最短路  复杂度 O(eloge)
+    long[] dijkstra(int n, List<int[]>[] adj, int source) {
+        long INF = Long.MAX_VALUE / 2;
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        boolean[] vis = new boolean[n + 1];
+
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
+        pq.add(new long[]{1, 0});
+        while (!pq.isEmpty()) {
+            long[] p = pq.poll();
+            int u = (int) p[0];
+            long d = p[1];
+
+            if (vis[u]) continue;
+            vis[u] = true;
+            for (var v : adj[u]) {
+                if (d + v[1] < dist[v[0]]) {
+                    dist[v[0]] = d + v[1];
+                    pq.add(new long[]{v[0], dist[v[0]]});
+                }
+            }
+        }
+        return dist;
     }
 
     //建图  dijkstra模板  前向星
