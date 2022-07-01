@@ -1,5 +1,6 @@
 package com.dpz.main;
 
+
 import java.io.*;
 import java.util.*;
 
@@ -10,33 +11,47 @@ public class Main {
     static void solve() {
         for (int T = 1; T > 0; T--) go();
     }
-    //给定两个非负整数（不含前导 0） A，B，请你计算 A/B 的商和余数。 1≤A的长度≤100000,0≤B≤10000
-    static String[] divide(String a, String b) {
-        return divide(a, Integer.parseInt(b));
-    }
-
-
-    static String[] divide(String a, int b) {
-        StringBuilder sb = new StringBuilder();
-        int n = a.length();
-        int r = 0;
-        for (int i = 0; i < n; i++) {
-            r = r * 10 + (a.charAt(i) - '0');
-
-            int v = r / b;
-            if (v != 0 || sb.length() != 0)
-                sb.append(r / b);
-
-            r = (r - v * b);
-        }
-        return new String[]{sb.length() == 0 ? "0" : sb.toString(), String.valueOf(r)};
-    }
-
 
     static void go() {
-        String[] ans = divide(ns(), ns());
-        System.out.println(ans[0]+" "+ans[1]);
+        long INF = Long.MAX_VALUE / 2;
+        int n = ni(), m = ni();
+        List<int[]>[] adj = new ArrayList[n + 1];
+        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
+        while (m-- > 0) {
+            int[] edge = new int[]{ni(), ni(), ni()};
+            adj[edge[0]].add(new int[]{edge[1], edge[2]});
+        }
+        long[] dist = dijkstra(n, adj, 1);
+        out.println(dist[n] == INF ? -1 : dist[n]);
     }
+
+    //Dijkstra
+    static long[] dijkstra(int n, List<int[]>[] adj, int source) {
+        long INF = Long.MAX_VALUE / 2;
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        boolean[] vis = new boolean[n + 1];
+
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
+        pq.add(new long[]{1, 0});
+        while (!pq.isEmpty()) {
+            long[] p = pq.poll();
+            int u = (int) p[0];
+            long d = p[1];
+
+            if (vis[u]) continue;
+            vis[u] = true;
+            for (var v : adj[u]) {
+                if (d + v[1] < dist[v[0]]) {
+                    dist[v[0]] = d + v[1];
+                    pq.add(new long[]{v[0], dist[v[0]]});
+                }
+            }
+        }
+        return dist;
+    }
+
 
     public static void main(String[] args) throws Exception {
         long S = System.currentTimeMillis();

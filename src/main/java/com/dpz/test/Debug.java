@@ -5,7 +5,8 @@ public class Debug {
      * 生成main函数
      */
     public static void main(String[] args) {
-        genMain("[\"coffee\",\"donuts\",\"time\",\"toffee\"]");
+        genMain("\"abc\"\n" +
+                "\"ababc\"");
     }
 
 
