@@ -7,7 +7,7 @@ import java.util.*;
 public class API {
     //最大字段和 todo
 
-    static class Pair<A,B>{
+    static class Pair<A, B> {
         A a;
         B b;
 
@@ -16,14 +16,16 @@ public class API {
             this.b = b;
         }
     }
+
     //List转数组
-    int[]list2Num(List<Integer>list){
-        int[]ans=new int[list.size()];
+    int[] list2Num(List<Integer> list) {
+        int[] ans = new int[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            ans[i]=list.get(i);
+            ans[i] = list.get(i);
         }
         return ans;
     }
+
     //字符集
     String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String lower = "abcdefghijklmnopqrstuvwxyz";
