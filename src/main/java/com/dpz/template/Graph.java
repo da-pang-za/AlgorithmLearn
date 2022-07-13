@@ -3,7 +3,9 @@ package com.dpz.template;
 import java.util.*;
 
 public class Graph {
-    //todo 图论模板   建图+算法
+    static long INF = Long.MAX_VALUE / 2; //todo 统一修改图论INF
+
+    //todo 图论模板   建图+算法   建图n 多+1
     //建图模板    注意！！！  这里是无向图！！！
     //建图 1 list
     List<Integer>[] build1(int n, int[][] edges) {
@@ -60,6 +62,29 @@ public class Graph {
                 if (d + v[1] < dist[v[0]]) {
                     dist[v[0]] = d + v[1];
                     pq.add(new long[]{v[0], dist[v[0]]});
+                }
+            }
+        }
+        return dist;
+    }
+
+
+    //Floyd算法 边权有可能为负数 已去除重边 保留最短的边
+    static int[][] floyd(int[][] adj) {
+        int n = adj.length - 1;
+        int[][] dist = new int[n + 1][n + 1];//最短路
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                dist[i][j] = adj[i][j];
+
+
+        //i到j 可以经过 [1,u]这些点 的最短路  i->[1,u]->j  [1,u]可以不包括 i j
+        //dp[u][i][j]=min(dp[u-1][i][j],dp[u-1/u][i][u]+dp[u-1/u][u][j]);
+        for (int u = 1; u <= n; u++) {
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    if (dist[i][u] == INF || dist[u][j] == INF) continue;
+                    dist[i][j] = Math.min(dist[i][j], dist[i][u] + dist[u][j]);
                 }
             }
         }
