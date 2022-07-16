@@ -47,14 +47,15 @@ public class Graph {
         boolean[] vis = new boolean[n + 1];
         int d = 1;
         Deque<Integer> deque = new ArrayDeque<>();
-        deque.addLast(source);vis[source]=true;
+        deque.addLast(source);
+        vis[source] = true;
         while (!deque.isEmpty()) {
             int sz = deque.size();
             for (int i = 0; i < sz; i++) {
                 int u = deque.pollFirst();
                 for (var v : adj[u]) {
-                    if(vis[v])continue;
-                    vis[v]=true;
+                    if (vis[v]) continue;
+                    vis[v] = true;
                     dist[v] = d;
                     deque.addLast(v);
                 }
@@ -165,6 +166,40 @@ public class Graph {
                     }
                 }
             }
+        }
+    }
+
+    //拓扑排序
+    static class topo {
+        static void go() {
+            int n = 5, m = 11;
+            int[][] edges = new int[m][];
+//            for (int i = 0; i < m; i++) {
+//                edges[i]=new int[]{ni(),ni()};
+//            }
+            List<Integer>[] adj = build1(n, edges);
+            int[] deg = new int[n + 1];
+            List<Integer> ans = new ArrayList<>();
+            for (int[] edge : edges) {
+                deg[edge[1]]++;
+            }
+            Deque<Integer> deque = new ArrayDeque<>();
+            for (int i = 1; i <= n; i++) {
+                if (deg[i] == 0) deque.add(i);
+            }
+            while (!deque.isEmpty()) {
+                int p = deque.pollFirst();
+                ans.add(p);
+                for (Integer v : adj[p]) {
+                    if (--deg[v] == 0) deque.addLast(v);
+                }
+            }
+            if (ans.size() == n) {
+                for (Integer v : ans) {
+                    System.out.print(v + " ");
+                }
+                System.out.println();
+            } else System.out.println(-1);
         }
     }
 
