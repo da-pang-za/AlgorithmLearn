@@ -162,6 +162,17 @@ public class ACWing {
      * 数学
      */
     static class Math1 {
+        //快速幂 x^k mod p
+        static long pow(long x, long k, long p) {
+            long res = 1;
+            while (k != 0) {
+                if ((k & 1) != 0) res = res * x % p;
+                x = x * x % p;
+                k >>= 1;
+            }
+            return res;
+        }
+
         //试除法判断质数
         static boolean isPrime(int s) {
             for (int v = 2; v <= s / v; v++) {
@@ -261,6 +272,14 @@ public class ACWing {
             return ans;
         }
 
+
+        //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
+
+        //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
+        //因此b的逆元 b-1 = b^(p-2)
+        static int inverse(int b, int p) {
+            return (int)pow(b, p - 2, p);
+        }
 
     }
 
