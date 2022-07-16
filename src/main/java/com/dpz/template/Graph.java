@@ -3,12 +3,12 @@ package com.dpz.template;
 import java.util.*;
 
 public class Graph {
-    //todo 图论模板   建图+算法
-    //建图模板    注意！！！  这里是无向图！！！
-    //建图 1 list
-    List<Integer>[] build1(int n, int[][] edges) {
-        List<Integer>[] adj = new ArrayList[n];
-        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+    static long INF = Long.MAX_VALUE / 2;
+
+    //建图 1 list 不带权   注意！！！  这里是无向图！！！
+    static List<Integer>[] build1(int n, int[][] edges) {
+        List<Integer>[] adj = new ArrayList[n + 1];
+        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
 
         for (int[] edge : edges) {
             adj[edge[0]].add(edge[1]);
@@ -17,10 +17,10 @@ public class Graph {
         return adj;
     }
 
-    //建图 2  set
-    HashSet<Integer>[] build2(int n, int[][] edges) {
-        HashSet<Integer>[] adj = new HashSet[n];
-        for (int i = 0; i < n; i++) adj[i] = new HashSet<>();
+    //建图 2  set 不带权   注意！！！  这里是无向图！！！
+    static HashSet<Integer>[] build2(int n, int[][] edges) {
+        HashSet<Integer>[] adj = new HashSet[n + 1];
+        for (int i = 0; i <= n; i++) adj[i] = new HashSet<>();
         for (int[] edge : edges) {
             adj[edge[0]].add(edge[1]);
             adj[edge[1]].add(edge[0]);
@@ -28,10 +28,10 @@ public class Graph {
         return adj;
     }
 
-    //建图3 带权
-    List<int[]>[] build3(int n, int[][] edges) {
-        List<int[]>[] adj = new ArrayList[n];
-        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+    //建图3 带权   注意！！！  这里是无向图！！！
+    static List<int[]>[] build3(int n, int[][] edges) {
+        List<int[]>[] adj = new ArrayList[n + 1];
+        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
         for (int[] edge : edges) {
             adj[edge[0]].add(new int[]{edge[1], edge[2]});
             adj[edge[1]].add(new int[]{edge[0], edge[2]});
@@ -39,9 +39,33 @@ public class Graph {
         return adj;
     }
 
+    //等权（都为1）单源最短路  BFS
+    static long[] bfs(int n, List<Integer>[] adj, int source) {
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        boolean[] vis = new boolean[n + 1];
+        int d = 1;
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(source);vis[source]=true;
+        while (!deque.isEmpty()) {
+            int sz = deque.size();
+            for (int i = 0; i < sz; i++) {
+                int u = deque.pollFirst();
+                for (var v : adj[u]) {
+                    if(vis[v])continue;
+                    vis[v]=true;
+                    dist[v] = d;
+                    deque.addLast(v);
+                }
+            }
+            d++;
+        }
+        return dist;
+    }
+
     //Dijkstra 单源最短路  复杂度 O(eloge)
-    long[] dijkstra(int n, List<int[]>[] adj, int source) {
-        long INF = Long.MAX_VALUE / 2;
+    static long[] dijkstra(int n, List<int[]>[] adj, int source) {
         long[] dist = new long[n + 1];
         Arrays.fill(dist, INF);
         dist[source] = 0;
@@ -67,7 +91,7 @@ public class Graph {
     }
 
     //建图  dijkstra模板  前向星
-    class Solution1 {
+    static class Solution1 {
         int N = 110, M = 6010;
         int[] he = new int[N], e = new int[M], ne = new int[M], w = new int[M];
         int[] dist = new int[N];
@@ -121,80 +145,9 @@ public class Graph {
         }
     }
 
-    //dijkstra模板 map
-    class Solution6032 {
-        long INF = Long.MAX_VALUE / 3 - 10;
-        int n;
-
-        public long minimumWeight(int _n, int[][] edges, int src1, int src2, int dest) {
-            n = _n;
-            HashMap<Long, Long> weight = new HashMap<>();
-            HashMap<Long, Long> weightR = new HashMap<>();
-            HashMap<Integer, List<Integer>> adj = new HashMap<>();
-            HashMap<Integer, List<Integer>> adjR = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                adj.putIfAbsent(i, new ArrayList<>());
-                adjR.putIfAbsent(i, new ArrayList<>());
-                weight.put(getKey(i, i), 0L);
-                weightR.put(getKey(i, i), 0L);
-            }
-            for (int[] edge : edges) {
-                int from = edge[0], to = edge[1], w = edge[2];
-                adj.get(from).add(to);
-                adjR.get(to).add(from);
-                weight.put(getKey(from, to), Math.min(w, weight.getOrDefault(getKey(from, to), INF)));
-                weightR.put(getKey(to, from), Math.min(w, weightR.getOrDefault(getKey(to, from), INF)));
-
-            }
-            long[] dd = dijkstra(dest, adjR, weightR);
-            if (dd[src1] == INF || dd[src2] == INF) return -1;
-            long[] s1 = dijkstra(src1, adj, weight);
-            long[] s2 = dijkstra(src2, adj, weight);
-            System.out.println(Arrays.toString(s1));
-            System.out.println(Arrays.toString(s2));
-            long ans = INF;
-            for (int i = 0; i < n; i++) {
-                ans = Math.min(ans, dd[i] + s1[i] + s2[i]);
-            }
-            return ans;
-        }
-
-
-        long[] dijkstra(int src, HashMap<Integer, List<Integer>> adj, HashMap<Long, Long> weight) {
-            boolean[] vis = new boolean[n];
-            long[] dist = new long[n];
-//        int[]pre=new int[n];
-//        Arrays.fill(pre,-1);
-            Arrays.fill(dist, INF);
-            dist[src] = 0;
-            PriorityQueue<long[]> q = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));//dist小的先出
-            q.add(new long[]{src, 0});
-            while (!q.isEmpty()) {
-                long[] poll = q.poll();//最小的
-                int id = (int) poll[0];
-                if (vis[id]) continue;
-                vis[id] = true;
-                for (int nx : adj.get(id)) {
-                    long w = weight.get(getKey(id, nx));
-                    if (dist[nx] > dist[id] + w) {
-                        dist[nx] = dist[id] + w;
-//                    pre[nx]=id;
-                        q.add(new long[]{nx, dist[nx]});
-                    }
-                }
-            }
-            return dist;
-        }
-
-        long getKey(int a, int b) {
-            return (long) a * 1000_000L + b;
-        }
-
-    }
-
     //三色标记
     //lc.802
-    class Solution802 {
+    static class Solution802 {
         public List<Integer> eventualSafeNodes(int[][] graph) {
             int n = graph.length;
             int[] color = new int[n];
