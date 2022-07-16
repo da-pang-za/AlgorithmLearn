@@ -274,11 +274,44 @@ public class ACWing {
 
 
         //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
-
+        //https://www.acwing.com/activity/content/problem/content/945/
         //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
         //因此b的逆元 b-1 = b^(p-2)
         static int inverse(int b, int p) {
-            return (int)pow(b, p - 2, p);
+            return (int) pow(b, p - 2, p);
+        }
+
+        //求最大公约数
+        //欧几里得算法     辗转相除法
+        static long gcd(long a, long b) {
+            if (b == 0) return a;
+            return gcd(b, a % b);
+        }
+
+        //扩展欧几里得算法
+        //https://www.acwing.com/problem/content/879/
+        //求 ax+by = gcd(a,b) 的解 (x,y)
+
+        /**
+         * 裴蜀定理
+         * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
+         * gcd(a,b)是a,b能构造出的最小正整数
+         * 利用扩展欧几里得算法  构造(x,y)
+         */
+
+        //公式推导：https://www.acwing.com/solution/content/1393/
+        //求gcd 顺便求系数 x,y
+        static long exGcd(long a, long b, long[] xy) {
+            if (b == 0) {
+                xy[0] = 1;
+                xy[1] = 0;
+                return a;
+            }
+            long ans = exGcd(b, a % b, xy);
+            long x = xy[0], y = xy[1];
+            xy[0] = y;
+            xy[1] = x - a / b * y;
+            return ans;
         }
 
     }
