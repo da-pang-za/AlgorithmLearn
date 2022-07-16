@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    //	static String INPUT = "10 60 1 60 2 60 3 60 4 60 5 60 6 60 7 60 8 60 9 60 10";
+
     static String INPUT = "";
 
     static void solve() {
