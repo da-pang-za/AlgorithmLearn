@@ -90,6 +90,29 @@ public class Graph {
         return dist;
     }
 
+
+    //Floyd算法 边权有可能为负数 已去除重边 保留最短的边
+    static int[][] floyd(int[][] adj) {
+        int n = adj.length - 1;
+        int[][] dist = new int[n + 1][n + 1];//最短路
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                dist[i][j] = adj[i][j];
+
+
+        //i到j 可以经过 [1,u]这些点 的最短路  i->[1,u]->j  [1,u]可以不包括 i j
+        //dp[u][i][j]=min(dp[u-1][i][j],dp[u-1/u][i][u]+dp[u-1/u][u][j]);
+        for (int u = 1; u <= n; u++) {
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    if (dist[i][u] == INF || dist[u][j] == INF) continue;
+                    dist[i][j] = Math.min(dist[i][j], dist[i][u] + dist[u][j]);
+                }
+            }
+        }
+        return dist;
+    }
+
     //建图  dijkstra模板  前向星
     static class Solution1 {
         int N = 110, M = 6010;

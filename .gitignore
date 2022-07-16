@@ -1,7 +1,3 @@
 # Project exclude paths
 /target/
 /.idea/
-.idea/compiler.xml
-.idea/compiler.xml
-.idea/jarRepositories.xml
-.idea/misc.xml
