@@ -182,7 +182,7 @@ public class ACWing {
         }
 
         //埃氏筛求质数 O(nloglogn)
-        void prime(int n) {
+        static void prime(int n) {
             boolean[] prim = new boolean[n + 1];
             Arrays.fill(prim, true);
             int ans = 0;//质数的个数
@@ -194,9 +194,9 @@ public class ACWing {
             }
         }
 
+        //线性筛   每次筛只与质数相乘   每个合数只会被其最小质因子筛掉
         //埃氏筛其实还是存在冗余的标记操作，比如对于 4545 这个数，它会同时被 3,53,5 两个数标记为合数，
         // 因此我们优化的目标是让每个合数只被标记一次，这样时间复杂度即能保证为 O(n)
-        //线性筛   每次筛只与质数相乘   每个合数只会被其最小质因子筛掉
         static public int countPrimes(int n) {
             List<Integer> primes = new ArrayList<>();
             boolean[] isPrime = new boolean[n + 1];
@@ -296,6 +296,7 @@ public class ACWing {
          * 裴蜀定理
          * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
          * gcd(a,b)是a,b能构造出的最小正整数
+         * 方程ax+by=c 有解的充要条件是c为gcd(a,b)的倍数
          * 利用扩展欧几里得算法  构造(x,y)
          */
 
@@ -312,6 +313,42 @@ public class ACWing {
             xy[0] = y;
             xy[1] = x - a / b * y;
             return ans;
+        }
+
+
+        //高斯消元  解线性方程组
+        //https://www.acwing.com/activity/content/problem/content/953/
+        //注意解不是1个的情况
+        //无解    0 0 0 0 = x        有无穷多组解     0 0 0 0 = 0
+
+        //组合数
+
+        //递推求阶乘
+        static long[] fac(int n, long p) {
+            long[] f = new long[n + 1];
+            f[0] = f[1] = 1;
+            for (int i = 2; i <= n; i++) {
+                f[i] = f[i - 1] * i % p;
+            }
+            return f;
+        }
+
+        //facR  利用逆元求阶乘的倒数 复杂度O(NlogP)
+        static long[] facR(int n, long p) {
+            long[] fr = new long[n + 1];
+            fr[0] = fr[1] = 1;
+            for (int i = 2; i <= n; i++) {
+                fr[i] = fr[i - 1] * pow(i, p - 2, p) % p;
+            }
+            return fr;
+        }
+
+        //公式法求组合数   结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)
+        static long combine(int a, int b, int p, long[] f, long[] fr) {
+//            long[] f = fac(10000, p);
+//            long[] fr = facR(10000, p);
+            //先预处理出阶乘   然后 每次 常数时间求解
+            return (f[a] * fr[b] % p) * fr[a - b] % p;
         }
 
     }
