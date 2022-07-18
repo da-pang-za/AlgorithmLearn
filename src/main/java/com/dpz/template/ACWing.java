@@ -6,6 +6,8 @@ import java.util.*;
  * ACWing算法模板
  */
 public class ACWing {
+    static int mod = (int) 1e9 + 7;
+
     public static void main(String[] args) {
         System.out.println(Arrays.toString(Basic.divide("777", "32")));
     }
@@ -162,6 +164,8 @@ public class ACWing {
      * 数学
      */
     static class Math1 {
+        //==============================质数相关===========================
+
         //试除法判断质数
         static boolean isPrime(int s) {
             for (int v = 2; v <= s / v; v++) {
@@ -261,6 +265,74 @@ public class ACWing {
             return ans;
         }
 
+
+        //==============================博弈论 game===========================
+
+        //Nim游戏  https://www.acwing.com/activity/content/problem/content/961/
+        static boolean Nim(int[] stones) {
+            //todo
+            return true;
+        }
+
+
+        //==============================排列组合===========================
+        //全排列  按字典序
+        static class FullArray {
+            static int n;
+
+            static List<Integer> list = new ArrayList<>();
+            static List<List<Integer>> ans = new ArrayList<>();
+
+            static boolean[] used;
+
+            FullArray(int n) {
+                FullArray.n = n;
+                dfs(0);
+            }
+
+
+            static void dfs(int cnt) {
+                if (cnt == n) {
+                    ans.add(new ArrayList<>(list));
+                    return;
+                }
+                for (int i = 1; i <= n; i++) {
+                    if (used[i]) continue;
+                    used[i] = true;
+                    list.add(i);
+                    dfs(cnt + 1);
+                    list.remove(list.size() - 1);
+                    used[i] = false;
+                }
+            }
+        }
+
+        //组合数
+        //DP求组合数
+        static int[][] comb = new int[2001][2001];
+
+        static void dpComb() {
+            comb[0][0] = 1;
+            for (int i = 1; i <= 2000; i++) {
+                comb[i][0] = 1;
+                for (int j = 1; j <= i; j++) {
+                    comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % mod;//是否选当前数
+                }
+            }
+        }
+
+        //其他
+        //快速幂 x^k mod p
+        long pow(long x, long k, long p) {
+            long res = 1;
+            while (k != 0) {
+                if ((k & 1) != 0) res = res * x % p;
+                x = x * x % p;
+                k >>= 1;
+            }
+            return res;
+        }
+        //快速幂求逆元
 
     }
 
