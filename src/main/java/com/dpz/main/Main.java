@@ -5,54 +5,58 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    //	static String INPUT = "10 60 1 60 2 60 3 60 4 60 5 60 6 60 7 60 8 60 9 60 10";
+
     static String INPUT = "";
 
     static void solve() {
-        for (int T = 1; T > 0; T--) go();
+        for (int T = ni(); T > 0; T--) go();
     }
+
 
     static void go() {
-        long INF = Long.MAX_VALUE / 2;
         int n = ni(), m = ni();
-        List<int[]>[] adj = new ArrayList[n + 1];
-        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
-        while (m-- > 0) {
-            int[] edge = new int[]{ni(), ni(), ni()};
-            adj[edge[0]].add(new int[]{edge[1], edge[2]});
+        int[][] edges=new int[m][];
+        for (int i = 0; i < m; i++) {
+            edges[i]=new int[]{ni(),ni()};
         }
-        long[] dist = dijkstra(n, adj, 1);
-        out.println(dist[n] == INF ? -1 : dist[n]);
-    }
-
-    //Dijkstra
-    static long[] dijkstra(int n, List<int[]>[] adj, int source) {
-        long INF = Long.MAX_VALUE / 2;
-        long[] dist = new long[n + 1];
-        Arrays.fill(dist, INF);
-        dist[source] = 0;
-        boolean[] vis = new boolean[n + 1];
-
-        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
-        pq.add(new long[]{1, 0});
-        while (!pq.isEmpty()) {
-            long[] p = pq.poll();
-            int u = (int) p[0];
-            long d = p[1];
-
-            if (vis[u]) continue;
-            vis[u] = true;
-            for (var v : adj[u]) {
-                if (d + v[1] < dist[v[0]]) {
-                    dist[v[0]] = d + v[1];
-                    pq.add(new long[]{v[0], dist[v[0]]});
-                }
+        List<Integer>[] adj = build1(n, edges);
+        int[]deg=new int[n+1];
+        List<Integer>ans=new ArrayList<>();
+        for (int[] edge : edges) {
+            deg[edge[1]]++;
+        }
+        Deque<Integer>deque=new ArrayDeque<>();
+        for (int i = 1; i <=n; i++) {
+            if(deg[i]==0)deque.add(i);
+        }
+        while(!deque.isEmpty()){
+            int p=deque.pollFirst();
+            ans.add(p);
+            for (Integer v : adj[p]) {
+                if(--deg[v]==0)deque.addLast(v);
             }
         }
-        return dist;
+        if(ans.size()==n){
+            for (Integer v : ans) {
+                out.print(v+" ");
+            }
+            out.println();
+        }
+        else out.println(-1);
+    }
+    //建图 1 list 不带权   注意！！！  这里是无向图！！！
+    static List<Integer>[] build1(int n, int[][] edges) {
+        List<Integer>[] adj = new ArrayList[n + 1];
+        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
+
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+        }
+        return adj;
     }
 
 
+    //===================== MAIN =============================
     public static void main(String[] args) throws Exception {
         long S = System.currentTimeMillis();
         is = INPUT.isEmpty() ? System.in : new ByteArrayInputStream(INPUT.getBytes());

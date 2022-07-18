@@ -5,8 +5,7 @@ public class Debug {
      * 生成main函数
      */
     public static void main(String[] args) {
-        genMain("\"abc\"\n" +
-                "\"ababc\"");
+        genMain("[[1,1,-1],[1,-1,1],[-1,1,1]]");
     }
 
 

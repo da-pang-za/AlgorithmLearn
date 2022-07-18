@@ -502,38 +502,18 @@ public class UWI {
         for (int T = 1; T > 0; T--) go();
     }
 
-    int[] nums = new int[500_000];
+    //#0.00代表保留两位小数
     DecimalFormat df = new DecimalFormat("#0.00000000");
 
-    //#0.00代表保留两位小数
     void go() {
-        int n = ni() - 1;
-        ni();
-        int p = 0;
-        nums[p++] = ni();
-        double ans = 0;
-        double sum = nums[0];
-        int i = 1;
-
-        while (n-- > 0) {
-            int opt = ni();
-            if (opt == 1) {
-                int x = ni();
-                nums[p++] = x;
-                int cnt = i + 1;
-                double s = sum + x;
-                while (s / cnt > (s + nums[i]) / (cnt + 1)) {
-                    s += nums[i];
-                    sum += nums[i];
-                    i++;
-                    cnt++;
-                }
-                ans = Math.max(ans, x - s / cnt);
-            } else {
-                out.println(df.format(ans));
-            }
-
+        int n = ni();
+        int mod = (int) 1e9 + 7;
+        //走到第s步 在0的数量和不在0的数量    dp[s][0]=3*dp[s-1][1]   dp[s][1]=dp[s-1][0]+2*dp[s-1][1]
+        long[] dp = new long[]{1, 0};
+        for (int s = 1; s <= n; s++) {
+            dp = new long[]{3 * dp[1] % mod, (dp[0] + 2 * dp[1]) % mod};
         }
+        out.println(dp[0]);
 
     }
 
