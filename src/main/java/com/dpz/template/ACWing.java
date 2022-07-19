@@ -281,8 +281,9 @@ public class ACWing {
 
         //Nim游戏  https://www.acwing.com/activity/content/problem/content/961/
         static boolean Nim(int[] stones) {
-            //todo
-            return true;
+            int ans = 0;
+            for (int v : stones) ans ^= v;
+            return ans != 0;
         }
 
 
