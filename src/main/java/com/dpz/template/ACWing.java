@@ -290,7 +290,27 @@ public class ACWing {
         //SG函数 https://www.acwing.com/solution/content/23435/
         //用图表示局面  结束局面SG值被定义为0  其他局面SG值为无法到达的最小自然数
         //0为必败态  非0为必胜态       一步 0只能到非0   非0一定可以到0
+        //利用sg值状态转移 转化为经典Nim游戏
+        static int NimMax = 10010;
 
+        static boolean NimSet(int[] stones, int[] canUse) {
+            int[] f = new int[NimMax];//   看每一堆石子是否可以操作
+            Arrays.fill(f,-1);
+            int ans = 0;
+            for (int x : stones) ans ^= sg(x, f, canUse);
+            return ans != 0;
+        }
+
+        private static int sg(int x, int[] f, int[] canUse) {
+            if(f[x]!=-1)return f[x];
+            HashSet<Integer>set=new HashSet<>();
+            for(int v:canUse){
+                if(x>=v)set.add(sg(x-v,f,canUse));
+            }
+            for(int i=0;;i++){
+                if(!set.contains(i))return f[x]=i;
+            }
+        }
 
 
         //==============================排列组合===========================
@@ -418,7 +438,6 @@ public class ACWing {
 
         //高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
         //先用质因数分解预处理   todo
-
 
 
     }
