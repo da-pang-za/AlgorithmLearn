@@ -39,6 +39,7 @@ public class Graph {
         return adj;
     }
 
+    //====================== 最短路 ==============================
     //等权（都为1）单源最短路  BFS
     static long[] bfs(int n, List<Integer>[] adj, int source) {
         long[] dist = new long[n + 1];
@@ -91,7 +92,6 @@ public class Graph {
         return dist;
     }
 
-
     //Floyd算法 边权有可能为负数 已去除重边 保留最短的边
     static int[][] floyd(int[][] adj) {
         int n = adj.length - 1;
@@ -112,6 +112,34 @@ public class Graph {
             }
         }
         return dist;
+    }
+
+    /**
+     * Bellman-Ford 算法 不超过k条边的单源最短路    求有负权边的最短路
+     * 复杂度 O(N*M)
+     * for(k)  for(all(edges))   dist[b]=min(dist[b],dist[a]+w)
+     * 每次循环路径最多增加一条边
+     * 1--> a --> b    边[a,b,w] dist[b]=min(dist[b],dist[a]+w)
+     * 注意 如果有负权回路 且负环在路径上 则  最短路不存在！！！
+     * <p>
+     * 有边数限制的最短路 https://www.acwing.com/problem/content/855/
+     * 这个问题只能用BF算法
+     * 边数有限制  负环不能无限转了
+     */
+    static long[] bf(int n, int[][] edges, int source, int k) {
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        for (int i = 0; i < k; i++) {
+            long[] dist1 = dist.clone();
+            for (int[] e : edges) {
+                int a = e[0], b = e[1], w = e[2];
+                dist1[b] = Math.min(dist1[b], dist[a] + w);
+            }
+            dist = dist1;
+        }
+        return dist;
+        //ans > INF/2 ? "impossible" : ans   注意有负权   INF-x   也是无穷
     }
 
     //建图  dijkstra模板  前向星
@@ -169,6 +197,8 @@ public class Graph {
         }
     }
 
+
+    //====================== 最短路 ==============================
     //拓扑排序
     static class topo {
         static void go() {
