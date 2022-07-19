@@ -332,9 +332,12 @@ public class ACWing {
             return gcd(b, a % b);
         }
 
-        //扩展欧几里得算法
-        //https://www.acwing.com/problem/content/879/
-        //求 ax+by = gcd(a,b) 的解 (x,y)
+        /**
+         * //扩展欧几里得算法
+         *         //https://www.acwing.com/problem/content/879/
+         *         //求 ax+by = gcd(a,b) 的解 (x,y)
+         */
+
 
         /**
          * 裴蜀定理
@@ -358,8 +361,11 @@ public class ACWing {
             xy[1] = x - a / b * y;
             return ans;
         }
-        //组合数
-        //DP求组合数
+
+        /**
+         * 组合数
+         */
+        //DP 求组合数   O(N^2)
         static int[][] comb = new int[2001][2001];
 
         static void dpComb() {
@@ -392,14 +398,21 @@ public class ACWing {
             return fr;
         }
 
-        //公式法求组合数   结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)
+        //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
         static long combine(int a, int b, int p, long[] f, long[] fr) {
-//            long[] f = fac(10000, p);
-//            long[] fr = facR(10000, p);
+            //long[] f = fac(10000, p);
+            //long[] fr = facR(10000, p);
             //先预处理出阶乘   然后 每次 常数时间求解
             return (f[a] * fr[b] % p) * fr[a - b] % p;
         }
 
+        //卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
+        //C(a/p ,b/p) 这部分可以递归求解
+        //https://www.acwing.com/problem/content/889/
+        //1≤b≤a≤10^18    1≤p≤105
+
+        //高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
+        //先用质因数分解预处理
 
     }
 
