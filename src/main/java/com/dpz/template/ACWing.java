@@ -286,6 +286,12 @@ public class ACWing {
             return ans != 0;
         }
 
+        //博弈论  集合-Nim游戏 https://www.acwing.com/activity/content/problem/content/963/
+        //SG函数 https://www.acwing.com/solution/content/23435/
+        //用图表示局面  结束局面SG值被定义为0  其他局面SG值为无法到达的最小自然数
+        //0为必败态  非0为必胜态       一步 0只能到非0   非0一定可以到0
+
+
 
         //==============================排列组合===========================
         //全排列  按字典序
@@ -318,6 +324,7 @@ public class ACWing {
                 }
             }
         }
+
         //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
         //https://www.acwing.com/activity/content/problem/content/945/
         //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
@@ -334,13 +341,10 @@ public class ACWing {
         }
 
         /**
-         * //扩展欧几里得算法
-         *         //https://www.acwing.com/problem/content/879/
-         *         //求 ax+by = gcd(a,b) 的解 (x,y)
-         */
-
-
-        /**
+         * 扩展欧几里得算法
+         * https://www.acwing.com/problem/content/879/
+         * 求 ax+by = gcd(a,b) 的解 (x,y)
+         *
          * 裴蜀定理
          * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
          * gcd(a,b)是a,b能构造出的最小正整数
@@ -416,10 +420,6 @@ public class ACWing {
         //先用质因数分解预处理   todo
 
 
-        //博弈论  集合-Nim游戏 https://www.acwing.com/activity/content/problem/content/963/
-        //SG函数 https://www.acwing.com/video/314/
-        //用图表示局面  结束局面SG值被定义为0  其他局面SG值为无法到达的最小自然数
-        //0为必败态  非0为必胜态       一步 0只能到非0   非0一定可以到0
 
     }
 
