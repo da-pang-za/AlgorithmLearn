@@ -148,6 +148,7 @@ public class Graph {
     /**
      * spfa   对BF算法的优化     有负权的最短路
      * 复杂度 一般O(M)   最坏O(N*M)
+     * https://www.acwing.com/solution/content/9306/
      * dist1[b] = Math.min(dist1[b], dist[a] + w);   a变小  b 才会变小
      * 更新过的节点 才会用来更新其他节点
      */
