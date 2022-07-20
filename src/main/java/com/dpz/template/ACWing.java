@@ -297,15 +297,15 @@ public class ACWing {
             int[] f = new int[NimMax];//   看每一堆石子是否可以操作
             Arrays.fill(f,-1);
             int ans = 0;
-            for (int x : stones) ans ^= sg(x, f, canUse);
+            for (int x : stones) ans ^= sg1(x, f, canUse);
             return ans != 0;
         }
 
-        private static int sg(int x, int[] f, int[] canUse) {
+        private static int sg1(int x, int[] f, int[] canUse) {
             if(f[x]!=-1)return f[x];
             HashSet<Integer>set=new HashSet<>();
             for(int v:canUse){
-                if(x>=v)set.add(sg(x-v,f,canUse));
+                if(x>=v)set.add(sg1(x-v,f,canUse));
             }
             for(int i=0;;i++){
                 if(!set.contains(i))return f[x]=i;
