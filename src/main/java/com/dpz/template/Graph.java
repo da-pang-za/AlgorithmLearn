@@ -1,5 +1,7 @@
 package com.dpz.template;
 
+import com.dpz.dataStructure.UnionFind;
+
 import java.util.*;
 
 public class Graph {
@@ -142,6 +144,40 @@ public class Graph {
         //ans > INF/2 ? "impossible" : ans   注意有负权   INF-x   也是无穷
     }
 
+    /**
+     * spfa   对BF算法的优化     有负权的最短路
+     * 复杂度 一般O(M)   最坏O(N*M)
+     * dist1[b] = Math.min(dist1[b], dist[a] + w);   a变小  b 才会变小
+     * 更新过的节点 才会用来更新其他节点
+     */
+    static long[] spfa(int n, List<int[]>[] adj, int source) {
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        boolean[] st = new boolean[n + 1];//是否在队列中
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(source);
+        st[source]=true;
+
+        while (!deque.isEmpty()) {
+            int p=deque.pollFirst();
+            st[p]=false;//注意出队后要设置st数组的值  可能会重新入队
+            for (var e : adj[p]) {
+                int v=e[0],d=e[1];
+                if (d + dist[p] < dist[v]) {
+                    dist[v] = d + dist[p];
+                    if(!st[v]){
+                        //变小了才去更新其他点
+                        deque.addLast(v);
+                        st[v]=true;
+                    }
+                }
+            }
+        }
+        //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
+        return dist;
+    }
+
     //建图  dijkstra模板  前向星
     static class Solution1 {
         int N = 110, M = 6010;
@@ -199,6 +235,31 @@ public class Graph {
 
 
     //====================== 最短路 ==============================
+
+
+    //====================== 最小生成树(无向图) ==========================
+
+    /**
+     * Kruskal算法  克鲁斯卡尔算法
+     * 所有边按权重从小到大排序
+     * 按顺序枚举每条边  如果枚举的两个顶点当前不连通 把当前边加到集合
+     * 即尽量加最小边
+     */
+    //输出所有边
+    static List<int[]> kruskal(int n, int[][] edges) {
+        List<int[]> tree = new ArrayList<>();
+        UnionFind uf = new UnionFind(n + 1);
+        Arrays.sort(edges, (a, b) -> a[2] - b[2]);
+        for (var e : edges) {
+            if (uf.find(e[0]) == uf.find(e[1])) continue;
+            uf.union(e[0], e[1]);
+            tree.add(e);
+        }
+        if (tree.size() < n - 1) return null;
+        return tree;
+    }
+
+    //====================== 最小生成树 ==========================
     //拓扑排序
     static class topo {
         static void go() {
