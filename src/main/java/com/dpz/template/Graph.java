@@ -159,19 +159,19 @@ public class Graph {
         boolean[] st = new boolean[n + 1];//是否在队列中
         Deque<Integer> deque = new ArrayDeque<>();
         deque.addLast(source);
-        st[source]=true;
+        st[source] = true;
 
         while (!deque.isEmpty()) {
-            int p=deque.pollFirst();
-            st[p]=false;//注意出队后要设置st数组的值  可能会重新入队
+            int p = deque.pollFirst();
+            st[p] = false;//注意出队后要设置st数组的值  可能会重新入队
             for (var e : adj[p]) {
-                int v=e[0],d=e[1];
+                int v = e[0], d = e[1];
                 if (d + dist[p] < dist[v]) {
                     dist[v] = d + dist[p];
-                    if(!st[v]){
+                    if (!st[v]) {
                         //变小了才去更新其他点
                         deque.addLast(v);
-                        st[v]=true;
+                        st[v] = true;
                     }
                 }
             }
@@ -262,6 +262,41 @@ public class Graph {
     }
 
     //====================== 最小生成树 ==========================
+
+    //====================== 二分图(无向图) ==========================
+    //二分图定义：把图划分为两个集合 集合内部没有边
+
+    /**
+     * 染色法判定二分图
+     * https://www.acwing.com/problem/content/862/
+     * 一个图是二分图  当且仅当图中不含奇数环(环中边的数量是奇数)
+     * (因为环上相邻的两点一定在不同的部分 奇数会出现矛盾)
+     */
+    static boolean isBinG(int n, List<Integer>[] adj) {
+        int[] color = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            if (color[i] != 0) continue;
+            Deque<Integer> deque = new ArrayDeque<>();
+            deque.addLast(i);
+            color[i] = 1;
+            while (!deque.isEmpty()) {
+                int p = deque.pollFirst();
+                int c = 1;
+                if (color[p] == 1) c++;
+                for (Integer v : adj[p]) {
+                    if (color[v] == 0) {
+                        color[v] = c;
+                        deque.addLast(v);
+                    } else if (color[v] != c) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
     //拓扑排序
     static class topo {
         static void go() {
