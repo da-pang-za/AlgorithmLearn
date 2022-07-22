@@ -186,7 +186,7 @@ public class Graph {
      * cnt[x]>=n  说明经过了n+1个点  一共n个点 所以一定重复了 即负环/负权回路
      * 抽象一个源点 和所有点的距离都是0  求这个点的最短路
      */
-   static boolean negLoop(int n, List<int[]>[] adj) {
+    static boolean negLoop(int n, List<int[]>[] adj) {
         long[] dist = new long[n + 1];//初始都设为0  直接更新负权
         int[] cnt = new int[n + 1];
         boolean[] st = new boolean[n + 1];//是否在队列中
@@ -332,6 +332,13 @@ public class Graph {
         return true;
     }
 
+    /**
+     * 匈牙利算法——二分图的最大匹配
+     * 两边每个点只能连一条边 求最多连线数   例子：男女匹配doge 牵红线
+     * a要匹配b 如果b已经匹配c了 尝试让c匹配其他点
+     * 时间复杂度 最坏O(N*M)
+     */
+
 
     //拓扑排序
     static class topo {
@@ -365,6 +372,42 @@ public class Graph {
                 System.out.println();
             } else System.out.println(-1);
         }
+    }
+
+
+    /**
+     * 棋盘
+     */
+    static int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    //左上角到右下角最短距离    BFS
+    static int minDist(int[][] board) {
+        int n = board.length, m = board[0].length;
+        boolean[][] vis = new boolean[n][m];
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.addLast(new int[]{0, 0});
+        vis[0][0] = true;
+        int step = -1;
+        while (!deque.isEmpty()) {
+            step++;
+            int size = deque.size();
+            for (int u = 0; u < size; u++) {
+                int[] p = deque.pollFirst();
+                int i = p[0], j = p[1];
+                if (i == n - 1 && j == m - 1) return step;
+                for (int[] dir : dirs) {
+                    int x = i + dir[0], y = j + dir[1];
+                    if (x < 0 || x >= n || y < 0 || y >= m) continue;
+                    if (board[x][y] == 1) continue;
+
+                    if (vis[x][y]) continue;
+                    vis[x][y] = true;
+                    deque.addLast(new int[]{x, y});
+                }
+            }
+
+        }
+        return -1;
     }
 
     //三色标记
