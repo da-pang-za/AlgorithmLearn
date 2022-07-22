@@ -180,6 +180,42 @@ public class Graph {
         return dist;
     }
 
+    /**
+     * spfa求负环   https://www.acwing.com/video/284/   抽屉原理
+     * 记录最短路走过的边数
+     * cnt[x]>=n  说明经过了n+1个点  一共n个点 所以一定重复了 即负环/负权回路
+     * 抽象一个源点 和所有点的距离都是0  求这个点的最短路
+     */
+   static boolean negLoop(int n, List<int[]>[] adj) {
+        long[] dist = new long[n + 1];//初始都设为0  直接更新负权
+        int[] cnt = new int[n + 1];
+        boolean[] st = new boolean[n + 1];//是否在队列中
+        Deque<Integer> deque = new ArrayDeque<>();
+        for (int i = 1; i <= n; i++) {
+            deque.addLast(i);
+        }
+        while (!deque.isEmpty()) {
+            int p = deque.pollFirst();
+            st[p] = false;//注意出队后要设置st数组的值  可能会重新入队
+            for (var e : adj[p]) {
+                int v = e[0], d = e[1];
+                if (d + dist[p] < dist[v]) {
+                    dist[v] = d + dist[p];
+                    cnt[v] = cnt[p] + 1;
+                    if (cnt[v] >= n) return true;
+                    if (!st[v]) {
+                        //变小了才去更新其他点
+                        deque.addLast(v);
+                        st[v] = true;
+                    }
+                }
+            }
+        }
+        //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
+        return false;
+    }
+
+
     //建图  dijkstra模板  前向星
     static class Solution1 {
         int N = 110, M = 6010;
