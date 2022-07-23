@@ -338,7 +338,28 @@ public class Graph {
      * a要匹配b 如果b已经匹配c了 尝试让c匹配其他点
      * 时间复杂度 最坏O(N*M)
      */
+    static int maxMatch(int n1, int n2, List<Integer>[] adj) {
+        int ans = 0;
+        int[] match = new int[n2 + 1];//右侧匹配的左侧点
+        for (int i = 1; i <= n1; i++) {
+            boolean[] st = new boolean[n2 + 1];//标记当前递归中使用的点
+            if (find(i, match, st, adj)) ans++;
 
+        }
+        return ans;
+    }
+
+    private static boolean find(int i, int[] match, boolean[] st, List<Integer>[] adj) {
+        for (int v : adj[i]) {
+            if (st[v]) continue;
+            st[v] = true;
+            if (match[v] == 0 || find(match[v], match, st, adj)) {
+                match[v] = i;
+                return true;
+            }
+        }
+        return false;
+    }
 
     //拓扑排序
     static class topo {
@@ -410,8 +431,20 @@ public class Graph {
         return -1;
     }
 
-    //三色标记
-    //lc.802
+    /**
+     * other
+     */
+
+    //读入边
+//    int[][]edges=new int[m][];
+//        for (int i = 0; i < m; i++) {
+//        edges[i]=new int[]{ni(),ni()};
+//    }
+
+    /**
+     * 三色标记
+     * lc.802
+     */
     static class Solution802 {
         public List<Integer> eventualSafeNodes(int[][] graph) {
             int n = graph.length;
