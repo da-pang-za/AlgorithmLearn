@@ -295,20 +295,20 @@ public class ACWing {
 
         static boolean NimSet(int[] stones, int[] canUse) {
             int[] f = new int[NimMax];//   看每一堆石子是否可以操作
-            Arrays.fill(f,-1);
+            Arrays.fill(f, -1);
             int ans = 0;
             for (int x : stones) ans ^= sg1(x, f, canUse);
             return ans != 0;
         }
 
         private static int sg1(int x, int[] f, int[] canUse) {
-            if(f[x]!=-1)return f[x];
-            HashSet<Integer>set=new HashSet<>();
-            for(int v:canUse){
-                if(x>=v)set.add(sg1(x-v,f,canUse));
+            if (f[x] != -1) return f[x];
+            HashSet<Integer> set = new HashSet<>();
+            for (int v : canUse) {
+                if (x >= v) set.add(sg1(x - v, f, canUse));
             }
-            for(int i=0;;i++){
-                if(!set.contains(i))return f[x]=i;
+            for (int i = 0; ; i++) {
+                if (!set.contains(i)) return f[x] = i;
             }
         }
 
@@ -364,7 +364,7 @@ public class ACWing {
          * 扩展欧几里得算法
          * https://www.acwing.com/problem/content/879/
          * 求 ax+by = gcd(a,b) 的解 (x,y)
-         *
+         * <p>
          * 裴蜀定理
          * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
          * gcd(a,b)是a,b能构造出的最小正整数
@@ -431,15 +431,34 @@ public class ACWing {
             return (f[a] * fr[b] % p) * fr[a - b] % p;
         }
 
-        //卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
-        //C(a/p ,b/p) 这部分可以递归求解
-        //https://www.acwing.com/problem/content/889/
-        //1≤b≤a≤10^18    1≤p≤105
+        /**
+         * 卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
+         * C(a/p ,b/p) 这部分可以递归求解
+         * https://www.acwing.com/problem/content/889/
+         * 1≤b≤a≤10^18    1≤p≤105
+         */
 
-        //高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
-        //先用质因数分解预处理   todo
 
+        /**
+         * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
+         * 先用质因数分解预处理
+         */
 
+        /**
+         * 卡特兰数
+         * https://www.acwing.com/problem/content/891/
+         * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
+         * 的路径方案数
+         * 转化为不经过y=x+1这条直线(红线)的路径数
+         * 每个经过红线到(n,n)的方案 都对应 一条到(n-1,n+1)的路径
+         * 所以答案为C(2n,n)-C(2n,n-1)
+         */
+        static long Catalan(int n) {
+            int p = 1000_000_007;
+            long[] f = fac(2 * n, p);
+            long[] fr = facR(2 * n, p);
+            return (combine(2 * n, n, p, f, fr) - combine(2 * n, n - 1, p, f, fr) + p) % p;
+        }
     }
 
 
