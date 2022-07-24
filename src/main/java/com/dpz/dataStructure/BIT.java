@@ -21,7 +21,7 @@ class BIT {
         return x & -x;
     }
 
-    //查询  拼接区间 每次去掉最低位的1
+    //查询[1,x]累和  拼接区间 每次去掉最低位的1
     public int query(int x) {
         int ans = 0;
         for (int i = x; i > 0; i -= lowbit(i)) ans += tree[i];
@@ -37,6 +37,7 @@ class BIT {
      * (0      , 1000000]
      */
     public void add(int x, int u) {
+        assert x>0;//注意add 0 会死循环
         for (int i = x; i < tree.length; i += lowbit(i)) tree[i] += u;
     }
 }
