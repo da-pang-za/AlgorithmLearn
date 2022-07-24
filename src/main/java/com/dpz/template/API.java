@@ -128,7 +128,7 @@ public class API {
             int l = 0, r = n;
             while (l < r) {
                 int mid = l + r + 1 >> 1;
-                if (g[mid] < nums[i]) {
+                if (g[mid] < nums[i]) {//如果是非递减子序列 这里加个等于号
                     l = mid;
                 } else r = mid - 1;
             }
