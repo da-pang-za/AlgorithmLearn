@@ -446,7 +446,9 @@ public class ACWing {
 
         /**
          * 卡特兰数
-         * https://www.acwing.com/problem/content/891/
+         * <p>
+         * 括号序列问题https://www.acwing.com/problem/content/891/
+         * 出栈序列问题https://www.acwing.com/video/66/
          * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
          * 的路径方案数
          * 转化为不经过y=x+1这条直线(红线)的路径数
@@ -563,7 +565,9 @@ public class ACWing {
             }
         }
 
-        //字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+        /**
+         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+         */
         //单哈希
         void StringHash1(int n, int m, String s, List<int[]> questions) {
             int base1 = 1313131;
@@ -586,6 +590,7 @@ public class ACWing {
             }
         }
 
+        //双哈希
         void StringHash2(int n, int m, String s, List<int[]> questions) {
             int base1 = 1313131;
             int base2 = 500007;
@@ -617,6 +622,45 @@ public class ACWing {
                 } else System.out.println("No");
             }
         }
+
+        /**
+         * KMP   https://www.acwing.com/video/259/
+         * s中是否有子串是p
+         * s长度为M p长度为N
+         * <p>
+         * 暴力做法：枚举s的每个位置作为开头 每次不匹配换下一个位置  最坏O(M*N)
+         * <p>
+         * 优化 匹配不成功后，p最少移动多少 s中当前不匹配的位置前面都匹配了 视频8:00
+         * next[i]=j  =>  p[1,j]=p[i-j+1,i]  最长相同的前后缀 长度为j   视频12:31
+         * 这样就可以直接从p[j+1]继续匹配
+         * 字符串下标从1开始 方便next数组
+         */
+        static int KMP(String s, String p) {
+            List<Integer> ans = new ArrayList<>();
+            int m = s.length(), n = p.length();
+            int[] next = new int[n + 1];
+            //求next  p和p自己匹配
+            //next[1] = 1;//这个按照上面定义应该为1 但是i不匹配直接i++ 不然死循环
+            for (int i = 2, j = 0; i <= n; i++) {
+                while (j > 0 && p.charAt(i - 1) != p.charAt(j)) j = next[j];
+                if (p.charAt(i - 1) == p.charAt(j)) j++;
+                next[i] = j;
+            }
+            //匹配
+            for (int i = 1, j = 0; i <= m; i++) {
+                //s[i]和p[j+1]进行匹配
+                while (j > 0 && s.charAt(i - 1) != p.charAt(j)) j = next[j];
+                if (s.charAt(i - 1) == p.charAt(j)) j++;
+                //返回从0开始的下标
+                if (j == n) {
+                    ans.add(i - n);//匹配所有位置
+                    j = next[j];//继续右移
+                }
+                //if (j == n) return i - n;//匹配最早位置
+            }
+            return -1;
+        }
+
     }
 
     static class Greedy {
