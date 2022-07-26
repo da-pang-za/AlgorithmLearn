@@ -74,7 +74,9 @@ class Skiplist {
             while(pre.next.length<i+1) pre = pre.pre;
             if(i==0 && node.next[i]!=null) node.next[i].pre = pre;
             pre.next[i] = node.next[i];
+            node.next[i]=null;
         }
+        node.pre=null;
         return true;
     }
 
