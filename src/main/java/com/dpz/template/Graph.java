@@ -1,5 +1,7 @@
 package com.dpz.template;
 
+import com.dpz.dataStructure.UnionFind;
+
 import java.util.*;
 
 public class Graph {
@@ -39,6 +41,7 @@ public class Graph {
         return adj;
     }
 
+    //====================== 最短路 ==============================
     //等权（都为1）单源最短路  BFS
     static long[] bfs(int n, List<Integer>[] adj, int source) {
         long[] dist = new long[n + 1];
@@ -65,7 +68,7 @@ public class Graph {
         return dist;
     }
 
-    //Dijkstra 单源最短路  复杂度 O(eloge)
+    //Dijkstra 单源最短路  复杂度 O(eloge)  无负权
     static long[] dijkstra(int n, List<int[]>[] adj, int source) {
         long[] dist = new long[n + 1];
         Arrays.fill(dist, INF);
@@ -91,8 +94,8 @@ public class Graph {
         return dist;
     }
 
-
-    //Floyd算法 边权有可能为负数 已去除重边 保留最短的边
+    //Floyd算法 任意两点最短路 边权有可能为负数 已去除重边 保留最短的边
+    //复杂度O(N^3)
     static int[][] floyd(int[][] adj) {
         int n = adj.length - 1;
         int[][] dist = new int[n + 1][n + 1];//最短路
@@ -113,6 +116,105 @@ public class Graph {
         }
         return dist;
     }
+
+    /**
+     * Bellman-Ford 算法 不超过k条边的单源最短路    求有负权边的最短路
+     * 复杂度 O(N*M)
+     * for(k)  for(all(edges))   dist[b]=min(dist[b],dist[a]+w)
+     * 每次循环路径最多增加一条边
+     * 1--> a --> b    边[a,b,w] dist[b]=min(dist[b],dist[a]+w)
+     * 注意 如果有负权回路 且负环在路径上 则  最短路不存在！！！
+     * <p>
+     * 有边数限制的最短路 https://www.acwing.com/problem/content/855/
+     * 这个问题只能用BF算法
+     * 边数有限制  负环不能无限转了
+     */
+    static long[] bf(int n, int[][] edges, int source, int k) {
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        for (int i = 0; i < k; i++) {
+            long[] dist1 = dist.clone();
+            for (int[] e : edges) {
+                int a = e[0], b = e[1], w = e[2];
+                dist1[b] = Math.min(dist1[b], dist[a] + w);
+            }
+            dist = dist1;
+        }
+        return dist;
+        //ans > INF/2 ? "impossible" : ans   注意有负权   INF-x   也是无穷
+    }
+
+    /**
+     * spfa   对BF算法的优化     有负权的最短路
+     * 复杂度 一般O(M)   最坏O(N*M)
+     * https://www.acwing.com/solution/content/9306/
+     * dist1[b] = Math.min(dist1[b], dist[a] + w);   a变小  b 才会变小
+     * 更新过的节点 才会用来更新其他节点
+     */
+    static long[] spfa(int n, List<int[]>[] adj, int source) {
+        long[] dist = new long[n + 1];
+        Arrays.fill(dist, INF);
+        dist[source] = 0;
+        boolean[] st = new boolean[n + 1];//是否在队列中
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(source);
+        st[source] = true;
+
+        while (!deque.isEmpty()) {
+            int p = deque.pollFirst();
+            st[p] = false;//注意出队后要设置st数组的值  可能会重新入队
+            for (var e : adj[p]) {
+                int v = e[0], d = e[1];
+                if (d + dist[p] < dist[v]) {
+                    dist[v] = d + dist[p];
+                    if (!st[v]) {
+                        //变小了才去更新其他点
+                        deque.addLast(v);
+                        st[v] = true;
+                    }
+                }
+            }
+        }
+        //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
+        return dist;
+    }
+
+    /**
+     * spfa求负环   https://www.acwing.com/video/284/   抽屉原理
+     * 记录最短路走过的边数
+     * cnt[x]>=n  说明经过了n+1个点  一共n个点 所以一定重复了 即负环/负权回路
+     * 抽象一个源点 和所有点的距离都是0  求这个点的最短路
+     */
+    static boolean negLoop(int n, List<int[]>[] adj) {
+        long[] dist = new long[n + 1];//初始都设为0  直接更新负权
+        int[] cnt = new int[n + 1];
+        boolean[] st = new boolean[n + 1];//是否在队列中
+        Deque<Integer> deque = new ArrayDeque<>();
+        for (int i = 1; i <= n; i++) {
+            deque.addLast(i);
+        }
+        while (!deque.isEmpty()) {
+            int p = deque.pollFirst();
+            st[p] = false;//注意出队后要设置st数组的值  可能会重新入队
+            for (var e : adj[p]) {
+                int v = e[0], d = e[1];
+                if (d + dist[p] < dist[v]) {
+                    dist[v] = d + dist[p];
+                    cnt[v] = cnt[p] + 1;
+                    if (cnt[v] >= n) return true;
+                    if (!st[v]) {
+                        //变小了才去更新其他点
+                        deque.addLast(v);
+                        st[v] = true;
+                    }
+                }
+            }
+        }
+        //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
+        return false;
+    }
+
 
     //建图  dijkstra模板  前向星
     static class Solution1 {
@@ -169,6 +271,96 @@ public class Graph {
         }
     }
 
+
+    //====================== 最短路 ==============================
+
+
+    //====================== 最小生成树(无向图) ==========================
+
+    /**
+     * Kruskal算法  克鲁斯卡尔算法
+     * 所有边按权重从小到大排序
+     * 按顺序枚举每条边  如果枚举的两个顶点当前不连通 把当前边加到集合
+     * 即尽量加最小边
+     */
+    //输出所有边
+    static List<int[]> kruskal(int n, int[][] edges) {
+        List<int[]> tree = new ArrayList<>();
+        UnionFind uf = new UnionFind(n + 1);
+        Arrays.sort(edges, (a, b) -> a[2] - b[2]);
+        for (var e : edges) {
+            if (uf.find(e[0]) == uf.find(e[1])) continue;
+            uf.union(e[0], e[1]);
+            tree.add(e);
+        }
+        if (tree.size() < n - 1) return null;
+        return tree;
+    }
+
+    //====================== 最小生成树 ==========================
+
+    //====================== 二分图(无向图) ==========================
+    //二分图定义：把图划分为两个集合 集合内部没有边
+
+    /**
+     * 染色法判定二分图
+     * https://www.acwing.com/problem/content/862/
+     * 一个图是二分图  当且仅当图中不含奇数环(环中边的数量是奇数)
+     * (因为环上相邻的两点一定在不同的部分 奇数会出现矛盾)
+     */
+    static boolean isBinG(int n, List<Integer>[] adj) {
+        int[] color = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            if (color[i] != 0) continue;
+            Deque<Integer> deque = new ArrayDeque<>();
+            deque.addLast(i);
+            color[i] = 1;
+            while (!deque.isEmpty()) {
+                int p = deque.pollFirst();
+                int c = 1;
+                if (color[p] == 1) c++;
+                for (Integer v : adj[p]) {
+                    if (color[v] == 0) {
+                        color[v] = c;
+                        deque.addLast(v);
+                    } else if (color[v] != c) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 匈牙利算法——二分图的最大匹配
+     * 两边每个点只能连一条边 求最多连线数   例子：男女匹配doge 牵红线
+     * a要匹配b 如果b已经匹配c了 尝试让c匹配其他点
+     * 时间复杂度 最坏O(N*M)
+     */
+    static int maxMatch(int n1, int n2, List<Integer>[] adj) {
+        int ans = 0;
+        int[] match = new int[n2 + 1];//右侧匹配的左侧点
+        for (int i = 1; i <= n1; i++) {
+            boolean[] st = new boolean[n2 + 1];//标记当前递归中使用的点
+            if (find(i, match, st, adj)) ans++;
+
+        }
+        return ans;
+    }
+
+    private static boolean find(int i, int[] match, boolean[] st, List<Integer>[] adj) {
+        for (int v : adj[i]) {
+            if (st[v]) continue;
+            st[v] = true;
+            if (match[v] == 0 || find(match[v], match, st, adj)) {
+                match[v] = i;
+                return true;
+            }
+        }
+        return false;
+    }
+
     //拓扑排序
     static class topo {
         static void go() {
@@ -203,8 +395,56 @@ public class Graph {
         }
     }
 
-    //三色标记
-    //lc.802
+
+    /**
+     * 棋盘
+     */
+    static int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    //左上角到右下角最短距离    BFS
+    static int minDist(int[][] board) {
+        int n = board.length, m = board[0].length;
+        boolean[][] vis = new boolean[n][m];
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.addLast(new int[]{0, 0});
+        vis[0][0] = true;
+        int step = -1;
+        while (!deque.isEmpty()) {
+            step++;
+            int size = deque.size();
+            for (int u = 0; u < size; u++) {
+                int[] p = deque.pollFirst();
+                int i = p[0], j = p[1];
+                if (i == n - 1 && j == m - 1) return step;
+                for (int[] dir : dirs) {
+                    int x = i + dir[0], y = j + dir[1];
+                    if (x < 0 || x >= n || y < 0 || y >= m) continue;
+                    if (board[x][y] == 1) continue;
+
+                    if (vis[x][y]) continue;
+                    vis[x][y] = true;
+                    deque.addLast(new int[]{x, y});
+                }
+            }
+
+        }
+        return -1;
+    }
+
+    /**
+     * other
+     */
+
+    //读入边
+//    int[][]edges=new int[m][];
+//        for (int i = 0; i < m; i++) {
+//        edges[i]=new int[]{ni(),ni()};
+//    }
+
+    /**
+     * 三色标记
+     * lc.802
+     */
     static class Solution802 {
         public List<Integer> eventualSafeNodes(int[][] graph) {
             int n = graph.length;

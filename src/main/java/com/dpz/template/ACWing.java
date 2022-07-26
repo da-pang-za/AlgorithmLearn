@@ -281,8 +281,35 @@ public class ACWing {
 
         //Nim游戏  https://www.acwing.com/activity/content/problem/content/961/
         static boolean Nim(int[] stones) {
-            //todo
-            return true;
+            int ans = 0;
+            for (int v : stones) ans ^= v;
+            return ans != 0;
+        }
+
+        //博弈论  集合-Nim游戏 https://www.acwing.com/activity/content/problem/content/963/
+        //SG函数 https://www.acwing.com/solution/content/23435/
+        //用图表示局面  结束局面SG值被定义为0  其他局面SG值为无法到达的最小自然数
+        //0为必败态  非0为必胜态       一步 0只能到非0   非0一定可以到0
+        //利用sg值状态转移 转化为经典Nim游戏
+        static int NimMax = 10010;
+
+        static boolean NimSet(int[] stones, int[] canUse) {
+            int[] f = new int[NimMax];//   看每一堆石子是否可以操作
+            Arrays.fill(f, -1);
+            int ans = 0;
+            for (int x : stones) ans ^= sg1(x, f, canUse);
+            return ans != 0;
+        }
+
+        private static int sg1(int x, int[] f, int[] canUse) {
+            if (f[x] != -1) return f[x];
+            HashSet<Integer> set = new HashSet<>();
+            for (int v : canUse) {
+                if (x >= v) set.add(sg1(x - v, f, canUse));
+            }
+            for (int i = 0; ; i++) {
+                if (!set.contains(i)) return f[x] = i;
+            }
         }
 
 
@@ -317,6 +344,7 @@ public class ACWing {
                 }
             }
         }
+
         //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
         //https://www.acwing.com/activity/content/problem/content/945/
         //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
@@ -333,13 +361,10 @@ public class ACWing {
         }
 
         /**
-         * //扩展欧几里得算法
-         *         //https://www.acwing.com/problem/content/879/
-         *         //求 ax+by = gcd(a,b) 的解 (x,y)
-         */
-
-
-        /**
+         * 扩展欧几里得算法
+         * https://www.acwing.com/problem/content/879/
+         * 求 ax+by = gcd(a,b) 的解 (x,y)
+         * <p>
          * 裴蜀定理
          * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
          * gcd(a,b)是a,b能构造出的最小正整数
@@ -406,20 +431,36 @@ public class ACWing {
             return (f[a] * fr[b] % p) * fr[a - b] % p;
         }
 
-        //卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
-        //C(a/p ,b/p) 这部分可以递归求解
-        //https://www.acwing.com/problem/content/889/
-        //1≤b≤a≤10^18    1≤p≤105
+        /**
+         * 卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
+         * C(a/p ,b/p) 这部分可以递归求解
+         * https://www.acwing.com/problem/content/889/
+         * 1≤b≤a≤10^18    1≤p≤105
+         */
 
-        //高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
-        //先用质因数分解预处理   todo
 
+        /**
+         * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
+         * 先用质因数分解预处理
+         */
 
-        //博弈论  集合-Nim游戏 https://www.acwing.com/activity/content/problem/content/963/
-        //SG函数 https://www.acwing.com/video/314/
-        //用图表示局面  结束局面SG值被定义为0  其他局面SG值为无法到达的最小自然数
-        //0为必败态  非0为必胜态       一步 0只能到非0   非0一定可以到0
-
+        /**
+         * 卡特兰数
+         * <p>
+         * 括号序列问题https://www.acwing.com/problem/content/891/
+         * 出栈序列问题https://www.acwing.com/video/66/
+         * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
+         * 的路径方案数
+         * 转化为不经过y=x+1这条直线(红线)的路径数
+         * 每个经过红线到(n,n)的方案 都对应 一条到(n-1,n+1)的路径
+         * 所以答案为C(2n,n)-C(2n,n-1)
+         */
+        static long Catalan(int n) {
+            int p = 1000_000_007;
+            long[] f = fac(2 * n, p);
+            long[] fr = facR(2 * n, p);
+            return (combine(2 * n, n, p, f, fr) - combine(2 * n, n - 1, p, f, fr) + p) % p;
+        }
     }
 
 
@@ -524,7 +565,9 @@ public class ACWing {
             }
         }
 
-        //字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+        /**
+         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+         */
         //单哈希
         void StringHash1(int n, int m, String s, List<int[]> questions) {
             int base1 = 1313131;
@@ -547,6 +590,7 @@ public class ACWing {
             }
         }
 
+        //双哈希
         void StringHash2(int n, int m, String s, List<int[]> questions) {
             int base1 = 1313131;
             int base2 = 500007;
@@ -578,6 +622,45 @@ public class ACWing {
                 } else System.out.println("No");
             }
         }
+
+        /**
+         * KMP   https://www.acwing.com/video/259/
+         * s中是否有子串是p
+         * s长度为M p长度为N
+         * <p>
+         * 暴力做法：枚举s的每个位置作为开头 每次不匹配换下一个位置  最坏O(M*N)
+         * <p>
+         * 优化 匹配不成功后，p最少移动多少 s中当前不匹配的位置前面都匹配了 视频8:00
+         * next[i]=j  =>  p[1,j]=p[i-j+1,i]  最长相同的前后缀 长度为j   视频12:31
+         * 这样就可以直接从p[j+1]继续匹配
+         * 字符串下标从1开始 方便next数组
+         */
+        static int KMP(String s, String p) {
+            List<Integer> ans = new ArrayList<>();
+            int m = s.length(), n = p.length();
+            int[] next = new int[n + 1];
+            //求next  p和p自己匹配
+            //next[1] = 1;//这个按照上面定义应该为1 但是i不匹配直接i++ 不然死循环
+            for (int i = 2, j = 0; i <= n; i++) {
+                while (j > 0 && p.charAt(i - 1) != p.charAt(j)) j = next[j];
+                if (p.charAt(i - 1) == p.charAt(j)) j++;
+                next[i] = j;
+            }
+            //匹配
+            for (int i = 1, j = 0; i <= m; i++) {
+                //s[i]和p[j+1]进行匹配
+                while (j > 0 && s.charAt(i - 1) != p.charAt(j)) j = next[j];
+                if (s.charAt(i - 1) == p.charAt(j)) j++;
+                //返回从0开始的下标
+                if (j == n) {
+                    ans.add(i - n);//匹配所有位置
+                    j = next[j];//继续右移
+                }
+                //if (j == n) return i - n;//匹配最早位置
+            }
+            return -1;
+        }
+
     }
 
     static class Greedy {
