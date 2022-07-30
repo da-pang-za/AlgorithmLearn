@@ -21,24 +21,19 @@ class UnionFind {
         this.parent = new int[n];
         this.size = new int[n];
         Arrays.fill(size, 1);
-        for (int i = 0; i < n; ++i) {
-            parent[i] = i;
-        }
+        for (int i = 0; i < n; ++i) parent[i] = i;
     }
 
     public int find(int x) {
         //路径压缩  父亲更新为原父亲的祖先
-        if (x != parent[x])
-            parent[x] = find(parent[x]);
+        if (x != parent[x])parent[x] = find(parent[x]);
         return parent[x];
     }
 
     public boolean union(int x, int y) {
         x = find(x);
         y = find(y);
-        if (x == y) {
-            return false;
-        }
+        if (x == y) return false;
         //按秩合并  x是size较大的
         //如果我们将一棵点数与深度都较小的集合树连接到一棵更大的集合树下，显然相比于另一种连接方案
         if (size[x] < size[y]) {
