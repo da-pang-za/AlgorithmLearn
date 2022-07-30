@@ -3,7 +3,7 @@ package com.dpz.template;
 import java.util.*;
 
 /**
- * ACWing算法模板
+ * ACWing算法模板  算法基础课
  */
 public class ACWing {
     static int mod = (int) 1e9 + 7;
@@ -11,7 +11,6 @@ public class ACWing {
     public static void main(String[] args) {
         System.out.println(Arrays.toString(Basic.divide("777", "32")));
     }
-    //==============================算法基础课===================================
 
     /**
      * 排序算法
@@ -300,7 +299,7 @@ public class ACWing {
             for (int x : stones) ans ^= sg1(x, f, canUse);
             return ans != 0;
         }
-
+        //重点理解sg定理
         private static int sg1(int x, int[] f, int[] canUse) {
             if (f[x] != -1) return f[x];
             HashSet<Integer> set = new HashSet<>();
@@ -311,6 +310,8 @@ public class ACWing {
                 if (!set.contains(i)) return f[x] = i;
             }
         }
+
+        //==============================博弈论 game===========================
 
 
         //==============================排列组合===========================
@@ -353,8 +354,7 @@ public class ACWing {
             return (int) pow(b, p - 2, p);
         }
 
-        //求最大公约数
-        //欧几里得算法     辗转相除法
+        //求最大公约数   欧几里得算法     辗转相除法
         static long gcd(long a, long b) {
             if (b == 0) return a;
             return gcd(b, a % b);
@@ -663,6 +663,9 @@ public class ACWing {
 
     }
 
+    /**
+     * 贪心
+     */
     static class Greedy {
         //推公式
         //刷杂技的牛 https://www.acwing.com/problem/content/127/
@@ -716,7 +719,6 @@ public class ACWing {
     static class G {
     }
 
-    //算法提高课
 }
 
 
