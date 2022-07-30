@@ -3,7 +3,7 @@ package com.dpz.dataStructure;
 /**
  * 树状数组
  * 模板题：307
- * 参考资料：https://zhuanlan.zhihu.com/p/93795692
+ * 参考资料：https://zhuanlan.zhihu.com/p/93795692   注意树的结构
  * 注意：维护的区间index从1开始
  */
 
