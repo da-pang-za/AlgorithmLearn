@@ -450,7 +450,7 @@ public class ACWing {
          * 括号序列问题https://www.acwing.com/problem/content/891/
          * 出栈序列问题https://www.acwing.com/video/66/
          * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
-         * 的路径方案数
+         * 的路径方案数（只能向下或向右走）
          * 转化为不经过y=x+1这条直线(红线)的路径数
          * 每个经过红线到(n,n)的方案 都对应 一条到(n-1,n+1)的路径
          * 所以答案为C(2n,n)-C(2n,n-1)
