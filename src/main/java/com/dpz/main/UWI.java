@@ -471,7 +471,12 @@ public class UWI {
         }
     }
 
-    private boolean oj = System.getProperty("ONLINE_JUDGE") != null || ojFlag;
+    private final boolean oj = !local();
+
+    boolean local() {
+        String user = System.getProperty("user.name");
+        return user.contains("dpz");
+    }
 
     //调试的时候打印
     private void tr(Object... o) {
@@ -479,7 +484,6 @@ public class UWI {
     }
 
     void run() throws Exception {
-        //add  INPUT from local file  todo
         if (INPUT.length() > 0)
             is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
         else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
@@ -495,26 +499,15 @@ public class UWI {
         new UWI().run();
     }
 
-
-    static boolean ojFlag = false;
-
     void solve() {
         for (int T = 1; T > 0; T--) go();
     }
 
     //#0.00代表保留两位小数
-    DecimalFormat df = new DecimalFormat("#0.00000000");
+    static DecimalFormat df = new DecimalFormat("#0.00000000");
 
     void go() {
         int n = ni();
-        int mod = (int) 1e9 + 7;
-        //走到第s步 在0的数量和不在0的数量    dp[s][0]=3*dp[s-1][1]   dp[s][1]=dp[s-1][0]+2*dp[s-1][1]
-        long[] dp = new long[]{1, 0};
-        for (int s = 1; s <= n; s++) {
-            dp = new long[]{3 * dp[1] % mod, (dp[0] + 2 * dp[1]) % mod};
-        }
-        out.println(dp[0]);
-
     }
 
 }

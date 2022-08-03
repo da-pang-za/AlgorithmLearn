@@ -2,9 +2,11 @@ package com.dpz.main;
 
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class Main {
+    static private final boolean oj = !local();
 
     static String INPUT = "";
 
@@ -12,54 +14,22 @@ public class Main {
         for (int T = ni(); T > 0; T--) go();
     }
 
+    //#0.00代表保留两位小数
+    static DecimalFormat df = new DecimalFormat("#0.000000");
 
     static void go() {
-        int n = ni(), m = ni();
-        int[][] edges=new int[m][];
-        for (int i = 0; i < m; i++) {
-            edges[i]=new int[]{ni(),ni()};
-        }
-        List<Integer>[] adj = build1(n, edges);
-        int[]deg=new int[n+1];
-        List<Integer>ans=new ArrayList<>();
-        for (int[] edge : edges) {
-            deg[edge[1]]++;
-        }
-        Deque<Integer>deque=new ArrayDeque<>();
-        for (int i = 1; i <=n; i++) {
-            if(deg[i]==0)deque.add(i);
-        }
-        while(!deque.isEmpty()){
-            int p=deque.pollFirst();
-            ans.add(p);
-            for (Integer v : adj[p]) {
-                if(--deg[v]==0)deque.addLast(v);
-            }
-        }
-        if(ans.size()==n){
-            for (Integer v : ans) {
-                out.print(v+" ");
-            }
-            out.println();
-        }
-        else out.println(-1);
-    }
-    //建图 1 list 不带权   注意！！！  这里是无向图！！！
-    static List<Integer>[] build1(int n, int[][] edges) {
-        List<Integer>[] adj = new ArrayList[n + 1];
-        for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
 
-        for (int[] edge : edges) {
-            adj[edge[0]].add(edge[1]);
-        }
-        return adj;
     }
 
 
     //===================== MAIN =============================
     public static void main(String[] args) throws Exception {
+
         long S = System.currentTimeMillis();
-        is = INPUT.isEmpty() ? System.in : new ByteArrayInputStream(INPUT.getBytes());
+        if (INPUT.length() > 0)
+            is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
+        else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+
         out = new PrintWriter(System.out);
 
         solve();
@@ -202,6 +172,11 @@ public class Main {
     }
 
     private static void tr(Object... o) {
-        if (INPUT.length() != 0) System.out.println(Arrays.deepToString(o));
+        if (!oj) System.out.println(Arrays.deepToString(o));
+    }
+
+    static boolean local() {
+        String user = System.getProperty("user.name");
+        return user.contains("dpz");
     }
 }
