@@ -1,6 +1,3 @@
-package com.dpz.main;
-
-
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -176,7 +173,11 @@ public class Main {
     }
 
     static boolean local() {
-        String user = System.getProperty("user.name");
-        return user.contains("dpz");
+        try {
+            String user = System.getProperty("user.name");
+            return user.contains("dpz");
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 }

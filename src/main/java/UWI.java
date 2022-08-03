@@ -1,6 +1,3 @@
-package com.dpz.main;
-
-
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -474,8 +471,12 @@ public class UWI {
     private final boolean oj = !local();
 
     boolean local() {
-        String user = System.getProperty("user.name");
-        return user.contains("dpz");
+        try{
+            String user = System.getProperty("user.name");
+            return user.contains("dpz");
+        }
+        catch (Exception ignored){}
+        return false;
     }
 
     //调试的时候打印
@@ -507,7 +508,43 @@ public class UWI {
     static DecimalFormat df = new DecimalFormat("#0.00000000");
 
     void go() {
-        int n = ni();
+        int n = ni(), m = ni();
+
+        int[] a = na(n), b = na(m);
+        long[] ma = new long[n + 1];
+        long[] mb = new long[m + 1];
+        Arrays.fill(ma, 0x3f3f3f3f);
+        Arrays.fill(mb, 0x3f3f3f3f);
+        int x = ni();
+
+        for (int i = 0; i < n; i++) {
+            long sum = 0;
+            for (int j = i; j < n; j++) {
+                int len = j - i + 1;
+                sum += a[j];
+                ma[len] = Math.min(ma[len], sum);
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            long sum = 0;
+            for (int j = i; j < m; j++) {
+                int len = j - i + 1;
+                sum += b[j];
+                mb[len] = Math.min(mb[len], sum);
+            }
+        }
+        int ans = 0;
+        for (int len1 = 1; len1 <= n; len1++) {
+            int l = 0, r = m;
+            while (l < r) {
+                int mid = l + r + 1 >> 1;
+                if (ma[len1] * mb[mid] > x) r = mid - 1;
+                else l = mid;
+            }
+            int len2 = l;
+            ans = Math.max(ans, len1 * len2);
+        }
+        out.println(ans);
     }
 
 }
