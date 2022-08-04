@@ -117,10 +117,10 @@ public class API {
     }
 
     //最长上升子序列 最长递增子序列 这里是严格递增的
-    public int lengthOfLIS(int[] nums) {
+    public int LIS(int[] nums) {
         int n = nums.length;
 //        int[] f = new int[n];  //以i为结尾的最长递增子序列长度
-        int[] g = new int[n + 1];//长度为i的子序列 最后一个位置的最小值  单调递增
+        int[] g = new int[n + 1];//长度为i的递增子序列 最后一个位置的最小值  单调递增
 //        Arrays.fill(f,1);
         Arrays.fill(g, Integer.MAX_VALUE);
         int ans = 1;
@@ -237,7 +237,6 @@ public class API {
             while (l < r) {
                 swap(nums, l++, r--);
             }
-
         }
     }
 
