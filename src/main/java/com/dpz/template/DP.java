@@ -168,6 +168,46 @@ public class DP {
 
 }
 
+//状压DP
+class BitMask{
+    //蒙德里安的梦想
+    //https://www.acwing.com/activity/content/problem/content/1010/
+    static void go() {
+        //不含连续奇数0的状态   预处理
+        boolean[] valid = new boolean[1 << 11];
+
+        int N=11, M=10;
+
+            for (int i = 0; i < 1 << 11; i++) {
+                valid[i] = true;
+                int u = i | (1 << M);
+                while (u > 0) {
+                    if (u % 2 == 1) u /= 2;
+                    else {
+                        if (u % 4 != 0) {
+                            valid[i] = false;
+                            break;
+                        } else u /= 4;
+                    }
+                }
+            }
+            long[][] dp = new long[N + 1][1 << M];//前i行已经排好了 i行伸到i+1行的状态为j
+            dp[0][0] = 1;
+            for (int i = 1; i <= N; i++) {
+                for (int j = 0; j < 1 << M; j++) {
+                    for (int k = 0; k < 1 << M; k++) {
+                        if ((j & k) != 0 || !valid[j | k]) continue;
+                        dp[i][j] += dp[i - 1][k];
+                    }
+                }
+            }
+            System.out.println(dp[N][0]);
+
+    }
+
+
+}
+
 
 
 
