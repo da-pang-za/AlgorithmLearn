@@ -35,6 +35,9 @@ public class DP {
                 return dp[N][V];
             }
 
+            /**
+             * 一维优化 注意内层驯化是倒序的
+             */
             static int _01bp1d(int N, int V, int[] v, int[] w) {
                 //总容量不超过V的情况下的最大价值
                 int[] dp = new int[V + 1];//前i个物品 容量不超过j的最大价值
@@ -149,24 +152,64 @@ public class DP {
 
     //编辑距离
     static public int minDistance(String word1, String word2) {
-        int m=word1.length(),n=word2.length();
-        int[][]dp=new int[m+1][n+1];
-        for(int i=1;i<=m;i++)dp[i][0]=i;
-        for(int j=1;j<=n;j++)dp[0][j]=j;
-        for(int i=1;i<=m;i++){
-            char a=word1.charAt(i-1);
-            for(int j=1;j<=n;j++){
-                char b=word2.charAt(j-1);
-                if(a==b)dp[i][j]=dp[i-1][j-1];
-                else dp[i][j]=Math.min(dp[i-1][j],Math.min(dp[i][j-1],dp[i-1][j-1]))+1;
+        int m = word1.length(), n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) dp[i][0] = i;
+        for (int j = 1; j <= n; j++) dp[0][j] = j;
+        for (int i = 1; i <= m; i++) {
+            char a = word1.charAt(i - 1);
+            for (int j = 1; j <= n; j++) {
+                char b = word2.charAt(j - 1);
+                if (a == b) dp[i][j] = dp[i - 1][j - 1];
+                else dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
             }
         }
         return dp[m][n];
     }
 
+    //状压DP
+    static class BitMask {
+        //蒙德里安的梦想
+        //https://www.acwing.com/activity/content/problem/content/1010/
+        static void go() {
+            //不含连续奇数0的状态   预处理
+            boolean[] valid = new boolean[1 << 11];
+
+            int N = 11, M = 10;
+
+            for (int i = 0; i < 1 << 11; i++) {
+                valid[i] = true;
+                int u = i | (1 << M);
+                while (u > 0) {
+                    if (u % 2 == 1) u /= 2;
+                    else {
+                        if (u % 4 != 0) {
+                            valid[i] = false;
+                            break;
+                        } else u /= 4;
+                    }
+                }
+            }
+            long[][] dp = new long[N + 1][1 << M];//前i行已经排好了 i行伸到i+1行的状态为j
+            dp[0][0] = 1;
+            for (int i = 1; i <= N; i++) {
+                for (int j = 0; j < 1 << M; j++) {
+                    for (int k = 0; k < 1 << M; k++) {
+                        if ((j & k) != 0 || !valid[j | k]) continue;
+                        dp[i][j] += dp[i - 1][k];
+                    }
+                }
+            }
+            System.out.println(dp[N][0]);
+
+        }
+
+
+    }
     //=======================算法提高课===========================
 
 }
+
 
 
 
