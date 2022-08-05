@@ -3,6 +3,35 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class UWI {
+
+    //#0.00代表保留两位小数
+    static DecimalFormat df = new DecimalFormat("#0.00000000");
+
+    void solve() {
+        for (int T = 1; T > 0; T--) go();
+    }
+
+    void go() {
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        new UWI().run();
+    }
+
+    void run() throws Exception {
+        if (INPUT.length() > 0)
+            is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
+        else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+        out = new FastWriter(System.out);
+
+        long s = System.currentTimeMillis();
+        solve();
+        out.flush();
+        tr(System.currentTimeMillis() - s + "ms");
+    }
+
+
     InputStream is;
     FastWriter out;
     String INPUT = "";
@@ -471,11 +500,11 @@ public class UWI {
     private final boolean oj = !local();
 
     boolean local() {
-        try{
+        try {
             String user = System.getProperty("user.name");
             return user.contains("dpz");
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){}
         return false;
     }
 
@@ -484,67 +513,5 @@ public class UWI {
         if (!oj) System.out.println(Arrays.deepToString(o));
     }
 
-    void run() throws Exception {
-        if (INPUT.length() > 0)
-            is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
-        else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
-        out = new FastWriter(System.out);
-
-        long s = System.currentTimeMillis();
-        solve();
-        out.flush();
-        tr(System.currentTimeMillis() - s + "ms");
-    }
-
-    public static void main(String[] args) throws Exception {
-        new UWI().run();
-    }
-
-    void solve() {
-        for (int T = 1; T > 0; T--) go();
-    }
-
-    //#0.00代表保留两位小数
-    static DecimalFormat df = new DecimalFormat("#0.00000000");
-
-    void go() {
-        int n = ni(), m = ni();
-
-        int[] a = na(n), b = na(m);
-        long[] ma = new long[n + 1];
-        long[] mb = new long[m + 1];
-        Arrays.fill(ma, 0x3f3f3f3f);
-        Arrays.fill(mb, 0x3f3f3f3f);
-        int x = ni();
-
-        for (int i = 0; i < n; i++) {
-            long sum = 0;
-            for (int j = i; j < n; j++) {
-                int len = j - i + 1;
-                sum += a[j];
-                ma[len] = Math.min(ma[len], sum);
-            }
-        }
-        for (int i = 0; i < m; i++) {
-            long sum = 0;
-            for (int j = i; j < m; j++) {
-                int len = j - i + 1;
-                sum += b[j];
-                mb[len] = Math.min(mb[len], sum);
-            }
-        }
-        int ans = 0;
-        for (int len1 = 1; len1 <= n; len1++) {
-            int l = 0, r = m;
-            while (l < r) {
-                int mid = l + r + 1 >> 1;
-                if (ma[len1] * mb[mid] > x) r = mid - 1;
-                else l = mid;
-            }
-            int len2 = l;
-            ans = Math.max(ans, len1 * len2);
-        }
-        out.println(ans);
-    }
 
 }
