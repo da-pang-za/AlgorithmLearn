@@ -5,23 +5,23 @@ import java.util.*;
 public class Main {
     static private final boolean oj = !local();
 
-    static String INPUT = "";
+    String INPUT = "";
 
-    static void solve() {
-        for (int T = ni(); T > 0; T--) go();
+    void solve() {
+        for (int T = 1; T > 0; T--) go();
     }
 
     //#0.00代表保留两位小数
-    static DecimalFormat df = new DecimalFormat("#0.000000");
+    DecimalFormat df = new DecimalFormat("#0.000000");
 
-    static void go() {
-
-    }
-
+    void go(){}
 
     //===================== MAIN =============================
     public static void main(String[] args) throws Exception {
+        new Main().run();
+    }
 
+    void run() throws Exception {
         long S = System.currentTimeMillis();
         if (INPUT.length() > 0)
             is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
