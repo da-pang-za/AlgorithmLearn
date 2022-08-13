@@ -1,6 +1,7 @@
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.InputMismatchException;
 
 public class Main {
     static private final boolean oj = !local();
@@ -14,7 +15,9 @@ public class Main {
     //#0.00代表保留两位小数
     DecimalFormat df = new DecimalFormat("#0.000000");
 
-    void go(){}
+    void go() {
+
+    }
 
     //===================== MAIN =============================
     public static void main(String[] args) throws Exception {
@@ -129,25 +132,17 @@ public class Main {
         return a;
     }
 
-    private static int ni() {
-        int num = 0, b;
-        boolean minus = false;
-        while ((b = readByte()) != -1 && !((b >= '0' && b <= '9') || b == '-')) ;
-        if (b == '-') {
-            minus = true;
-            b = readByte();
-        }
-
-        while (true) {
-            if (b >= '0' && b <= '9') {
-                num = num * 10 + (b - '0');
-            } else {
-                return minus ? -num : num;
-            }
-            b = readByte();
-        }
+    private long[] nal(int n) {
+        long[] a = new long[n];
+        for (int i = 0; i < n; i++) a[i] = nl();
+        return a;
     }
 
+    private static int ni() {
+        return (int) nl();
+    }
+
+    //long
     private static long nl() {
         long num = 0;
         int b;
