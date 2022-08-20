@@ -7,6 +7,18 @@ import java.util.*;
 public class API {
     //最大字段和 todo
 
+    //================ map cnt ===============
+    void add(int v, Map<Integer, Integer> map) {
+        map.put(v, map.getOrDefault(v, 0) + 1);
+    }
+
+    void remove(int v, Map<Integer, Integer> map) {
+        assert map.containsKey(v);
+        if (map.get(v) == 1) map.remove(v);
+        else map.put(v, map.get(v) - 1);
+    }
+    //================ map cnt ===============
+
     static class Pair<A, B> {
         A a;
         B b;
