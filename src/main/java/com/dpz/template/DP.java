@@ -208,6 +208,55 @@ public class DP {
     }
     //=======================算法提高课===========================
 
+    /**
+     * 数位DP
+     * 不降数的个数https://www.acwing.com/problem/content/1084/
+     * https://www.acwing.com/video/488/
+     * 数n 表示为N= a[n-1] a[n-2] ... a[0]
+     * 构造树形结构  左侧为当前位的值ui<ai 右边为ui=ai 直到a0
+     */
+
+    /**
+     * https://leetcode.cn/problems/count-special-integers/
+     * 参考@0x3F
+     * 数位dp要点:
+     * 1. 是否是最高位isHigh 最高位可以跳过
+     * 2. 是否处理过的位都和n相同limit  则当前位不能超过num当前位h / 受限
+     * 3. dp[i][j] 表示前i个位置已经处理过，状态为j(状态定义根据题目具体分析) //非最高位 非受限
+     * 4. 考虑的是[1,n]    0 比较特殊
+     */
+
+    static class COUNT_SPECIAL_INTEGERS {
+        int[] num;
+        Integer[][] dp;//可复用 非最高位 非受限
+
+        public int countSpecialNumbers(int n) {
+            char[] t = Integer.toString(n).toCharArray();
+            num = new int[t.length];
+            for (int i = 0; i < t.length; i++) {
+                num[i] = t[i] - '0';
+            }
+            var len = num.length;
+            dp = new Integer[len][1 << 10];
+            return f(0, 0, true, true);
+        }
+
+        int f(int i, int used, boolean limit, boolean high) {
+            if (i == num.length) return high ? 0 : 1;
+            //可复用 非最高位 非受限
+            if (!limit && !high && dp[i][used] != null)
+                return dp[i][used];
+            var ans = 0;
+            if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
+                ans = f(i + 1, used, false, true);
+            for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
+                if (((used >> u) & 1) == 0) // u 不在 used 中   题目要求
+                    ans += f(i + 1, used | (1 << u), limit && u == num[i], false);
+            if (!limit && !high) dp[i][used] = ans;
+            return ans;
+        }
+    }
+
 }
 
 
