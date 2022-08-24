@@ -226,6 +226,7 @@ public class DP {
      * 4. 考虑的是[1,n]    0 比较特殊
      */
 
+    //无重复数字的个数  https://leetcode.cn/submissions/detail/354119636/
     static class COUNT_SPECIAL_INTEGERS {
         int[] num;
         Integer[][] dp;//可复用 非最高位 非受限
@@ -255,6 +256,38 @@ public class DP {
             if (!limit && !high) dp[i][used] = ans;
             return ans;
         }
+    }
+
+    //数字1的个数  https://leetcode.cn/problems/number-of-digit-one/
+    static class COUNT_DIGIT_ONE {
+        int[] num;
+        Integer[][] dp;//可复用 非最高位 非受限
+
+        public int countDigitOne(int n) {
+            char[] t = Integer.toString(n).toCharArray();
+            num = new int[t.length];
+            for (int i = 0; i < t.length; i++) {
+                num[i] = t[i] - '0';
+            }
+            var len = num.length;
+            dp = new Integer[len][len];
+            return f(0, 0, true, true);
+        }
+
+        int f(int i, int cnt, boolean limit, boolean high) {
+            if (i == num.length) return high ? 0 : cnt;
+            //可复用 非最高位 非受限
+            if (!limit && !high && dp[i][cnt] != null)
+                return dp[i][cnt];
+            var ans = 0;
+            if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
+                ans = f(i + 1, cnt, false, true);
+            for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
+                ans += f(i + 1, cnt + (u == 1 ? 1 : 0), limit && u == num[i], false);
+            if (!limit && !high) dp[i][cnt] = ans;
+            return ans;
+        }
+
     }
 
 }
