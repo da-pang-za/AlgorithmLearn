@@ -571,7 +571,7 @@ public class ACWing {
         }
 
         /**
-         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  note 下标从1开始
          */
         //单哈希
         void StringHash1(int n, int m, String s, List<int[]> questions) {
@@ -631,12 +631,10 @@ public class ACWing {
         /**
          * KMP   https://www.acwing.com/video/259/
          * s中是否有子串是p
-         * s长度为M p长度为N   时间复杂度O(M+N) 证明 todo
-         * <p>
+         * s长度为M p长度为N   时间复杂度O(M+N)  todo 证明
          * 暴力做法：枚举s的每个位置作为开头 每次不匹配换下一个位置  最坏O(M*N)
-         * <p>
-         * 优化 匹配不成功后，p最少移动多少 当前正在匹配的位置之前都匹配了 视频8:00
-         * next[i]=j  =>  p[0,j]=p[i-j+1,i]  最长(且长度小于N的)相同的前后缀 长度为j   视频12:31
+         * 优化 匹配不成功后，p最少移动多少 note 当前正在匹配的位置之前都匹配了
+         * next[i]=j  =>  p[0,j]=p[i-j+1,i]  note 最长(且长度小于N的)相同的前后缀 长度为j
          * 这样就可以直接从p[j]继续匹配
          * 字符串下标从0开始
          */
