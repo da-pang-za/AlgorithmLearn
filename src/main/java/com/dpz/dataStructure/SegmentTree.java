@@ -2,7 +2,6 @@ package com.dpz.dataStructure;
 //线段树讲解：https://zhuanlan.zhihu.com/p/106118909
 //例题：https://leetcode-cn.com/problems/range-sum-query-mutable/
 /*
- * todo 动态设置幺元
  * 线段树
  * 线段树的用处就是，对编号连续的一些点进行修改或者统计操作，修改和统计的复杂度都是O(log2(n)).
  * 线段树中，每个点代表一条线段（区间）
