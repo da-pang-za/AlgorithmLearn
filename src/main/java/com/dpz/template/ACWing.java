@@ -303,6 +303,7 @@ public class ACWing {
             for (int x : stones) ans ^= sg1(x, f, canUse);
             return ans != 0;
         }
+
         //重点理解sg定理
         private static int sg1(int x, int[] f, int[] canUse) {
             if (f[x] != -1) return f[x];
@@ -570,7 +571,7 @@ public class ACWing {
         }
 
         /**
-         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  下标从1开始!!!
+         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  note 下标从1开始
          */
         //单哈希
         void StringHash1(int n, int m, String s, List<int[]> questions) {
@@ -630,35 +631,35 @@ public class ACWing {
         /**
          * KMP   https://www.acwing.com/video/259/
          * s中是否有子串是p
-         * s长度为M p长度为N
-         * <p>
+         * s长度为M p长度为N   时间复杂度O(M+N)  todo 证明
          * 暴力做法：枚举s的每个位置作为开头 每次不匹配换下一个位置  最坏O(M*N)
-         * <p>
-         * 优化 匹配不成功后，p最少移动多少 s中当前不匹配的位置前面都匹配了 视频8:00
-         * next[i]=j  =>  p[1,j]=p[i-j+1,i]  最长相同的前后缀 长度为j   视频12:31
-         * 这样就可以直接从p[j+1]继续匹配
-         * 字符串下标从1开始 方便next数组
+         * 优化 匹配不成功后，p最少移动多少 note 当前正在匹配的位置之前都匹配了
+         * next[i]=j  =>  p[0,j]=p[i-j+1,i]  note 最长(且长度小于N的)相同的前后缀 长度为j
+         * 这样就可以直接从p[j]继续匹配
+         * 字符串下标从0开始
          */
-        static int KMP(String s, String p) {
-            List<Integer> ans = new ArrayList<>();
+        List<Integer> KMP_ANS = new ArrayList<>();
+
+        int KMP(String s, String p) {
             int m = s.length(), n = p.length();
-            int[] next = new int[n + 1];
-            //求next  p和p自己匹配
-            //next[1] = 1;//这个按照上面定义应该为1 但是i不匹配直接i++ 不然死循环
-            for (int i = 2, j = 0; i <= n; i++) {
-                while (j > 0 && p.charAt(i - 1) != p.charAt(j)) j = next[j];
-                if (p.charAt(i - 1) == p.charAt(j)) j++;
+            int[] next = new int[n];
+            //求next  p和p自己匹配  从1开始
+            for (int i = 1, j = 0; i < n; i++) {
+                char c = p.charAt(i);
+                while (j > 0 && c != p.charAt(j)) j = next[j - 1];
+                if (c == p.charAt(j)) j++;
                 next[i] = j;
             }
             //匹配
-            for (int i = 1, j = 0; i <= m; i++) {
-                //s[i]和p[j+1]进行匹配
-                while (j > 0 && s.charAt(i - 1) != p.charAt(j)) j = next[j];
-                if (s.charAt(i - 1) == p.charAt(j)) j++;
+            for (int i = 0, j = 0; i < m; i++) {
+                char c = s.charAt(i);
+                //s[i]和p[j]进行匹配
+                while (j > 0 && c != p.charAt(j)) j = next[j - 1];
+                if (c == p.charAt(j)) j++;
                 //返回从0开始的下标
                 if (j == n) {
-                    ans.add(i - n);//匹配所有位置
-                    j = next[j];//继续右移
+                    KMP_ANS.add(i - n + 1);//匹配所有位置
+                    j = next[n - 1];//继续左移
                 }
                 //if (j == n) return i - n;//匹配最早位置
             }
