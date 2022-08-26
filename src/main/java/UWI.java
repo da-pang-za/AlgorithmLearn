@@ -23,7 +23,7 @@ public class UWI {
 
     }
 
-    boolean TEST = true;//对拍  只需要改这里
+    boolean TEST = false;//对拍  只需要改这里
 
     public static void main(String[] args) throws Exception {
         new UWI().run();
@@ -34,7 +34,7 @@ public class UWI {
             is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
         else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
         out = new FastWriter(System.out);
-        if(oj)TEST=false;
+        if (oj) TEST = false;
         if (TEST) {
             out = testRun;
             testRun.print("");
@@ -43,22 +43,24 @@ public class UWI {
         long s = System.currentTimeMillis();
         solve();
         out.flush();
-        testRun.flush();
-        testAC.flush();
+        if (TEST) {
+            testRun.flush();
+            testAC.flush();
+        }
         tr(System.currentTimeMillis() - s + "ms");
     }
 
     void goAC(FastWriter pre) {
-        if(!TEST)return;
+        if (!TEST) return;
         out = testAC;
         go1();
-        out=pre;
+        out = pre;
     }
 
     InputStream is;
     FastWriter out;
-    FastWriter testRun = new FastWriter("output/run.out");
-    FastWriter testAC = new FastWriter("output/ac.out");
+    FastWriter testRun;
+    FastWriter testAC;
     String INPUT = "";
 
     private byte[] inbuf = new byte[1024];
