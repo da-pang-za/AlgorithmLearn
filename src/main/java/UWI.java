@@ -2,18 +2,28 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
+
 public class UWI {
 
     //#0.00代表保留两位小数
     static DecimalFormat df = new DecimalFormat("#0.00000000");
 
     void solve() {
-        for (int T = 1; T > 0; T--) go();
+        for (int T = 1; T > 0; T--) {
+            go();
+            goAC(out);
+        }
     }
 
     void go() {
 
     }
+
+    void go1() {
+
+    }
+
+    boolean TEST = true;//对拍  只需要改这里
 
     public static void main(String[] args) throws Exception {
         new UWI().run();
@@ -24,16 +34,31 @@ public class UWI {
             is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
         else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
         out = new FastWriter(System.out);
-
+        if(oj)TEST=false;
+        if (TEST) {
+            out = testRun;
+            testRun.print("");
+            testAC.print("");
+        }
         long s = System.currentTimeMillis();
         solve();
         out.flush();
+        testRun.flush();
+        testAC.flush();
         tr(System.currentTimeMillis() - s + "ms");
     }
 
+    void goAC(FastWriter pre) {
+        if(!TEST)return;
+        out = testAC;
+        go1();
+        out=pre;
+    }
 
     InputStream is;
     FastWriter out;
+    FastWriter testRun = new FastWriter("output/run.out");
+    FastWriter testAC = new FastWriter("output/ac.out");
     String INPUT = "";
 
     private byte[] inbuf = new byte[1024];
