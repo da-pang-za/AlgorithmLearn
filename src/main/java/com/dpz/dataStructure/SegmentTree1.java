@@ -3,7 +3,7 @@ package com.dpz.dataStructure;
 /**
  * 线段树-动态开点
  * 例题：https://leetcode-cn.com/problems/my-calendar-iii/
- * todo 合并前的初始值ans不一定是0
+ * note 合并前的初始值ans不一定是0
  */
 public
 class SegmentTree1 {
