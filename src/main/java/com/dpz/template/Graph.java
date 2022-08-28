@@ -9,7 +9,8 @@ public class Graph {
 
     //建图 1 list 不带权   注意！！！  这里是无向图！！！
     static List<Integer>[] build1(int n, int[][] edges) {
-        List<Integer>[] adj = new ArrayList[n + 1];
+        List<Integer>[]
+                adj = new ArrayList[n + 1];
         for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
 
         for (int[] edge : edges) {
@@ -361,38 +362,28 @@ public class Graph {
         return false;
     }
 
-    //拓扑排序
-    static class topo {
-        static void go() {
-            int n = 5, m = 11;
-            int[][] edges = new int[m][];
-//            for (int i = 0; i < m; i++) {
-//                edges[i]=new int[]{ni(),ni()};
-//            }
-            List<Integer>[] adj = build1(n, edges);
-            int[] deg = new int[n + 1];
-            List<Integer> ans = new ArrayList<>();
-            for (int[] edge : edges) {
-                deg[edge[1]]++;
-            }
-            Deque<Integer> deque = new ArrayDeque<>();
-            for (int i = 1; i <= n; i++) {
-                if (deg[i] == 0) deque.add(i);
-            }
-            while (!deque.isEmpty()) {
-                int p = deque.pollFirst();
-                ans.add(p);
-                for (Integer v : adj[p]) {
-                    if (--deg[v] == 0) deque.addLast(v);
-                }
-            }
-            if (ans.size() == n) {
-                for (Integer v : ans) {
-                    System.out.print(v + " ");
-                }
-                System.out.println();
-            } else System.out.println(-1);
+    //拓扑排序   返回合法顺序   如果长度小于n 说明有环
+    static int[] topoSort(int n, int[][] edges) {
+        List<Integer>[] g = new ArrayList[n];
+        Arrays.setAll(g, e -> new ArrayList<>());
+        var inDeg = new int[n];
+        for (var e : edges) {
+            int x = e[0] - 1, y = e[1] - 1; // 顶点编号从 0 开始，方便计算
+            g[x].add(y);
+            ++inDeg[y];
         }
+
+        var order = new ArrayList<Integer>();
+        var q = new ArrayDeque<Integer>();
+        for (var i = 0; i < n; ++i)
+            if (inDeg[i] == 0) q.push(i);
+        while (!q.isEmpty()) {
+            var x = q.pollFirst();
+            order.add(x);//从1开始就+1
+            for (var y : g[x])
+                if (--inDeg[y] == 0) q.addFirst(y);
+        }
+        return order.stream().mapToInt(a -> a).toArray();
     }
 
 
@@ -442,34 +433,72 @@ public class Graph {
 //    }
 
     /**
-     * 三色标记
+     * 三色标记  dfs找环
      * lc.802
      */
     static class Solution802 {
-        public List<Integer> eventualSafeNodes(int[][] graph) {
-            int n = graph.length;
-            int[] color = new int[n];
-            List<Integer> ans = new ArrayList<Integer>();
-            for (int i = 0; i < n; ++i) {
-                if (safe(graph, color, i)) {
-                    ans.add(i);
-                }
-            }
-            return ans;
-        }
-
-        public boolean safe(int[][] graph, int[] color, int x) {
-            if (color[x] > 0) {//访问过了  看是灰还是黑  得出是否安全
-                return color[x] == 2;
-            }
+        public boolean isLoop(int[][] graph, int[] color, int x) {
+            if (color[x] > 0) return color[x] == 1;//有环
             color[x] = 1;//入栈
             for (int y : graph[x]) { //当前点能到达的点
-                if (!safe(graph, color, y)) {
-                    return false;//不安全还是灰色
+                if (isLoop(graph, color, y)) {
+                    return true;
                 }
             }
-            color[x] = 2;//如果安全标记为黑
-            return true;
+            color[x] = 2;
+            return false;
+        }
+
+        int loopSize = 0;
+
+        //todo 待整理
+        public int[] maxLoop(int n, List<Integer>[] adj, int u, int[] color, int level) {
+            if (color[u] == 2) return new int[]{-1, -1};
+            color[u] = 1;
+            for (Integer v : adj[u]) {
+                int[] levelAndNode = maxLoop(n, adj, v, color, level + 1);
+                if (levelAndNode[0] == -1) continue;
+                if (levelAndNode[1] == u) loopSize = Math.max(loopSize, levelAndNode[0] - level);
+                return levelAndNode;
+            }
+            color[u] = 2;
+            return new int[]{-1, -1};
+        }
+    }
+
+    //可达性统计  有向无环图 每个点能到达的点的个数  BitSet存可达点
+    static class Reachable {
+        void go() {
+            int n = 10, m = 10;
+            Set<Integer>[] rg = new HashSet[n];
+            Arrays.setAll(rg, e -> new HashSet<>());
+            var outDeg = new int[n];
+            for (int i = 0; i < m; i++) {
+                int a = 2 - 1, b = 3 - 1;
+                if (rg[b].contains(a)) continue;
+                rg[b].add(a);
+                outDeg[a]++;
+            }
+            BitSet[] reachable = new BitSet[n];
+            Arrays.setAll(reachable, i -> new BitSet(n));
+            for (int i = 0; i < n; i++) {
+                reachable[i].set(i);
+            }
+
+            var q = new ArrayDeque<Integer>();
+            for (var i = 0; i < n; ++i)
+                if (outDeg[i] == 0) q.addFirst(i);
+            while (!q.isEmpty()) {
+                var x = q.pollFirst();
+                for (var y : rg[x]) {
+                    if (--outDeg[y] == 0)
+                        q.addFirst(y);
+                    reachable[y].or(reachable[x]);
+                }
+            }
+            for (BitSet bitSet : reachable) {
+                System.out.println(bitSet.cardinality());
+            }
         }
     }
 
