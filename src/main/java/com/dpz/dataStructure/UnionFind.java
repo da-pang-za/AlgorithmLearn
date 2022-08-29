@@ -9,11 +9,8 @@ import java.util.Arrays;
  */
 public
 class UnionFind {
-    int[] parent;
-    int[] size;
-    int n;
-    // 当前连通分量数目
-    int setCount;
+    int[] parent,size;
+    int n,setCount;// 当前连通分量数目
 
     public UnionFind(int n) {
         this.n = n;
@@ -21,7 +18,7 @@ class UnionFind {
         this.parent = new int[n];
         this.size = new int[n];
         Arrays.fill(size, 1);
-        for (int i = 0; i < n; ++i) parent[i] = i;
+        Arrays.setAll(parent,i->i);
     }
 
     public int find(int x) {
@@ -35,7 +32,6 @@ class UnionFind {
         y = find(y);
         if (x == y) return false;
         //按秩合并  x是size较大的
-        //如果我们将一棵点数与深度都较小的集合树连接到一棵更大的集合树下，显然相比于另一种连接方案
         if (size[x] < size[y]) {
             int temp = x;
             x = y;
@@ -53,16 +49,13 @@ class UnionFind {
 //https://www.acwing.com/problem/content/description/242/
 //带权/距离并查集  只是用路径压缩优化
 class UnionFind_d {
-    int[] parent;
-    int[] dist;
+    int[] parent,dist;
     int n;
 
     public UnionFind_d(int n) {
         this.n = n;
         this.parent = new int[n];
-        for (int i = 0; i < n; ++i) {
-            parent[i] = i;
-        }
+        Arrays.setAll(parent,i->i);
         dist = new int[n];
     }
 
