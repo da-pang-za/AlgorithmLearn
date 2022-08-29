@@ -42,7 +42,7 @@ class SegmentTree1 {
      * @param mergeN    区间每个位置增量d,区间长度为len,求区间整体增量
      * @param MODE      累加 or 赋值
      */
-    public SegmentTree1(int[] nums, int start, int end, A add, M merge, MN mergeN, int MODE) {
+    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MN mergeN, int MODE) {
         this.mergeFunc = merge;
         this.mergeNFunc = mergeN;
         this.addFunc = add;
@@ -59,22 +59,22 @@ class SegmentTree1 {
     }
 
     static class Node {
-        int l, r;
+        long l, r;
         Node left, right;
         long val = 0;
         long lazy;
         boolean hasLazy;
 
-        Node(int l, int r) {
+        Node(long l, long r) {
             this.l = l;
             this.r = r;
         }
     }
 
     private void build(Node p) {
-        int l = p.l, r = p.r;
+        long l = p.l, r = p.r;
         if (l == r) {
-            p.val = nums[l - 1];
+            p.val = nums[(int) l - 1];
             return;
         }
 
@@ -83,28 +83,28 @@ class SegmentTree1 {
         push_up(p);
     }
 
-    public long query(int l, int r) {
+    public long query(long l, long r) {
         return query(l, r, root);
     }
 
-    private long query(int l, int r, Node p) {
-        int nl = p.l, nr = p.r;
+    private long query(long l, long r, Node p) {
+        long nl = p.l, nr = p.r;
         if (l <= nl && nr <= r) return p.val;
 
         push_down(p);
         long ans = 0;
-        int mid = (nl + nr) >> 1;
+        long mid = (nl + nr) >> 1;
         if (mid >= l) ans = mergeFunc.merge(ans, query(l, r, left(p)));
         if (mid < r) ans = mergeFunc.merge(ans, query(l, r, right(p)));
         return ans;
     }
 
-    public void update(int l, int r, long val) {
+    public void update(long l, long r, long val) {
         update(l, r, val, root);
     }
 
-    private void update(int l, int r, long d, Node p) {
-        int nl = p.l, nr = p.r;
+    private void update(long l, long r, long d, Node p) {
+        long nl = p.l, nr = p.r;
 //        System.out.println(l+" "+r+" "+nl+" "+nr);
         if (l <= nl && nr <= r) {
             if (MODE == ADD) {
@@ -121,7 +121,7 @@ class SegmentTree1 {
 
         push_down(p);
 
-        int mid = (nl + nr) >> 1;
+        long mid = (nl + nr) >> 1;
         if (mid >= l) update(l, r, d, left(p));
         if (mid < r) update(l, r, d, right(p));
         push_up(p);
@@ -133,9 +133,9 @@ class SegmentTree1 {
     }
 
     private void push_down(Node p) {
-        int l = p.l, r = p.r;
+        long l = p.l, r = p.r;
         if (l >= r) return;
-        int mid = (l + r) >> 1;
+        long mid = (l + r) >> 1;
         if (MODE == ADD) {
             left(p).lazy = addFunc.add(p.left.lazy, p.lazy);
             right(p).lazy = addFunc.add(p.right.lazy, p.lazy);
@@ -158,18 +158,17 @@ class SegmentTree1 {
 
     private Node right(Node p) {
         if (p.right != null) return p.right;
-        int l = p.l, r = p.r;
-        int mid = (l + r) >> 1;
+        long l = p.l, r = p.r;
+        long mid = (l + r) >> 1;
         p.right = new Node(mid + 1, r);
         return p.right;
     }
 
     private Node left(Node p) {
         if (p.left != null) return p.left;
-        int l = p.l, r = p.r;
-        int mid = (l + r) >> 1;
+        long l = p.l, r = p.r;
+        long mid = (l + r) >> 1;
         p.left = new Node(l, mid);
         return p.left;
     }
-
 }
