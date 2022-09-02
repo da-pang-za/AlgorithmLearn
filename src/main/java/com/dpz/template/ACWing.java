@@ -629,9 +629,9 @@ public class ACWing {
         }
 
         /**
-         * KMP   https://www.acwing.com/video/259/
+         * KMP   https://www.zhihu.com/question/21923021/answer/37475572
          * s中是否有子串是p
-         * s长度为M p长度为N   时间复杂度O(M+N)  todo 证明
+         * s长度为M p长度为N   时间复杂度O(M+N)   note 证明：j最多增加n次,所以最多回退n次 整体为线性
          * 暴力做法：枚举s的每个位置作为开头 每次不匹配换下一个位置  最坏O(M*N)
          * 优化 匹配不成功后，p最少移动多少 note 当前正在匹配的位置之前都匹配了
          * next[i]=j  =>  p[0,j]=p[i-j+1,i]  note 最长(且长度小于N的)相同的前后缀 长度为j
