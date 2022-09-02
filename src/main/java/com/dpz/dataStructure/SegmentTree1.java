@@ -39,7 +39,7 @@ class SegmentTree1 {
      * @param start,end 区间开始结束[start,end]
      * @param add       增量 只有add模式用到 累加方式
      * @param merge     合并左右两个区间
-     * @param mergeN    区间每个位置增量d,区间长度为len,求区间整体增量
+     * @param mergeN    区间每个位置增量/赋值d,区间长度为len,求区间整体增量、赋值
      * @param MODE      累加 or 赋值
      */
     public SegmentTree1(int[] nums, long start, long end, A add, M merge, MN mergeN, int MODE) {
