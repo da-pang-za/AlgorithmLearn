@@ -428,12 +428,13 @@ public class ACWing {
             return fr;
         }
 
+        static long[] fac = fac(10000, mod);
+        static long[] facR = facR(10000, mod);
+
         //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
-        static long combine(int a, int b, int p, long[] f, long[] fr) {
-            //long[] f = fac(10000, p);
-            //long[] fr = facR(10000, p);
+        static long combine(int a, int b, int p) {
             //先预处理出阶乘   然后 每次 常数时间求解
-            return (f[a] * fr[b] % p) * fr[a - b] % p;
+            return (fac[a] * facR[b] % p) * facR[a - b] % p;
         }
 
         /**
@@ -461,10 +462,8 @@ public class ACWing {
          * 所以答案为C(2n,n)-C(2n,n-1)
          */
         static long Catalan(int n) {
-            int p = 1000_000_007;
-            long[] f = fac(2 * n, p);
-            long[] fr = facR(2 * n, p);
-            return (combine(2 * n, n, p, f, fr) - combine(2 * n, n - 1, p, f, fr) + p) % p;
+            int p = mod;
+            return (combine(2 * n, n, p) - combine(2 * n, n - 1, p) + p) % p;
         }
     }
 
