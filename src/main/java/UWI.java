@@ -9,15 +9,19 @@ public class UWI {
     static DecimalFormat df = new DecimalFormat("#0.00000000");
 
     void solve() {
-        for (int T = 1; T > 0; T--) {
+        for (int T = ni(); T > 0; T--) {
             go();
             goAC(out);
         }
     }
 
-    void go() {
 
+    int INF = 0x3f3f3f3f;
+    int mod = 1000_000_007;
+
+    void go() {
     }
+
 
     void go1() {
 
