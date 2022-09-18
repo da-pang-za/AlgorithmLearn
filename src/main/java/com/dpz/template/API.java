@@ -246,9 +246,7 @@ public class API {
         }
 
         void reverse(int[] nums, int l, int r) {
-            while (l < r) {
-                swap(nums, l++, r--);
-            }
+            while (l < r) swap(nums, l++, r--);
         }
     }
 

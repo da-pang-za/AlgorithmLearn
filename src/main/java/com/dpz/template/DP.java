@@ -15,6 +15,7 @@ public class DP {
 
         /**
          * 01背包 物品只有一个  求不超过容量时的最大价值
+         * 二维费用的01背包：https://www.acwing.com/problem/content/1024/
          */
         static class _01BackPack {
             /**
@@ -53,6 +54,7 @@ public class DP {
 
         /**
          * 完全背包  物品无限
+         * 二维费用的完全背包: https://codeforces.com/contest/543/problem/A
          */
         static class InfBackPack {
             static int infBp(int N, int V, int[] v, int[] w) {
