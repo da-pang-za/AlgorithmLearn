@@ -15,6 +15,9 @@ public class Main {
         }
     }
 
+    int INF = 0x3f3f3f3f;
+    int mod = 1000_000_007;
+
     void go() {
 
     }
