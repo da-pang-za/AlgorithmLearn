@@ -502,5 +502,65 @@ public class Graph {
         }
     }
 
+    /**
+     * LCA最近公共祖先 倍增做法  初始化O(NlogN) 每次询问O(logN)
+     * 参考：https://www.acwing.com/solution/content/20554/
+     */
+    static class LCA {
+        int N = 40005;
+        int LOG = 0;
+        List<List<Integer>> adj = new ArrayList<>();//need build
+        int[][] p;//i节点向上跳2^j步
+        int[] depth;//root的depth为1  0是root的前一个 虚拟
+
+        int lca(int a, int b) {
+            if (depth[a] < depth[b]) return lca(b, a);
+            //跳到同一层
+            for (int k = LOG - 1; k >= 0; k--) {
+                if (depth[p[a][k]] >= depth[b])
+                    a = p[a][k];
+            }
+            if (a == b) return a;
+            for (int k = LOG - 1; k >= 0; k--) {
+                // 假如a,b都跳过根节点,fa[a][k]==fa[b][k]==0 a,b还在原位
+                if (p[a][k] != p[b][k]) {
+                    a = p[a][k];
+                    b = p[b][k];
+                }
+            }
+            //再向上跳一步
+            return p[a][0];
+        }
+
+        void init(int root) {
+            while ((1 << LOG) < N) LOG++;
+            p = new int[N][LOG];
+            depth = new int[N];
+            Arrays.fill(depth, N);
+            depth[0] = 0;
+            bfs(root);
+        }
+
+        void bfs(int root) {
+            var deque = new ArrayDeque<Integer>();
+            deque.addLast(root);
+            depth[root] = 1;
+            while (!deque.isEmpty()) {
+                int u = deque.pollFirst();
+                for (Integer v : adj.get(u)) {
+                    if (depth[v] > depth[u] + 1) {
+                        depth[v] = depth[u] + 1;
+                        deque.addLast(v);
+                        p[v][0] = u;
+                        for (int k = 1; k < LOG; k++) {
+                            p[v][k] = p[p[v][k - 1]][k - 1];
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
 
 }
