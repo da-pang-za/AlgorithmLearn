@@ -26,7 +26,7 @@ public class Main {
 
     }
 
-    boolean TEST = false;//对拍  只需要改这里
+    boolean TEST = false;//对拍  只需要改这里  todo fix 对拍
 
 
     //===================== MAIN =============================
