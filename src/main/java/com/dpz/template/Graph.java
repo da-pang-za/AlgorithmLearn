@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Graph {
     static long INF = Long.MAX_VALUE / 2;
-
+    //========================建图  note  没有考虑重边
     //建图 1 list 不带权   注意！！！  这里是无向图！！！
     static List<Integer>[] build1(int n, int[][] edges) {
         List<Integer>[]
@@ -77,7 +77,7 @@ public class Graph {
         boolean[] vis = new boolean[n + 1];
 
         PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
-        pq.add(new long[]{1, 0});
+        pq.add(new long[]{source, 0});
         while (!pq.isEmpty()) {
             long[] p = pq.poll();
             int u = (int) p[0];
