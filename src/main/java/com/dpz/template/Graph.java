@@ -103,8 +103,6 @@ public class Graph {
         for (int i = 1; i <= n; i++)
             for (int j = 1; j <= n; j++)
                 dist[i][j] = adj[i][j];
-
-
         //i到j 可以经过 [1,u]这些点 的最短路  i->[1,u]->j  [1,u]可以不包括 i j
         //dp[u][i][j]=min(dp[u-1][i][j],dp[u-1][i][u]+dp[u-1][u][j]);
         for (int u = 1; u <= n; u++) {
