@@ -40,6 +40,8 @@ public class UWI {
         out = new FastWriter(System.out);
         if (oj) TEST = false;
         if (TEST) {
+            testRun = new FastWriter("output/run.out");
+            testAC = new FastWriter("output/ac.out");
             out = testRun;
             testRun.print("");
             testAC.print("");
