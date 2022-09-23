@@ -3,7 +3,7 @@ package com.dpz.dataStructure;
 /**
  * 线段树-动态开点
  * 例题：https://leetcode-cn.com/problems/my-calendar-iii/
- * note 合并前的初始值ans不一定是0
+ * note 合并前的初始值ans不一定是0  例如求最小
  */
 public
 class SegmentTree1 {
@@ -92,7 +92,7 @@ class SegmentTree1 {
         if (l <= nl && nr <= r) return p.val;
 
         push_down(p);
-        long ans = 0;
+        long ans = 0;//todo 这个值需要根据需求变
         long mid = (nl + nr) >> 1;
         if (mid >= l) ans = mergeFunc.merge(ans, query(l, r, left(p)));
         if (mid < r) ans = mergeFunc.merge(ans, query(l, r, right(p)));
