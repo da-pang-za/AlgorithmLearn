@@ -105,14 +105,10 @@ public class Graph {
                 dist[i][j] = adj[i][j];
         //i到j 可以经过 [1,u]这些点 的最短路  i->[1,u]->j  [1,u]可以不包括 i j
         //dp[u][i][j]=min(dp[u-1][i][j],dp[u-1][i][u]+dp[u-1][u][j]);
-        for (int u = 1; u <= n; u++) {
-            for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= n; j++) {
-                    if (dist[i][u] == INF || dist[u][j] == INF) continue;
+        for (int u = 1; u <= n; u++)
+            for (int i = 1; i <= n; i++)
+                for (int j = 1; j <= n; j++)
                     dist[i][j] = Math.min(dist[i][j], dist[i][u] + dist[u][j]);
-                }
-            }
-        }
         return dist;
     }
 
@@ -213,8 +209,7 @@ public class Graph {
         //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
         return false;
     }
-
-
+        
     //建图  dijkstra模板  前向星
     static class Solution1 {
         int N = 110, M = 6010;
