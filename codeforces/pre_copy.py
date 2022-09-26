@@ -4,7 +4,7 @@ import sys
 startTag = "//==START=="
 endTag = "//==END=="
 
-uwiPath="/Users/dpzdpz/project/AlgorithmLearn/src/main/java/UWI.java"
+uwiPath="/Users/dpz/Desktop/CS_Knowledge/Alg/src/main/java/UWI.java"
 def copyProblem(uwiFile, tmpFile):
     uwiFile = open(uwiFile,mode='r')
     tmpFile = open(tmpFile,mode='r+')
