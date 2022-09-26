@@ -1,4 +1,6 @@
 # copy solution from uwi
+import sys
+
 startTag = "//==START=="
 endTag = "//==END=="
 
@@ -17,5 +19,5 @@ def copyProblem(uwiFile, tmpFile):
     # tmpFile.truncate()
     tmpFile.write(tot)
 
-tmpPath="/Users/dpzdpz/project/AlgorithmLearn/src/main/java/codeforces/contest/729/D/CF729D.java"
+tmpPath=sys.argv[1]
 copyProblem(uwiPath,tmpPath)
