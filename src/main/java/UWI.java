@@ -4,12 +4,12 @@ import java.util.*;
 
 
 public class UWI {
-
+    //==START==
     //#0.00代表保留两位小数
     static DecimalFormat df = new DecimalFormat("#0.00000000");
 
     void solve() {
-        for (int T = ni(); T > 0; T--) {
+        for (int T = 1; T > 0; T--) {
             go();
             goAC(out);
         }
@@ -21,7 +21,7 @@ public class UWI {
 
     void go() {
     }
-
+    //==END==
 
     void go1() {
 
