@@ -7,24 +7,9 @@ import java.util.*;
  * time: $%Y%$/$%M%$/$%D%$   $%h%$:$%m%$:$%s%$
  */
 public class $%file%$ {
-
-    //#0.00代表保留两位小数
-    static DecimalFormat df = new DecimalFormat("#0.00000000");
-
-    void solve() {
-        for (int T = 1; T > 0; T--) {
-            go();
-            goAC(out);
-        }
-    }
-
-
-    int INF = 0x3f3f3f3f;
-    int mod = 1000_000_007;
-
-    void go() {
-    }
-
+    //==START==
+    void go() {}
+    //==END==
 
     void go1() {
 
@@ -545,6 +530,4 @@ public class $%file%$ {
     private void tr(Object... o) {
         if (!oj) System.out.println(Arrays.deepToString(o));
     }
-
-
 }
