@@ -297,6 +297,19 @@ public class DP {
     /**
      * 斜率优化DP todo
      */
+    /**
+     * 单调队列优化DP todo
+     */
+    class MonoDequeDP{
+        //公式变型优化 修剪草坪 https://www.acwing.com/problem/content/1089/
+        //当前为i 用i则i-k不能用
+        // 前i合法的最大值 f[i]=max(f[i-k-1]+s[i]-s[i-k],f[i-1])
+        //
+
+    }
+
+
+
 
 }
 
