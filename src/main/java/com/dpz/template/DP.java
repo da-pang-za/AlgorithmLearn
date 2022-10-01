@@ -309,7 +309,7 @@ public class DP {
         //从当前位置开始选连续的j个  i-j不取  j[0,k]
         // 前i合法的最大值 f[i]=max(f[i-j-1]+s[i]-s[i-j])=max(f[i-j-1]-s[i-j])+s[i]
         //g[i]=f[i-1]-s[i]   max(g[i]...g[i-k]) 能取g[0]时代表可以拿前i个所有的数(取i个)
-        // 注意数组下标要从1开始 否则g[0]无法定义
+        // 注意数组下标要从1开始 (否则g[0]无法定义  i为0的时候j可取0,1 还需要g[0-1-1])
         long AcWing1089(long[] nums, int k) {
             int n = nums.length - 1;//下标从1开始的数组
             long[] s = new long[n + 1];
