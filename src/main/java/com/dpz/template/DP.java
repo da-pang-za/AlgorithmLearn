@@ -1,6 +1,9 @@
 package com.dpz.template;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class DP {
     //背包
     static class Backpack {
@@ -298,17 +301,32 @@ public class DP {
      * 斜率优化DP todo
      */
     /**
-     * 单调队列优化DP todo
+     * 单调队列优化DP
      */
-    class MonoDequeDP{
+    static class MonoDequeDP {
         //公式变型优化 修剪草坪 https://www.acwing.com/problem/content/1089/
         //当前为i 用i则i-k不能用
-        // 前i合法的最大值 f[i]=max(f[i-k-1]+s[i]-s[i-k],f[i-1])
-        //
-
+        //从当前位置开始选连续的j个  i-j不取  j[0,k]
+        // 前i合法的最大值 f[i]=max(f[i-j-1]+s[i]-s[i-j])=max(f[i-j-1]-s[i-j])+s[i]
+        //g[i]=f[i-1]-s[i]   max(g[i]...g[i-k]) 能取g[0]时代表可以拿前i个所有的数(取i个)
+        // 注意数组下标要从1开始 否则g[0]无法定义
+        long AcWing1089(long[] nums, int k) {
+            int n = nums.length - 1;//下标从1开始的数组
+            long[] s = new long[n + 1];
+            for (int i = 1; i <= n; i++) s[i] = s[i - 1] + nums[i];
+            long[] f = new long[n + 1], g = new long[n + 1];
+            Deque<Integer> deque = new ArrayDeque<>();
+            deque.addLast(0);
+            for (int i = 1; i <= n; i++) {
+                g[i] = f[i - 1] - s[i];
+                while (!deque.isEmpty() && g[i] >= g[deque.peekLast()]) deque.pollLast();
+                deque.addLast(i);
+                if (deque.peekFirst() < i - k) deque.pollFirst();
+                f[i] = g[deque.peekFirst()] + s[i];
+            }
+            return f[n];
+        }
     }
-
-
 
 
 }
