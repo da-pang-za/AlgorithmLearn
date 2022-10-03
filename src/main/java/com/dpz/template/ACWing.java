@@ -570,62 +570,53 @@ public class ACWing {
         }
 
         /**
-         * 字符串哈希   判断子串 [l1,r1]  [l2,r2]是否相同  note 下标从1开始
+         * 字符串哈希 rolling hash
+         * 判断子串 [l1,r1]  [l2,r2]是否相同  note 下标从1开始
          */
-        //单哈希
-        void StringHash1(int n, int m, String s, List<int[]> questions) {
-            int base1 = 1313131;
-            int mod = (int) 1e9 + 7;
-            long[] hash1 = new long[n + 1];
-            long[] p1 = new long[n + 1];
-            p1[0] = 1;
-            for (int i = 0; i < n; i++) {
-                hash1[i + 1] = (base1 * hash1[i] + s.charAt(i)) % mod;
-                p1[i + 1] = p1[i] * base1 % mod;
+        static class StringHash {
+            //todo  base 和 mod 优化   返回long范围的hash值
+            final int base1 = 1313131;
+            final int base2 = 500007;
+            final int mod = 1000_000_007;
+            long[] hash1, p1, hash2, p2;
+
+            public StringHash(String s) {
+                int n = s.length();
+                hash1 = new long[n + 1];
+                p1 = new long[n + 1];
+                p1[0] = 1;
+                hash2 = new long[n + 1];
+                p2 = new long[n + 1];
+                p2[0] = 1;
+                for (int i = 0; i < n; i++) {
+                    hash1[i + 1] = (base1 * hash1[i] + s.charAt(i)) % mod;
+                    p1[i + 1] = p1[i] * base1 % mod;
+                    hash2[i + 1] = (base2 * hash2[i] + s.charAt(i)) % mod;
+                    p2[i + 1] = p2[i] * base2 % mod;
+                }
             }
 
-            for (var q : questions) {
-                int l1 = q[0], r1 = q[1], l2 = q[2], r2 = q[3];
-
-                long h1 = (hash1[r1] - hash1[l1 - 1] * p1[r1 - l1 + 1] % mod + mod) % mod;
-                long h2 = (hash1[r2] - hash1[l2 - 1] * p1[r2 - l2 + 1] % mod + mod) % mod;
-                if (h1 == h2) System.out.println("Yes");
-                else System.out.println("No");
+            public long h1(int l, int r) {
+                return hash(l, r, hash1, p1);
             }
-        }
 
-        //双哈希
-        void StringHash2(int n, int m, String s, List<int[]> questions) {
-            int base1 = 1313131;
-            int base2 = 500007;
-            int mod = (int) 1e9 + 7;
-            long[] hash1 = new long[n + 1];
-            long[] p1 = new long[n + 1];
-            p1[0] = 1;
-            long[] hash2 = new long[n + 1];
-            long[] p2 = new long[n + 1];
-            p2[0] = 1;
-            for (int i = 0; i < n; i++) {
-                hash1[i + 1] = (base1 * hash1[i] + s.charAt(i)) % mod;
-                p1[i + 1] = p1[i] * base1 % mod;
-                hash2[i + 1] = (base2 * hash2[i] + s.charAt(i)) % mod;
-                p2[i + 1] = p2[i] * base2 % mod;
+            public long h2(int l, int r) {
+                return hash(l, r, hash2, p2);
             }
-            for (var q : questions) {
-                int l1 = q[0], r1 = q[1], l2 = q[2], r2 = q[3];
+            //判断两个子串是否相等 单哈希
+            public boolean eq1(int l1, int r1, int l2, int r2) {
+                return h1(l1, r1) == h1(l2, r2);
+            }
+            //判断两个子串是否相等 双哈希
+            public boolean eq2(int l1, int r1, int l2, int r2) {
+                return h1(l1, r1) == h1(l2, r2) && h2(l1, r1) == h2(l2, r2);
+            }
 
-                long h1 = (hash1[r1] - hash1[l1 - 1] * p1[r1 - l1 + 1] % mod + mod) % mod;
-                long h2 = (hash1[r2] - hash1[l2 - 1] * p1[r2 - l2 + 1] % mod + mod) % mod;
-                if (h1 == h2) {
-                    h1 = (hash2[r1] - hash2[l1 - 1] * p2[r1 - l1 + 1] % mod + mod) % mod;
-                    h2 = (hash2[r2] - hash2[l2 - 1] * p2[r2 - l2 + 1] % mod + mod) % mod;
-
-                    if (h1 == h2)
-                        System.out.println("Yes");
-                    else System.out.println("No");
-                } else System.out.println("No");
+            long hash(int l, int r, long[] h, long[] p) {
+                return (h[r] - h[l - 1] * p[r - l + 1] % mod + mod) % mod;
             }
         }
+
 
         /**
          * KMP   https://www.zhihu.com/question/21923021/answer/37475572
