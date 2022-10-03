@@ -21,6 +21,7 @@ public class UWI {
 
     void go() {
     }
+
     //==END==
 
     void go1() {
@@ -53,7 +54,6 @@ public class UWI {
             testRun.flush();
             testAC.flush();
         }
-        tr(System.currentTimeMillis() - s + "ms");
     }
 
     void goAC(FastWriter pre) {
@@ -477,59 +477,6 @@ public class UWI {
         }
     }
 
-    //打印非零？
-    public void trnz(int... o) {
-        for (int i = 0; i < o.length; i++) if (o[i] != 0) System.out.print(i + ":" + o[i] + " ");
-        System.out.println();
-    }
-
-    // print ids which are 1
-    public void trt(long... o) {
-        Queue<Integer> stands = new ArrayDeque<>();
-        for (int i = 0; i < o.length; i++) {
-            for (long x = o[i]; x != 0; x &= x - 1) stands.add(i << 6 | Long.numberOfTrailingZeros(x));
-        }
-        System.out.println(stands);
-    }
-
-    public void tf(boolean... r) {
-        for (boolean x : r) System.out.print(x ? '#' : '.');
-        System.out.println();
-    }
-
-    public void tf(boolean[]... b) {
-        for (boolean[] r : b) {
-            for (boolean x : r) System.out.print(x ? '#' : '.');
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    public void tf(long[]... b) {
-        if (INPUT.length() != 0) {
-            for (long[] r : b) {
-                for (long x : r) {
-                    for (int i = 0; i < 64; i++) {
-                        System.out.print(x << ~i < 0 ? '#' : '.');
-                    }
-                }
-                System.out.println();
-            }
-            System.out.println();
-        }
-    }
-
-    public void tf(long... b) {
-        if (INPUT.length() != 0) {
-            for (long x : b) {
-                for (int i = 0; i < 64; i++) {
-                    System.out.print(x << ~i < 0 ? '#' : '.');
-                }
-            }
-            System.out.println();
-        }
-    }
-
     private final boolean oj = !local();
 
     boolean local() {
@@ -540,11 +487,4 @@ public class UWI {
         }
         return false;
     }
-
-    //调试的时候打印
-    private void tr(Object... o) {
-        if (!oj) System.out.println(Arrays.deepToString(o));
-    }
-
-
 }
