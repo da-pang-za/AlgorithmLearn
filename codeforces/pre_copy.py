@@ -16,8 +16,9 @@ def copyProblem(uwiFile, tmpFile):
     tot = a + solution + b
     # 回退指针
     tmpFile.seek(0)
-    # tmpFile.truncate()
+    tmpFile.truncate(0)
     tmpFile.write(tot)
+    tmpFile.flush()
 
 tmpPath=sys.argv[1]
 copyProblem(uwiPath,tmpPath)
