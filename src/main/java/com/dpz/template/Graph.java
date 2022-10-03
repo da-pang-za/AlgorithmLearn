@@ -42,7 +42,7 @@ public class Graph {
         return adj;
     }
 
-    //====================== 最短路 ==============================
+    //====================== 最短路 最长路同理==============================
     //等权（都为1）单源最短路  BFS
     static long[] bfs(int n, List<Integer>[] adj, int source) {
         long[] dist = new long[n + 1];
@@ -69,7 +69,7 @@ public class Graph {
         return dist;
     }
 
-    //Dijkstra 单源最短路  复杂度 O(eloge)  无负权
+    //Dijkstra 单源最短路  复杂度 O(ElogE)  无负权
     static long[] dijkstra(int n, List<int[]>[] adj, int source) {
         long[] dist = new long[n + 1];
         Arrays.fill(dist, INF);
