@@ -300,6 +300,8 @@ public class DP {
     /**
      * 斜率优化DP todo
      */
+
+
     /**
      * 单调队列优化DP
      */
@@ -326,6 +328,8 @@ public class DP {
             }
             return f[n];
         }
+        //相似题目 lc.1687 rating 2610  https://leetcode.cn/problems/delivering-boxes-from-storage-to-ports/
+        //submit: https://leetcode.cn/submissions/detail/369463120/
     }
 
 
