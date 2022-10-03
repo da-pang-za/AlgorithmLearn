@@ -1,5 +1,3 @@
-//todo ACM mode
-
 #include "Solution.cpp"
 
 #include "stl.h"
