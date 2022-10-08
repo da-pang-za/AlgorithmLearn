@@ -1,23 +1,14 @@
 package com.dpz.template;
 
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 public class DP {
     //背包
     static class Backpack {
-        //    //总容量不超过V的情况下的最大价值
-//    int N = ni(), V = ni();
-//    int[] v = new int[N];//容量
-//    int[] w = new int[N];//价值
-//        for (int i = 0; i < N; i++) {
-//        v[i] = ni();
-//        w[i] = ni();
-//    }
-
         /**
-         * 01背包 物品只有一个  求不超过容量时的最大价值
+         * 01背包 物品只有一个  求不超过容量时的最大价值  //物品不能重复选择
+         * 从前i个物品里面选 容量不超过j f[i][j]=max(f[i-1][j],f[i-1][j-v[i]]+w[i])
          * 二维费用的01背包：https://www.acwing.com/problem/content/8/
          */
         static class _01BackPack {
@@ -40,7 +31,7 @@ public class DP {
             }
 
             /**
-             * 一维优化 注意内层驯化是倒序的
+             * 一维优化 注意内层循环是倒序的
              */
             static int _01bp1d(int N, int V, int[] v, int[] w) {
                 //总容量不超过V的情况下的最大价值
@@ -52,52 +43,126 @@ public class DP {
                 }
                 return dp[V];
             }
-
         }
 
         /**
-         * 完全背包  物品无限
+         * 完全背包  物品无限   //物品可以重复选择
+         * 从前i个物品里面选 容量不超过j f[i][j]=max(f[i-1][j],f[i][j-v[i]]+w[i])
          * 二维费用的完全背包: https://codeforces.com/contest/543/problem/A
          */
-        static class InfBackPack {
-            static int infBp(int N, int V, int[] v, int[] w) {
-                //总容量不超过V的情况下的最大价值
-                int[] dp = new int[V + 1];//容量不超过i的最大价值
-                for (int i = 1; i <= V; i++) {
-                    for (int j = 0; j < N; j++) {
-                        if (v[j] <= i) {
-                            dp[i] = Math.max(dp[i], dp[i - v[j]] + w[j]);
-                        }
+        static int infBp(int N, int V, int[] v, int[] w) {
+            //总容量不超过V的情况下的最大价值
+            int[] dp = new int[V + 1];//容量不超过i的最大价值
+            for (int i = 1; i <= V; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (v[j] <= i) {
+                        dp[i] = Math.max(dp[i], dp[i - v[j]] + w[j]);
                     }
                 }
-                return dp[V];
             }
+            return dp[V];
         }
 
+
         /**
-         * 多重背包 每个物品的数量有限  二进制优化   转化为01背包问题  复杂度O(N*V*logS)
+         * 多重背包 每个物品的数量有限  物品根据二进制拆分 转化为01背包问题  复杂度O(N*V*logS)
          * https://www.acwing.com/problem/content/5/
+         * 从低到高补1    s=10001   补到1111  (剩10再加上)
          */
-        static class MultiBackPack {
+        //价值 容量 数量   m最大容量
+        static int multiBp(int[] A, int[] B, int[] C, int m) {
+            int N = 11010, M = 2010;
+            int[] v = new int[N], w = new int[N], f = new int[M];
+            int n = A.length;
+            int idx = 0;//从1开始
+            for (int i = 0; i < n; i++) {
+                int a = A[i], b = B[i], c = C[i];
+                int k = 1;
+                while (k <= c) {
+                    idx++;
+                    v[idx] = a * k;
+                    w[idx] = b * k;
+                    c -= k;
+                    k *= 2;
+                }
+                if (c > 0) {
+                    idx++;
+                    v[idx] = a * c;
+                    w[idx] = b * c;
+                }
+            }
+            n = idx;
+            //01背包
+            for (int i = 1; i <= n; i++)
+                for (int j = m; j >= v[i]; j--)
+                    f[j] = Math.max(f[j], f[j - v[i]] + w[i]);
+            return f[m];
         }
+
 
         /**
          * 分组背包 背个物品属于一个组  每个组最多只能选择一个物品
          */
-        static class GroupBackPack {
-            //@param N 物品组数
-            static int gBp(int N, int V, int[][] v, int[][] w) {
-                //总容量不超过V的情况下的最大价值
-                int[] dp = new int[V + 1];//容量不超过j的最大价值
-                for (int g = 1; g <= N; g++) {
-                    for (int i = V; i > 0; i--) {
-                        for (int j = 0; j < w[g - 1].length; j++) {
-                            if (v[g - 1][j] <= i) dp[i] = Math.max(dp[i], dp[i - v[g - 1][j]] + w[g - 1][j]);
-                        }
+        //@param N 物品组数
+        static int gBp(int N, int V, int[][] v, int[][] w) {
+            //总容量不超过V的情况下的最大价值
+            int[] dp = new int[V + 1];//容量不超过j的最大价值
+            for (int g = 1; g <= N; g++) {
+                for (int i = V; i > 0; i--) {
+                    for (int j = 0; j < w[g - 1].length; j++) {
+                        if (v[g - 1][j] <= i) dp[i] = Math.max(dp[i], dp[i - v[g - 1][j]] + w[g - 1][j]);
                     }
                 }
-                return dp[V];
             }
+            return dp[V];
+        }
+
+        /**
+         * 混合背包   01多重完全结合  每步转移只和当前物品有关 根据类型找到对应的转移方程
+         * https://www.acwing.com/video/390/
+         */
+        //价值 容量 数量   m最大容量
+        int mixedBp(int[] A, int[] B, int[] C, int m) {
+            int N = 11010, M = 1010;
+            int[] v = new int[N], w = new int[N];
+            boolean[] inf = new boolean[N];
+            int[][] f = new int[N][M];
+            int n = A.length;
+            int idx = 0;//从1开始
+            for (int i = 0; i < n; i++) {
+                int a = A[i], b = B[i], c = C[i];
+                if (c == 0) {
+                    idx++;
+                    v[idx] = a;
+                    w[idx] = b;
+                    inf[idx] = true;
+                    continue;
+                }
+                if (c == -1) c = 1;
+                int k = 1;
+                while (k <= c) {
+                    idx++;
+                    v[idx] = a * k;
+                    w[idx] = b * k;
+                    c -= k;
+                    k *= 2;
+                }
+                if (c > 0) {
+                    idx++;
+                    v[idx] = a * c;
+                    w[idx] = b * c;
+                }
+            }
+            n = idx;
+            //根据物品是否无限 选择转移方程
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j < v[i] && j <= m; j++) f[i][j] = f[i - 1][j];
+                for (int j = v[i]; j <= m; j++) {
+                    if (inf[i]) f[i][j] = Math.max(f[i - 1][j], f[i][j - v[i]] + w[i]);
+                    else f[i][j] = Math.max(f[i - 1][j], f[i - 1][j - v[i]] + w[i]);
+                }
+            }
+            return f[n][m];
         }
     }
 
