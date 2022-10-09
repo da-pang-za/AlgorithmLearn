@@ -170,7 +170,7 @@ public class DP {
     }
 
     //区间DP
-    static class Interval {
+    static class IntervalDP {
         //https://www.acwing.com/problem/content/284/
         static int acwing282(int n, int[] nums) {
             int[] sum = new int[n + 1];
@@ -192,52 +192,43 @@ public class DP {
         }
     }
 
-    //记忆化搜索
-    //https://www.acwing.com/problem/content/903/
-    static int maxPath(int[][] grid) {
-        int max = 0;
-        int m = grid.length, n = grid[0].length;
-        Integer[][] dp = new Integer[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                max = Math.max(max, dfs903(grid, i, j, dp));
-            }
-        }
-        return max;
-    }
-
-    private static int dfs903(int[][] grid, int i, int j, Integer[][] dp) {
-        if (dp[i][j] == null) {
-            int h = grid[i][j];
+    /**
+     * 记忆化搜索
+     * 滑雪:https://www.acwing.com/problem/content/903/
+     */
+    static class MemSearch {
+        static int maxPath(int[][] grid) {
             int max = 0;
-            if (i - 1 >= 0 && grid[i - 1][j] < h) max = Math.max(max, dfs903(grid, i - 1, j, dp));
-            if (j - 1 >= 0 && grid[i][j - 1] < h) max = Math.max(max, dfs903(grid, i, j - 1, dp));
-            if (i + 1 < grid.length && grid[i + 1][j] < h) max = Math.max(max, dfs903(grid, i + 1, j, dp));
-            if (j + 1 < grid[i].length && grid[i][j + 1] < h) max = Math.max(max, dfs903(grid, i, j + 1, dp));
-            dp[i][j] = max + 1;
+            int m = grid.length, n = grid[0].length;
+            Integer[][] dp = new Integer[m][n];
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    max = Math.max(max, dfs903(grid, i, j, dp));
+                }
+            }
+            return max;
         }
-        return dp[i][j];
+
+        private static int dfs903(int[][] grid, int i, int j, Integer[][] dp) {
+            if (dp[i][j] == null) {
+                int h = grid[i][j];
+                int max = 0;
+                if (i - 1 >= 0 && grid[i - 1][j] < h) max = Math.max(max, dfs903(grid, i - 1, j, dp));
+                if (j - 1 >= 0 && grid[i][j - 1] < h) max = Math.max(max, dfs903(grid, i, j - 1, dp));
+                if (i + 1 < grid.length && grid[i + 1][j] < h) max = Math.max(max, dfs903(grid, i + 1, j, dp));
+                if (j + 1 < grid[i].length && grid[i][j + 1] < h) max = Math.max(max, dfs903(grid, i, j + 1, dp));
+                dp[i][j] = max + 1;
+            }
+            return dp[i][j];
+        }
     }
 
-    //树形DP
-    //https://www.acwing.com/problem/content/287/
+    /**
+     * 树形DP todo
+     * https://www.acwing.com/problem/content/287/
+     */
+    static class TreeDP {
 
-
-    //编辑距离
-    static public int minDistance(String word1, String word2) {
-        int m = word1.length(), n = word2.length();
-        int[][] dp = new int[m + 1][n + 1];
-        for (int i = 1; i <= m; i++) dp[i][0] = i;
-        for (int j = 1; j <= n; j++) dp[0][j] = j;
-        for (int i = 1; i <= m; i++) {
-            char a = word1.charAt(i - 1);
-            for (int j = 1; j <= n; j++) {
-                char b = word2.charAt(j - 1);
-                if (a == b) dp[i][j] = dp[i - 1][j - 1];
-                else dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
-            }
-        }
-        return dp[m][n];
     }
 
     //状压DP
@@ -279,17 +270,12 @@ public class DP {
 
 
     }
-    //=======================算法提高课===========================
 
     /**
      * 数位DP
-     * 不降数的个数https://www.acwing.com/problem/content/1084/
-     * https://www.acwing.com/video/488/
-     * 数n 表示为N= a[n-1] a[n-2] ... a[0]
      * 构造树形结构  左侧为当前位的值ui<ai 右边为ui=ai 直到a0
-     */
-
-    /**
+     * <p>
+     * 模板
      * https://leetcode.cn/problems/count-special-integers/
      * 参考@0x3F
      * 数位dp要点:
@@ -298,82 +284,84 @@ public class DP {
      * 3. dp[i][j] 表示前i个位置已经处理过，状态为j(状态定义根据题目具体分析) //非最高位 非受限
      * 4. 考虑的是[1,n]    0 比较特殊
      */
+    static class NumBitDP {
+        //无重复数字的个数  https://leetcode.cn/submissions/detail/354119636/
+        static class COUNT_SPECIAL_INTEGERS {
+            int[] num;
+            Integer[][] dp;//可复用 非最高位 非受限
 
-    //无重复数字的个数  https://leetcode.cn/submissions/detail/354119636/
-    static class COUNT_SPECIAL_INTEGERS {
-        int[] num;
-        Integer[][] dp;//可复用 非最高位 非受限
-
-        public int countSpecialNumbers(int n) {
-            char[] t = Integer.toString(n).toCharArray();
-            num = new int[t.length];
-            for (int i = 0; i < t.length; i++) {
-                num[i] = t[i] - '0';
+            public int countSpecialNumbers(int n) {
+                char[] t = Integer.toString(n).toCharArray();
+                num = new int[t.length];
+                for (int i = 0; i < t.length; i++) {
+                    num[i] = t[i] - '0';
+                }
+                var len = num.length;
+                dp = new Integer[len][1 << 10];
+                return f(0, 0, true, true);
             }
-            var len = num.length;
-            dp = new Integer[len][1 << 10];
-            return f(0, 0, true, true);
+
+            int f(int i, int used, boolean limit, boolean high) {
+                if (i == num.length) return high ? 0 : 1;
+                //可复用 非最高位 非受限
+                if (!limit && !high && dp[i][used] != null)
+                    return dp[i][used];
+                var ans = 0;
+                if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
+                    ans = f(i + 1, used, false, true);
+                for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
+                    if (((used >> u) & 1) == 0) // u 不在 used 中   题目要求
+                        ans += f(i + 1, used | (1 << u), limit && u == num[i], false);
+                if (!limit && !high) dp[i][used] = ans;
+                return ans;
+            }
         }
 
-        int f(int i, int used, boolean limit, boolean high) {
-            if (i == num.length) return high ? 0 : 1;
-            //可复用 非最高位 非受限
-            if (!limit && !high && dp[i][used] != null)
-                return dp[i][used];
-            var ans = 0;
-            if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
-                ans = f(i + 1, used, false, true);
-            for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
-                if (((used >> u) & 1) == 0) // u 不在 used 中   题目要求
-                    ans += f(i + 1, used | (1 << u), limit && u == num[i], false);
-            if (!limit && !high) dp[i][used] = ans;
-            return ans;
+        //数字1的个数  https://leetcode.cn/problems/number-of-digit-one/
+        static class COUNT_DIGIT_ONE {
+            int[] num;
+            Integer[][] dp;//可复用 非最高位 非受限
+
+            public int countDigitOne(int n) {
+                char[] t = Integer.toString(n).toCharArray();
+                num = new int[t.length];
+                for (int i = 0; i < t.length; i++) {
+                    num[i] = t[i] - '0';
+                }
+                var len = num.length;
+                dp = new Integer[len][len];
+                return f(0, 0, true, true);
+            }
+
+            int f(int i, int cnt, boolean limit, boolean high) {
+                if (i == num.length) return high ? 0 : cnt;
+                //可复用 非最高位 非受限
+                if (!limit && !high && dp[i][cnt] != null)
+                    return dp[i][cnt];
+                var ans = 0;
+                if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
+                    ans = f(i + 1, cnt, false, true);
+                for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
+                    ans += f(i + 1, cnt + (u == 1 ? 1 : 0), limit && u == num[i], false);
+                if (!limit && !high) dp[i][cnt] = ans;
+                return ans;
+            }
+
         }
     }
-
-    //数字1的个数  https://leetcode.cn/problems/number-of-digit-one/
-    static class COUNT_DIGIT_ONE {
-        int[] num;
-        Integer[][] dp;//可复用 非最高位 非受限
-
-        public int countDigitOne(int n) {
-            char[] t = Integer.toString(n).toCharArray();
-            num = new int[t.length];
-            for (int i = 0; i < t.length; i++) {
-                num[i] = t[i] - '0';
-            }
-            var len = num.length;
-            dp = new Integer[len][len];
-            return f(0, 0, true, true);
-        }
-
-        int f(int i, int cnt, boolean limit, boolean high) {
-            if (i == num.length) return high ? 0 : cnt;
-            //可复用 非最高位 非受限
-            if (!limit && !high && dp[i][cnt] != null)
-                return dp[i][cnt];
-            var ans = 0;
-            if (high) //当前是最高位 可以跳过当前数位   位数低于num 一定不受限
-                ans = f(i + 1, cnt, false, true);
-            for (int u = high ? 1 : 0; u <= (limit ? num[i] : 9); ++u) // 枚举要填入的数字 d
-                ans += f(i + 1, cnt + (u == 1 ? 1 : 0), limit && u == num[i], false);
-            if (!limit && !high) dp[i][cnt] = ans;
-            return ans;
-        }
-
-    }
-
-    //费用提前计算思想：https://www.acwing.com/solution/content/68062/
 
     /**
      * 斜率优化DP todo
      */
+    //费用提前计算思想：https://www.acwing.com/solution/content/68062/
+    static class SlopeOptDP{
 
+    }
 
     /**
      * 单调队列优化DP
      */
-    static class MonoDequeDP {
+    static class MonoDequeOptDP {
         //公式变型优化 修剪草坪 https://www.acwing.com/problem/content/1089/
         //当前为i 用i则i-k不能用
         //从当前位置开始选连续的j个  i-j不取  j[0,k]
@@ -400,6 +388,30 @@ public class DP {
         //submit: https://leetcode.cn/submissions/detail/369463120/
     }
 
+    /**
+     * 状态机DP
+     */
+    static class DFA_DP {
+        //结合KMP的DP  todo
+        //设计密码:https://www.acwing.com/activity/content/problem/content/1290/
+
+        //编辑距离
+        static public int minDistance(String word1, String word2) {
+            int m = word1.length(), n = word2.length();
+            int[][] dp = new int[m + 1][n + 1];
+            for (int i = 1; i <= m; i++) dp[i][0] = i;
+            for (int j = 1; j <= n; j++) dp[0][j] = j;
+            for (int i = 1; i <= m; i++) {
+                char a = word1.charAt(i - 1);
+                for (int j = 1; j <= n; j++) {
+                    char b = word2.charAt(j - 1);
+                    if (a == b) dp[i][j] = dp[i - 1][j - 1];
+                    else dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+                }
+            }
+            return dp[m][n];
+        }
+    }
 
 }
 
