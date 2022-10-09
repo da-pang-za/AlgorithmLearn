@@ -98,7 +98,10 @@ public class DP {
                     f[j] = Math.max(f[j], f[j - v[i]] + w[i]);
             return f[m];
         }
-
+        /**
+         * 多重背包——单调队列优化 复杂度O(N*V) todo
+         * https://www.acwing.com/solution/content/6500/
+         */
 
         /**
          * 分组背包 背个物品属于一个组  每个组最多只能选择一个物品
