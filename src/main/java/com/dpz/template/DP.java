@@ -224,11 +224,15 @@ public class DP {
     }
 
     /**
-     * 树形DP todo
-     * https://www.acwing.com/problem/content/287/
+     * 树形DP
      */
     static class TreeDP {
-
+        /**
+         * 树的中心: https://www.acwing.com/problem/content/1075/
+         * 换根DP 分别求出父节点的贡献和子节点的贡献 一般需要2次dfs
+         * todo 代码不够精简
+         */
+        void getTreeCenter(){}
     }
 
     //状压DP
