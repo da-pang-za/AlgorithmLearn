@@ -394,6 +394,8 @@ public class DP {
     static class DFA_DP {
         //结合KMP的DP  todo
         //设计密码:https://www.acwing.com/activity/content/problem/content/1290/
+        //加强版：https://leetcode.cn/problems/find-all-good-strings/
+
 
         //编辑距离
         static public int minDistance(String word1, String word2) {
