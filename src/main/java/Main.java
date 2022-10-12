@@ -1,19 +1,9 @@
 import java.io.*;
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.InputMismatchException;
+import java.util.*;
 
 public class Main {
-
-    //#0.00代表保留两位小数
-    static DecimalFormat df = new DecimalFormat("#0.00000000");
-
-    void solve() {
-        for (int T = 1; T > 0; T--) {
-            go();
-            goAC(out);
-        }
-    }
+    //==START==
+    int TestCases = 1;//case cnt
 
     int INF = 0x3f3f3f3f;
     int mod = 1000_000_007;
@@ -22,56 +12,73 @@ public class Main {
 
     }
 
-    void go1() {
+    //==END==
+
+    boolean TEST = false;//对拍  只需要改这里
+
+    //自定义对拍方法
+    void myGo1() {
 
     }
 
-    boolean TEST = false;//对拍  只需要改这里  todo fix 对拍
+    //ac代码
+    void acGo1() {
 
+    }
 
-    //===================== MAIN =============================
     public static void main(String[] args) throws Exception {
         new Main().run();
     }
 
     void run() throws Exception {
-        if (INPUT.length() > 0)
-            is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
-        else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+        is = System.in;
+        if (!oj && fileExist("input/a.test"))
+            is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
         out = new FastWriter(System.out);
-        if (oj) TEST = false;
         if (TEST) {
             testRun = new FastWriter("output/run.out");
             testAC = new FastWriter("output/ac.out");
             out = testRun;
+            //clear
             testRun.print("");
             testAC.print("");
         }
         long s = System.currentTimeMillis();
         solve();
-        out.flush();
+//        out.println(System.currentTimeMillis() - s + " ms");
+
         if (TEST) {
             testRun.flush();
             testAC.flush();
-        }
-        tr(System.currentTimeMillis() - s + "ms");
+        } else out.flush();
     }
 
-    void goAC(FastWriter pre) {
+    void solve() throws Exception {
+        for (int t = TestCases; t > 0; t--) go();
+        goAC();
+    }
+
+    void goAC() throws Exception {
         if (!TEST) return;
+        System.setIn(new FileInputStream("./input/a.test"));
+        System.setOut(new PrintStream("./output/ac.out"));
         out = testAC;
-        go1();
-        out = pre;
+        is = System.in;
+        lenbuf = 0;
+        ptrbuf = 0;
+        for (int t = TestCases; t > 0; t--) go1();
+    }
+
+    void go1() {
+        myGo1();
+        acGo1();
     }
 
     InputStream is;
-    FastWriter out;
-    FastWriter testRun;
-    FastWriter testAC;
-    String INPUT = "";
+    FastWriter out, testRun, testAC;
 
-    private static byte[] inbuf = new byte[1024];
-    static int lenbuf = 0, ptrbuf = 0;
+    private byte[] inbuf = new byte[1024];
+    private int lenbuf = 0, ptrbuf = 0;
 
     private int readByte() {
         if (lenbuf == -1) throw new InputMismatchException();
@@ -91,7 +98,6 @@ public class Main {
         return !(c >= 33 && c <= 126);
     }
 
-    //	private static boolean isSpaceChar(int c) { return !(c >= 32 && c <= 126); }
     private int skip() {
         int b;
         while ((b = readByte()) != -1 && isSpaceChar(b)) ;
@@ -109,7 +115,17 @@ public class Main {
     private String ns() {
         int b = skip();
         StringBuilder sb = new StringBuilder();
-        while (!(isSpaceChar(b))) {
+        while (!(isSpaceChar(b))) { // when nextLine, (isSpaceChar(b) && b != ' ')
+            sb.appendCodePoint(b);
+            b = readByte();
+        }
+        return sb.toString();
+    }
+
+    private String nextLine() {
+        int b = skip();
+        StringBuilder sb = new StringBuilder();
+        while (!(isSpaceChar(b) && b != ' ')) {
             sb.appendCodePoint(b);
             b = readByte();
         }
@@ -126,12 +142,6 @@ public class Main {
         return n == p ? buf : Arrays.copyOf(buf, p);
     }
 
-    private char[][] nm(int n, int m) {
-        char[][] map = new char[n][];
-        for (int i = 0; i < n; i++) map[i] = ns(m);
-        return map;
-    }
-
     private int[] na(int n) {
         int[] a = new int[n];
         for (int i = 0; i < n; i++) a[i] = ni();
@@ -144,6 +154,20 @@ public class Main {
         return a;
     }
 
+    //二维数组
+    private char[][] nm(int n, int m) {
+        char[][] map = new char[n][];
+        for (int i = 0; i < n; i++) map[i] = ns(m);
+        return map;
+    }
+
+    private int[][] nmi(int n, int m) {
+        int[][] map = new int[n][];
+        for (int i = 0; i < n; i++) map[i] = na(m);
+        return map;
+    }
+
+    //int
     private int ni() {
         return (int) nl();
     }
@@ -169,22 +193,7 @@ public class Main {
         }
     }
 
-    private static void tr(Object... o) {
-        if (!oj) System.out.println(Arrays.deepToString(o));
-    }
-
-    static boolean local() {
-        try {
-            String user = System.getProperty("user.name");
-            return user.contains("dpz");
-        } catch (Exception ignored) {
-        }
-        return false;
-    }
-
-    static private final boolean oj = !local();
-
-    static class FastWriter {
+    public static class FastWriter {
         private static final int BUF_SIZE = 1 << 13;
         private final byte[] buf = new byte[BUF_SIZE];
         private final OutputStream out;
@@ -475,5 +484,23 @@ public class Main {
             return writeln();
         }
     }
-}
 
+    private final boolean oj = !local();
+
+    boolean local() {
+        try {
+            String user = System.getProperty("user.name");
+            return user.contains("dpz");
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
+    boolean fileExist(String name) {
+        try {
+            return new File(name).exists();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}
