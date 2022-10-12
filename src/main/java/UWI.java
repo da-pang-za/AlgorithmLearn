@@ -1,76 +1,84 @@
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.*;
-
 
 public class UWI {
     //==START==
-    //#0.00代表保留两位小数
-    static DecimalFormat df = new DecimalFormat("#0.00000000");
-
-    void solve() {
-        for (int T = 1; T > 0; T--) {
-            go();
-            goAC(out);
-        }
-    }
-
+    int TestCases = 1;//case cnt
 
     int INF = 0x3f3f3f3f;
     int mod = 1000_000_007;
 
     void go() {
+
     }
 
     //==END==
 
-    void go1() {
+    boolean TEST = false;//对拍  只需要改这里
+
+    //自定义对拍方法
+    void myGo1() {
 
     }
 
-    boolean TEST = false;//对拍  只需要改这里  todo fix 对拍
+    //ac代码
+    void acGo1() {
+
+    }
 
     public static void main(String[] args) throws Exception {
         new UWI().run();
     }
 
     void run() throws Exception {
-        if (INPUT.length() > 0)
-            is = oj ? System.in : new ByteArrayInputStream(INPUT.getBytes());
-        else is = oj ? System.in : new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+        is = System.in;
+        if (!oj && fileExist("input/a.test"))
+            is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
         out = new FastWriter(System.out);
-        if (oj) TEST = false;
         if (TEST) {
             testRun = new FastWriter("output/run.out");
             testAC = new FastWriter("output/ac.out");
             out = testRun;
+            //clear
             testRun.print("");
             testAC.print("");
         }
         long s = System.currentTimeMillis();
         solve();
-        out.flush();
+//        out.println(System.currentTimeMillis() - s + " ms");
+
         if (TEST) {
             testRun.flush();
             testAC.flush();
-        }
+        } else out.flush();
     }
 
-    void goAC(FastWriter pre) {
+    void solve() throws Exception {
+        for (int t = TestCases; t > 0; t--) go();
+        goAC();
+    }
+
+    void goAC() throws Exception {
         if (!TEST) return;
+        System.setIn(new FileInputStream("./input/a.test"));
+        System.setOut(new PrintStream("./output/ac.out"));
         out = testAC;
-        go1();
-        out = pre;
+        is = System.in;
+        lenbuf = 0;
+        ptrbuf = 0;
+        for (int t = TestCases; t > 0; t--) go1();
+    }
+
+    void go1() {
+        myGo1();
+        acGo1();
     }
 
     InputStream is;
-    FastWriter out;
-    FastWriter testRun;
-    FastWriter testAC;
-    String INPUT = "";
+    FastWriter out, testRun, testAC;
 
     private byte[] inbuf = new byte[1024];
-    public int lenbuf = 0, ptrbuf = 0;
+    private int lenbuf = 0, ptrbuf = 0;
 
     private int readByte() {
         if (lenbuf == -1) throw new InputMismatchException();
@@ -486,5 +494,13 @@ public class UWI {
         } catch (Exception ignored) {
         }
         return false;
+    }
+
+    boolean fileExist(String name) {
+        try {
+            return new File(name).exists();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
