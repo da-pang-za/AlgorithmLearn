@@ -4,6 +4,12 @@
  */
 public class $%file%${
     //==START==
+    boolean multiCase = false;
+
+    int INF = 0x3f3f3f3f;
+    int mod = 1000_000_007;
+
+    void go() {}
 
     //==END==
 
@@ -47,6 +53,7 @@ public class $%file%${
     }
 
     void solve() throws Exception {
+        if (multiCase) TestCases = ni();
         for (int t = TestCases; t > 0; t--) go();
         goAC();
     }
@@ -66,6 +73,8 @@ public class $%file%${
         myGo1();
         acGo1();
     }
+
+    int TestCases = 1;//case cnt
 
     InputStream is;
     FastWriter out, testRun, testAC;
