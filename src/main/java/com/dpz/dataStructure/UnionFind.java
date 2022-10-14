@@ -26,23 +26,24 @@ class UnionFind {
         if (x != parent[x])parent[x] = find(parent[x]);
         return parent[x];
     }
-
+    //没使用启发式合并  x连到y上
     public boolean union(int x, int y) {
         x = find(x);
         y = find(y);
         if (x == y) return false;
-        //按秩合并  x是size较大的
-        if (size[x] < size[y]) {
-            int temp = x;
-            x = y;
-            y = temp;
-        }
-        parent[y] = x;
-        size[x] += size[y];
+        parent[x] = y;
+        size[y] += size[x];
         --setCount;
         return true;
     }
 }
+
+//按秩合并  x是size较大的
+//        if (size[x] < size[y]) {
+//            int temp = x;
+//            x = y;
+//            y = temp;
+//        }
 
 
 //带权/距离并查集  dist[i]代表i到p[i]的距离
