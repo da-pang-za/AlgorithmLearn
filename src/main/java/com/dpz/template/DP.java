@@ -4,6 +4,8 @@ package com.dpz.template;
 import java.util.*;
 
 public class DP {
+    static int INF = 0x3f3f3f3f;
+
     //背包
     static class Backpack {
         /**
@@ -232,46 +234,109 @@ public class DP {
          * 换根DP 分别求出父节点的贡献和子节点的贡献 一般需要2次dfs
          * todo 代码不够精简
          */
-        void getTreeCenter(){}
+        void getTreeCenter() {
+        }
     }
 
     //状压DP
     static class BitMask {
-        //蒙德里安的梦想
-        //https://www.acwing.com/activity/content/problem/content/1010/
-        static void go() {
-            //不含连续奇数0的状态   预处理
-            boolean[] valid = new boolean[1 << 11];
+        /**
+         * 棋盘类问题 蒙德里安的梦想
+         * https://www.acwing.com/activity/content/problem/content/1010/
+         */
+        static class Board {
+            void go() {
+                //不含连续奇数0的状态   预处理
+                boolean[] valid = new boolean[1 << 11];
 
-            int N = 11, M = 10;
+                int N = 11, M = 10;
 
-            for (int i = 0; i < 1 << 11; i++) {
-                valid[i] = true;
-                int u = i | (1 << M);
-                while (u > 0) {
-                    if (u % 2 == 1) u /= 2;
-                    else {
-                        if (u % 4 != 0) {
-                            valid[i] = false;
-                            break;
-                        } else u /= 4;
+                for (int i = 0; i < 1 << 11; i++) {
+                    valid[i] = true;
+                    int u = i | (1 << M);
+                    while (u > 0) {
+                        if (u % 2 == 1) u /= 2;
+                        else {
+                            if (u % 4 != 0) {
+                                valid[i] = false;
+                                break;
+                            } else u /= 4;
+                        }
                     }
                 }
-            }
-            long[][] dp = new long[N + 1][1 << M];//前i行已经排好了 i行伸到i+1行的状态为j
-            dp[0][0] = 1;
-            for (int i = 1; i <= N; i++) {
-                for (int j = 0; j < 1 << M; j++) {
-                    for (int k = 0; k < 1 << M; k++) {
-                        if ((j & k) != 0 || !valid[j | k]) continue;
-                        dp[i][j] += dp[i - 1][k];
+                long[][] dp = new long[N + 1][1 << M];//前i行已经排好了 i行伸到i+1行的状态为j
+                dp[0][0] = 1;
+                for (int i = 1; i <= N; i++) {
+                    for (int j = 0; j < 1 << M; j++) {
+                        for (int k = 0; k < 1 << M; k++) {
+                            if ((j & k) != 0 || !valid[j | k]) continue;
+                            dp[i][j] += dp[i - 1][k];
+                        }
                     }
                 }
+                System.out.println(dp[N][0]);
             }
-            System.out.println(dp[N][0]);
-
         }
+        /**
+         * 集合类问题
+         * 重复覆盖 从当前到之后的
+         * 精确覆盖 从之前的到当前的
+         */
+        static class Set{
+            /**
+             * 重复覆盖问题 愤怒的小鸟
+             * https://www.acwing.com/problem/content/526/
+             */
+            static class CoverDuplicate {
+                void go(int n, double[][] pigs) {
+//                double[][] pigs = new double[n][];
+//                for (int i = 0; i < n; i++) {
+//                    pigs[i] = new double[]{nd(), nd()};
+//                }
+                    int[][] f = new int[n][n];//覆盖i j 的 覆盖了哪些
+                    for (int i = 0; i < n; i++) {
+                        f[i][i] = 1 << i;
+                        for (int j = 0; j < i; j++) {
+                            int s = 0;
+                            double x1 = pigs[i][0], y1 = pigs[i][1];
+                            double x2 = pigs[j][0], y2 = pigs[j][1];
+                            if (eq(x1, x2)) continue;
+                            double a = (y1 / x1 - y2 / x2) / (x1 - x2);
+                            double b = y1 / x1 - a * x1;
+                            if (Double.compare(a, 0) >= 0) continue;//开口要向下
+                            for (int k = 0; k < n; k++) {
+                                double x = pigs[k][0], y = pigs[k][1];
+                                if (eq(a * x * x + b * x, y)) s |= 1 << k;
+                            }
+                            f[i][j] = s;
+                        }
+                    }
 
+                    int[] dp = new int[1 << n];
+                    Arrays.fill(dp, INF);
+                    dp[0] = 0;
+                    for (int i = 0; i + 1 < 1 << n; i++) {
+                        int u = 0;
+                        //找第一个0
+                        for (int j = 0; j < n; j++)
+                            if (0 == ((i >> j) & 1)) {
+                                u = j;
+                                break;
+                            }
+
+                        for (int j = u; j < n; j++)
+                            dp[i | f[j][u]] = Math.min(dp[i] + 1, dp[i | f[j][u]]);
+//                if ((i | f[u][j]) == i)//不一定当前抛物线所经过的点之前都没用过
+//                    dp[i] = Math.min(dp[i], dp[i ^ (f[u][j])] + 1);
+                    }
+                    System.out.println(dp[(1 << n) - 1]);
+                }
+
+                boolean eq(double a, double b) {
+                    return Math.abs(a - b) < 1e-8;
+                }
+            }
+        }
 
     }
 
@@ -358,7 +423,7 @@ public class DP {
      * 斜率优化DP todo
      */
     //费用提前计算思想：https://www.acwing.com/solution/content/68062/
-    static class SlopeOptDP{
+    static class SlopeOptDP {
 
     }
 
