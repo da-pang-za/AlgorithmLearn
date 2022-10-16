@@ -301,6 +301,7 @@ public class Graph {
      * https://www.acwing.com/problem/content/862/
      * 一个图是二分图  当且仅当图中不含奇数环(环中边的数量是奇数)
      * (因为环上相邻的两点一定在不同的部分 奇数会出现矛盾)
+     * color 0 未染色 1 2 两种颜色
      */
     static boolean isBinG(int n, List<Integer>[] adj) {
         int[] color = new int[n + 1];
@@ -555,5 +556,5 @@ public class Graph {
         }
     }
 
-
+    //欧拉路径 欧拉回路
 }
