@@ -2,10 +2,10 @@ package com.dpz.template;
 
 import com.dpz.dataStructure.UnionFind;
 
+import java.io.*;
 import java.util.*;
 
 public class Graph {
-    static long INF = Long.MAX_VALUE / 2;
     //========================建图  note  没有考虑重边
     //建图 1 list 不带权   注意！！！  这里是无向图！！！
     static List<Integer>[] build1(int n, int[][] edges) {
@@ -209,7 +209,7 @@ public class Graph {
         //这里不会出现 INF-x 这种dist值 因为INF的dist不会去更新其他点
         return false;
     }
-        
+
     //建图  dijkstra模板  前向星
     static class Solution1 {
         int N = 110, M = 6010;
@@ -556,5 +556,123 @@ public class Graph {
         }
     }
 
-    //欧拉路径 欧拉回路
+    /**
+     * 一笔画 欧拉回路/路径  不重复走经过所有边(点可以重复)  前提：所有边都是连通的
+     * 无向图
+     * 欧拉路径 头尾度是奇数 其他点度是偶数  //除了头和尾都有进有出
+     * 欧拉回路 所有点的度是偶数  //起点=终点
+     * <p>
+     * 有向图
+     * 欧拉路径 (头 出度-入度= 1 尾入度-出度 = 1 中间出度=入度) 或 (所有点 出度=入度)
+     * 欧拉回路 所有点 出度=入度
+     * <p>
+     * 构造欧拉路径   形状大概是一条线上面有几个环  过山车的形状
+     * 倒序输出 终点到起点
+     * 需要用边来判重 如果直接遍历最坏是O(m^2) //一个点很多自环的情况
+     * 通过把遍历过的边删除  可以优化到O(m)
+     * 搜索当前点的每个ne 递归dfs把ne对应的路径上的节点都加进来了
+     * 此时加入当前节点u
+     * <p>
+     * 模板题：https://www.acwing.com/problem/content/1186/  //《简单》 细节比较多
+     * 需要边遍历边删除 因此使用 前向星 建图
+     */
+    static class Euler {
+        int N = 100100, M = 400100;//双向边
+
+        int[] h = new int[N], e = new int[M], ne = new int[M];
+        int idx;
+
+        boolean[] used = new boolean[M];
+        int[] din = new int[N], dout = new int[N];
+        int n, m, type;
+
+        int[] ans;
+        int cnt;
+
+        void go() {
+            type = ni();
+            n = ni();
+            m = ni();
+            ans = new int[m + 1];
+            Arrays.fill(h, -1);//没有边 编号为-1
+            //build graph
+            for (int i = 0; i < m; i++) {
+                int a = ni(), b = ni();
+                add(a, b);
+                if (type == 1) add(b, a);//无向图
+                din[b]++;
+                dout[a]++;
+            }
+            //validate
+            if (type == 1) {//无向图
+                for (int i = 1; i <= n; i++) {
+                    if ((din[i] + dout[i]) % 2 == 1) {//每个点的度都为偶数
+                        out.println("NO");
+                        return;
+                    }
+                }
+            } else {
+                for (int i = 1; i <= n; i++) {
+                    if (din[i] != dout[i]) { //每个点的入度等于出度
+                        out.println("NO");
+                        return;
+                    }
+                }
+            }
+            //construct
+            for (int i = 1; i <= n; i++) {
+                if (h[i] != -1) {
+                    dfs(i);//start node
+                    break;
+                }
+            }
+            //validate 上面没判断只有一个连通分量
+            if (cnt < m) {
+                out.println("NO");
+                return;
+            }
+            out.println("YES");
+            for (int i = cnt; i > 0; i--)
+                out.print(ans[i] + " ");
+            out.println();
+
+        }
+
+        void dfs(int u) {
+            for (int i = h[u]; i != -1; i = h[u]) {
+                if (used[i]) {
+                    h[u] = ne[i];//del
+                    continue;
+                }
+                used[i] = true;
+                if (type == 1) used[i ^ 1] = true;
+                //转化为实际的边的编号  实际编号从1开始
+                int p = i + 1;
+                if (type == 1) {
+                    p = i / 2 + 1;
+                    if (i % 2 == 1) p = -p;//题目要求 无向图需要知道走的方向
+                }
+                int v = e[i];
+                //del  这里是无向图的话 只能删(a,b) 无法删除 (b,a)  因此还需要used
+                h[u] = ne[i];
+                dfs(v);
+                ans[++cnt] = p;
+            }
+        }
+
+        void add(int a, int b) {
+            e[idx] = b;
+            ne[idx] = h[a];
+            h[a] = idx;
+            idx++;
+        }
+    }
+
+    //placeholder
+    static PrintStream out = System.out;
+    static long INF = Long.MAX_VALUE / 2;
+
+    static int ni() {
+        return 0;
+    }
 }
