@@ -1,9 +1,10 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main implements Runnable {
     //==START==
     boolean multiCase = false;
+
     int INF = 0x3f3f3f3f;
     int mod = 1000_000_007;
 
@@ -26,30 +27,30 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().run();
+        new Thread(null, new Main(), "dpz", 1 << 28).start();
     }
 
-    void run() throws Exception {
-        is = System.in;
-        if (!oj && fileExist("input/a.test"))
-            is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
-        out = new FastWriter(System.out);
-        if (TEST) {
-            testRun = new FastWriter("output/run.out");
-            testAC = new FastWriter("output/ac.out");
-            out = testRun;
-            //clear
-            testRun.print("");
-            testAC.print("");
+    public void run() {
+        try {
+            is = System.in;
+            if (!oj && fileExist("input/a.test"))
+                is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+            out = new FastWriter(System.out);
+            if (TEST) {
+                testRun = new FastWriter("output/run.out");
+                testAC = new FastWriter("output/ac.out");
+                out = testRun;
+                //clear
+                testRun.print("");
+                testAC.print("");
+            }
+            solve();
+            if (TEST) {
+                testRun.flush();
+                testAC.flush();
+            } else out.flush();
+        } catch (Exception ignored) {
         }
-        long s = System.currentTimeMillis();
-        solve();
-//        out.println(System.currentTimeMillis() - s + " ms");
-
-        if (TEST) {
-            testRun.flush();
-            testAC.flush();
-        } else out.flush();
     }
 
     void solve() throws Exception {
@@ -75,6 +76,7 @@ public class Main {
     }
 
     int TestCases = 1;//case cnt
+
     InputStream is;
     FastWriter out, testRun, testAC;
 

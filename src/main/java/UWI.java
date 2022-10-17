@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class UWI {
+public class UWI implements Runnable {
     //==START==
     boolean multiCase = false;
 
@@ -27,30 +27,30 @@ public class UWI {
     }
 
     public static void main(String[] args) throws Exception {
-        new UWI().run();
+        new Thread(null, new Main(), "dpz", 1 << 28).start();
     }
 
-    void run() throws Exception {
-        is = System.in;
-        if (!oj && fileExist("input/a.test"))
-            is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
-        out = new FastWriter(System.out);
-        if (TEST) {
-            testRun = new FastWriter("output/run.out");
-            testAC = new FastWriter("output/ac.out");
-            out = testRun;
-            //clear
-            testRun.print("");
-            testAC.print("");
+    public void run() {
+        try {
+            is = System.in;
+            if (!oj && fileExist("input/a.test"))
+                is = new ByteArrayInputStream(new FileInputStream("input/a.test").readAllBytes());
+            out = new FastWriter(System.out);
+            if (TEST) {
+                testRun = new FastWriter("output/run.out");
+                testAC = new FastWriter("output/ac.out");
+                out = testRun;
+                //clear
+                testRun.print("");
+                testAC.print("");
+            }
+            solve();
+            if (TEST) {
+                testRun.flush();
+                testAC.flush();
+            } else out.flush();
+        } catch (Exception ignored) {
         }
-        long s = System.currentTimeMillis();
-        solve();
-//        out.println(System.currentTimeMillis() - s + " ms");
-
-        if (TEST) {
-            testRun.flush();
-            testAC.flush();
-        } else out.flush();
     }
 
     void solve() throws Exception {
