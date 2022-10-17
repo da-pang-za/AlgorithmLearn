@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class API {
+    //todo 负数取mod为什么对？
     //最大字段和 todo
 
     //================ map cnt ===============
