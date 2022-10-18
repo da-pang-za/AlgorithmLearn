@@ -27,7 +27,7 @@ public class UWI implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-        new Thread(null, new Main(), "dpz", 1 << 28).start();
+        new Thread(null, new UWI(), "dpz", 1 << 28).start();
     }
 
     public void run() {
