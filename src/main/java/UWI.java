@@ -49,7 +49,8 @@ public class UWI implements Runnable {
                 testRun.flush();
                 testAC.flush();
             } else out.flush();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
