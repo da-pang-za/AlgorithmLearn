@@ -49,7 +49,7 @@ public class $%file%$ implements Runnable {
                 testAC.flush();
             } else out.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
