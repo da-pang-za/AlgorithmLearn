@@ -734,7 +734,14 @@ public class ACWing {
             return -1;
         }
 
-        //todo Z-func
+        /**
+         * Z-func   在 O(∣a∣+∣b∣) 求a的所有后缀 与 模式串 b 的 LCP 最长公共前缀
+         * 模板题 https://www.luogu.com.cn/problem/P5410
+         * 讲解 https://www.luogu.com.cn/blog/ericyan2008/Solution-P5410
+         */
+        int zfunc(){
+            return 0;//todo
+        }
 
     }
 
