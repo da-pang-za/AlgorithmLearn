@@ -514,14 +514,17 @@ public class ACWing {
          * 卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
          * C(a/p ,b/p) 这部分可以递归求解
          * https://www.acwing.com/problem/content/889/
-         * 1≤b≤a≤10^18    1≤p≤105
+         * 1≤b≤a≤10^18    1≤p≤105  todo
          */
 
 
         /**
-         * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果
-         * 先用质因数分解预处理
+         * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果  递推法
+         * 先用质因数分解预处理 todo
+         * 把组合数转化为质因子相乘的形式   然后用高精度乘法算
+         * 分子的质因子倍数-分母的质因子倍数
          */
+
 
         /**
          * 卡特兰数
@@ -730,6 +733,8 @@ public class ACWing {
             }
             return -1;
         }
+
+        //todo Z-func
 
     }
 
