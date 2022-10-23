@@ -72,7 +72,7 @@ public class UWI implements Runnable {
     }
 
     void go1() {
-        myGo1();
+//        myGo1();  //todo 对拍fix
         acGo1();
     }
 
