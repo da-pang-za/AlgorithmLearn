@@ -510,6 +510,11 @@ public class API {
         return query;
     }
 
+    //判断连个区间是否有交集 e1=[l1,r1] e2=[l2,r2]  想象e2不动 e1滑动
+    boolean haveIntersection(int[] e1, int[] e2) {
+        return e1[0] <= e2[1] && e1[1] >= e2[0];
+    }
+
     //三角函数
     void getAngle() {
         //360内的角度   角度制
