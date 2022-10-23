@@ -8,14 +8,15 @@ public class API {
     //最大字段和 todo
 
     //================ map cnt ===============
-    void add(int v, Map<Integer, Integer> map) {
-        map.put(v, map.getOrDefault(v, 0) + 1);
-    }
+    static class MultiSet<K> extends TreeMap<K, Long> {
+        public void add(K k, long c) {
+            put(k, getOrDefault(k, 0L) + c);
+            if (get(k) == 0) remove(k);
+        }
 
-    void remove(int v, Map<Integer, Integer> map) {
-        assert map.containsKey(v);
-        if (map.get(v) == 1) map.remove(v);
-        else map.put(v, map.get(v) - 1);
+        public Long cnt(Object k) {
+            return getOrDefault(k, 0L);
+        }
     }
     //================ map cnt ===============
 

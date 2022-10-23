@@ -1,7 +1,7 @@
 package com.dpz.template;
 
-
 import java.util.*;
+import static com.dpz.template.Const.*;
 
 public class DP {
     static int INF = 0x3f3f3f3f;
@@ -356,7 +356,7 @@ public class DP {
     static class NumBitDP {
         //无重复数字的个数  https://leetcode.cn/submissions/detail/354119636/
         static class COUNT_SPECIAL_INTEGERS {
-            int[] num;
+            int[] num;//0存的是低位
             Integer[][] dp;//可复用 非最高位 非受限
 
             public int countSpecialNumbers(int n) {
@@ -388,7 +388,7 @@ public class DP {
 
         //数字1的个数  https://leetcode.cn/problems/number-of-digit-one/
         static class COUNT_DIGIT_ONE {
-            int[] num;
+            int[] num;//0存的是低位
             Integer[][] dp;//可复用 非最高位 非受限
 
             public int countDigitOne(int n) {
@@ -481,6 +481,39 @@ public class DP {
                 }
             }
             return dp[m][n];
+        }
+    }
+
+    /**
+     *
+     */
+    static class Other{
+        /**
+         * 前缀和优化DP  https://www.acwing.com/problem/content/description/274/
+         */
+        static class SumOptDP{
+            void go() {
+                int n = ni();
+                int[] a = new int[n + 1], b = new int[n + 1];
+                for (int i = 1; i <= n; i++) a[i] = ni();
+                for (int i = 1; i <= n; i++) b[i] = ni();
+                int[][] dp = new int[n + 1][n + 1];// a pre i last element is b[j]
+                int ans = 0;
+                for (int i = 1; i <= n; i++) {
+                    int preMax = 0;//dp[i - 1][k]
+                    for (int j = 1; j <= n; j++) {
+                        dp[i][j] = dp[i - 1][j];
+                        if (a[i] == b[j]) dp[i][j] = Math.max(dp[i][j], preMax + 1);
+                        if (a[i] > b[j]) preMax = Math.max(preMax, dp[i - 1][j]);
+//                if (a[i] == b[j]) {
+//                    for (int k = 1; k < j; k++)
+//                        if (a[i] > b[k]) dp[i][j] = Math.max(dp[i][j], dp[i - 1][k] + 1);
+//                }
+                        ans = Math.max(ans, dp[i][j]);
+                    }
+                }
+                out.println(ans);
+            }
         }
     }
 

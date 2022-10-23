@@ -1,7 +1,7 @@
 package com.dpz.template;
 
 import com.dpz.dataStructure.UnionFind;
-
+import static com.dpz.template.Const.*;
 import java.io.*;
 import java.util.*;
 
@@ -668,11 +668,5 @@ public class Graph {
         }
     }
 
-    //placeholder
-    static PrintStream out = System.out;
     static long INF = Long.MAX_VALUE / 2;
-
-    static int ni() {
-        return 0;
-    }
 }
