@@ -786,7 +786,6 @@ public class ACWing {
 
     /**
      * 动态规划 DP
-     *
      * @see DP
      */
     static class DP1 {
@@ -799,6 +798,14 @@ public class ACWing {
      * @see Graph
      */
     static class G {
+    }
+
+    /**
+     * 计算几何
+     * @see Geometry
+     */
+    static class Geo{
+
     }
 
 }
