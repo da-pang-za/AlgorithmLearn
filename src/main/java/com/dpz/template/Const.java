@@ -14,6 +14,10 @@ public class Const {
         return 0;
     }
 
+    static double nd() {
+        return 0;
+    }
+
     static PrintStream out = System.out;
 
 
