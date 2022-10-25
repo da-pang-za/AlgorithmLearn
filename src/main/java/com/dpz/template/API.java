@@ -494,13 +494,44 @@ public class API {
         return a;
     }
 
-    static void sortWithPQ(int[] a) {
-        sortWithPQ(a, 0, a.length - 1);
+    //单调栈  左边第一个小于当前位置的数
+    int[] MonoStack(int[] nums, int n) {
+        Deque<Integer> dq = new ArrayDeque<>();
+        int[] ans = new int[n];
+        //维护递增栈
+        for (int i = 0; i < n; i++) {
+            int v = nums[i];
+            while (!dq.isEmpty() && dq.peekLast() >= v) dq.pollLast();
+            if (dq.isEmpty()) ans[i] = -1;
+            else ans[i] = dq.peekLast();
+            dq.addLast(v);
+        }
+        return ans;
     }
 
-    static void sortWithPQ(int[] a, int start, int end) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for (int i = start; i <= end; i++) pq.add(a[i]);
-        for (int i = start; i <= end; i++) a[i] = pq.poll();
+    //单调队列 滑动窗口最大值最小值   区间长度为k
+    void MonoDeque(int n, int k, int[] nums) {
+        Deque<Integer> deque1 = new ArrayDeque<>();//维护递减队列 求最大值
+        int[] max = new int[n - k + 1];
+
+        for (int i = 0; i < n; i++) {
+            int v = nums[i];
+            while (!deque1.isEmpty() && i - deque1.peekFirst() >= k) deque1.pollFirst();
+            while (!deque1.isEmpty() && v > nums[deque1.peekLast()]) deque1.pollLast();
+            deque1.addLast(i);
+            if (i >= k - 1) max[i - k + 1] = nums[deque1.peekFirst()];
+        }
+
+        Deque<Integer> deque2 = new ArrayDeque<>();//维护递增队列 求最小值
+        int[] min = new int[n - k + 1];
+        for (int i = 0; i < n; i++) {
+            int v = nums[i];
+            while (!deque2.isEmpty() && i - deque2.peekFirst() >= k) deque2.pollFirst();
+            while (!deque2.isEmpty() && v < nums[deque2.peekLast()]) deque2.pollLast();
+            deque2.addLast(i);
+            if (i >= k - 1) min[i - k + 1] = nums[deque2.peekFirst()];
+        }
     }
+
+
 }
