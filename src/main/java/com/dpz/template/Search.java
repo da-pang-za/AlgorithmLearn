@@ -6,6 +6,7 @@ import static com.dpz.template.Geometry.*;
 public class Search {
     /**
      * 模拟退火  简称sa
+     * 需要保证函数具有连续性
      */
     static class SimulatedAnnealing {
         double ans = Double.MAX_VALUE;
