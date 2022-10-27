@@ -495,6 +495,7 @@ public class API {
     }
 
     //单调栈  左边第一个小于当前位置的数
+    //note 抄板子的时候注意是要值还是要下标  模板里是值
     int[] MonoStack(int[] nums, int n) {
         Deque<Integer> dq = new ArrayDeque<>();
         int[] ans = new int[n];
