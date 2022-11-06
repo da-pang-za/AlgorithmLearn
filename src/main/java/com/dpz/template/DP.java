@@ -12,6 +12,7 @@ public class DP {
          * 01背包 物品只有一个  求不超过容量时的最大价值  //物品不能重复选择
          * 从前i个物品里面选 容量不超过j f[i][j]=max(f[i-1][j],f[i-1][j-v[i]]+w[i])
          * 二维费用的01背包：https://www.acwing.com/problem/content/8/
+         * 求具体方案:根据答案倒推  如果需要输出字典序最小 可以倒序遍历物品 这样倒推就是正序了
          */
         static class _01BackPack {
             /**
