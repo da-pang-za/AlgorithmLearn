@@ -3,26 +3,25 @@ package com.dpz.dataStructure;
 /**
  * 线段树-动态开点
  * 例题：https://leetcode-cn.com/problems/my-calendar-iii/
- * note 合并前的初始值ans不一定是0  例如求最小
  */
 public
 class SegmentTree1 {
     @FunctionalInterface
     public interface M {
-        long merge(long a, long b);
+        long merge(long v1, long v2);
     }
 
     @FunctionalInterface
     public interface MN {
-        long mergeN(long a, long count);
+        long modifyLR(long l, long r, long d);
     }
 
     @FunctionalInterface
     public interface A {
-        long add(long a, long b);
+        long add(long v1, long v2);
     }
 
-    private int MODE;
+    private int MODE, BASE;
     public static final int ADD = 0;//增量
     public static final int ASSIGN = 1;//赋值
 
@@ -42,11 +41,12 @@ class SegmentTree1 {
      * @param mergeN    区间每个位置增量/赋值d,区间长度为len,求区间整体增量、赋值
      * @param MODE      累加 or 赋值
      */
-    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MN mergeN, int MODE) {
+    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MN mergeN, int MODE, int BASE) {
         this.mergeFunc = merge;
         this.mergeNFunc = mergeN;
         this.addFunc = add;
         this.MODE = MODE;
+        this.BASE = BASE;//note 合并前ans的初始值不一定是0  例如求最小
         this.nums = nums;
         if (this.nums != null) {
             start = 1;
@@ -54,37 +54,7 @@ class SegmentTree1 {
         }
         root = new Node(start, end);
 
-        if (nums != null)
-            build(root);
-    }
-
-    static class Node {
-        long l, r;
-        Node left, right;
-        long val = 0;
-        long lazy;
-        boolean hasLazy;
-
-        Node(long l, long r) {
-            this.l = l;
-            this.r = r;
-        }
-    }
-
-    private void build(Node p) {
-        long l = p.l, r = p.r;
-        if (l == r) {
-            p.val = nums[(int) l - 1];
-            return;
-        }
-
-        build(left(p));
-        build(right(p));
-        push_up(p);
-    }
-
-    public long query(long l, long r) {
-        return query(l, r, root);
+        if (nums != null) build(root);
     }
 
     private long query(long l, long r, Node p) {
@@ -92,15 +62,11 @@ class SegmentTree1 {
         if (l <= nl && nr <= r) return p.val;
 
         push_down(p);
-        long ans = 0;//todo 这个值需要根据需求变
+        long ans = BASE;
         long mid = (nl + nr) >> 1;
         if (mid >= l) ans = mergeFunc.merge(ans, query(l, r, left(p)));
         if (mid < r) ans = mergeFunc.merge(ans, query(l, r, right(p)));
         return ans;
-    }
-
-    public void update(long l, long r, long val) {
-        update(l, r, val, root);
     }
 
     private void update(long l, long r, long d, Node p) {
@@ -108,10 +74,10 @@ class SegmentTree1 {
 //        System.out.println(l+" "+r+" "+nl+" "+nr);
         if (l <= nl && nr <= r) {
             if (MODE == ADD) {
-                p.val = addFunc.add(p.val, mergeNFunc.mergeN(d, nr - nl + 1));
+                p.val = addFunc.add(p.val, mergeNFunc.modifyLR(nl, nr, d));
                 p.lazy = addFunc.add(p.lazy, d);
             } else if (MODE == ASSIGN) {
-                p.val = mergeNFunc.mergeN(d, nr - nl + 1);
+                p.val = mergeNFunc.modifyLR(nl, nr, d);
                 p.lazy = d;
                 p.hasLazy = true;
             } else System.err.println("[SegmentTree]:unknown mode");
@@ -140,20 +106,52 @@ class SegmentTree1 {
             left(p).lazy = addFunc.add(p.left.lazy, p.lazy);
             right(p).lazy = addFunc.add(p.right.lazy, p.lazy);
 
-            p.left.val = addFunc.add(p.left.val, mergeNFunc.mergeN(p.lazy, mid - l + 1));
-            p.right.val = addFunc.add(p.right.val, mergeNFunc.mergeN(p.lazy, r - mid));
+            p.left.val = addFunc.add(p.left.val, mergeNFunc.modifyLR(l, mid, p.lazy));
+            p.right.val = addFunc.add(p.right.val, mergeNFunc.modifyLR(mid + 1, r, p.lazy));
         } else if (MODE == ASSIGN) {
             if (!p.hasLazy) return;
             left(p).lazy = p.lazy;//此处如果当前节点没有标记  会把子节点的标记给擦除  但当前节点也可能有值为0的标记
             right(p).lazy = p.lazy;
             p.left.hasLazy = true;
             p.right.hasLazy = true;
-            p.left.val = mergeNFunc.mergeN(p.lazy, mid - l + 1);
-            p.right.val = mergeNFunc.mergeN(p.lazy, r - mid);
+            p.left.val = mergeNFunc.modifyLR(l, mid, p.lazy);
+            p.right.val = mergeNFunc.modifyLR(mid + 1, r, p.lazy);
             p.hasLazy = false;
         } else System.err.println("[SegmentTree]:unknown mode");
 
         p.lazy = 0;
+    }
+
+    public long query(long l, long r) {
+        return query(l, r, root);
+    }
+
+    public void update(long l, long r, long val) {
+        update(l, r, val, root);
+    }
+
+    private void build(Node p) {
+        long l = p.l, r = p.r;
+        if (l == r) {
+            p.val = nums[(int) l - 1];
+            return;
+        }
+        build(left(p));
+        build(right(p));
+        push_up(p);
+    }
+
+    static class Node {
+        long l, r;
+        Node left, right;
+        long val = 0;
+        long lazy;
+        boolean hasLazy;
+
+        Node(long l, long r) {
+            this.l = l;
+            this.r = r;
+        }
     }
 
     private Node right(Node p) {
