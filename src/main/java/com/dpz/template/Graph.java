@@ -1,7 +1,9 @@
 package com.dpz.template;
 
 import com.dpz.dataStructure.UnionFind;
+
 import static com.dpz.template.Const.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -43,7 +45,10 @@ public class Graph {
     }
 
     //====================== 最短路 最长路同理==============================
-    //等权（都为1）单源最短路  BFS
+
+    /**
+     * 等权（都为1）单源最短路  BFS
+     */
     static long[] bfs(int n, List<Integer>[] adj, int source) {
         long[] dist = new long[n + 1];
         Arrays.fill(dist, INF);
@@ -69,7 +74,9 @@ public class Graph {
         return dist;
     }
 
-    //Dijkstra 单源最短路  复杂度 O(ElogE)  无负权
+    /**
+     * Dijkstra 单源最短路  复杂度 O(ElogE)  无负权
+     */
     static long[] dijkstra(int n, List<int[]>[] adj, int source) {
         long[] dist = new long[n + 1];
         Arrays.fill(dist, INF);
@@ -95,8 +102,9 @@ public class Graph {
         return dist;
     }
 
-    //Floyd算法 任意两点最短路 边权有可能为负数 已去除重边 保留最短的边
-    //复杂度O(N^3)
+    /**
+     * Floyd算法 任意两点最短路 复杂度O(N^3) 边权有可能为负数 已去除重边 保留最短的边
+     */
     static int[][] floyd(int[][] adj) {
         int n = adj.length - 1;
         int[][] dist = new int[n + 1][n + 1];//最短路
