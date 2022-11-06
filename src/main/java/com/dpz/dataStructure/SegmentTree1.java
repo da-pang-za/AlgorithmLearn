@@ -12,7 +12,7 @@ class SegmentTree1 {
     }
 
     @FunctionalInterface
-    public interface MN {
+    public interface MD {
         long modifyLR(long l, long r, long d);
     }
 
@@ -28,7 +28,7 @@ class SegmentTree1 {
     private int[] nums;
 
     private M mergeFunc;
-    private MN mergeNFunc;
+    private MD modifyFunc;
     private A addFunc;
 
     private Node root;
@@ -38,12 +38,12 @@ class SegmentTree1 {
      * @param start,end 区间开始结束[start,end]
      * @param add       增量 只有add模式用到 累加方式
      * @param merge     合并左右两个区间
-     * @param mergeN    区间每个位置增量/赋值d,区间长度为len,求区间整体增量、赋值
+     * @param modifyLR  区间每个位置增量/赋值d,区间[l,r],求区间整体增量、赋值
      * @param MODE      累加 or 赋值
      */
-    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MN mergeN, int MODE, int BASE) {
+    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MD modifyLR, int MODE, int BASE) {
         this.mergeFunc = merge;
-        this.mergeNFunc = mergeN;
+        this.modifyFunc = modifyLR;
         this.addFunc = add;
         this.MODE = MODE;
         this.BASE = BASE;//note 合并前ans的初始值不一定是0  例如求最小
@@ -74,10 +74,10 @@ class SegmentTree1 {
 //        System.out.println(l+" "+r+" "+nl+" "+nr);
         if (l <= nl && nr <= r) {
             if (MODE == ADD) {
-                p.val = addFunc.add(p.val, mergeNFunc.modifyLR(nl, nr, d));
+                p.val = addFunc.add(p.val, modifyFunc.modifyLR(nl, nr, d));
                 p.lazy = addFunc.add(p.lazy, d);
             } else if (MODE == ASSIGN) {
-                p.val = mergeNFunc.modifyLR(nl, nr, d);
+                p.val = modifyFunc.modifyLR(nl, nr, d);
                 p.lazy = d;
                 p.hasLazy = true;
             } else System.err.println("[SegmentTree]:unknown mode");
@@ -106,16 +106,16 @@ class SegmentTree1 {
             left(p).lazy = addFunc.add(p.left.lazy, p.lazy);
             right(p).lazy = addFunc.add(p.right.lazy, p.lazy);
 
-            p.left.val = addFunc.add(p.left.val, mergeNFunc.modifyLR(l, mid, p.lazy));
-            p.right.val = addFunc.add(p.right.val, mergeNFunc.modifyLR(mid + 1, r, p.lazy));
+            p.left.val = addFunc.add(p.left.val, modifyFunc.modifyLR(l, mid, p.lazy));
+            p.right.val = addFunc.add(p.right.val, modifyFunc.modifyLR(mid + 1, r, p.lazy));
         } else if (MODE == ASSIGN) {
             if (!p.hasLazy) return;
             left(p).lazy = p.lazy;//此处如果当前节点没有标记  会把子节点的标记给擦除  但当前节点也可能有值为0的标记
             right(p).lazy = p.lazy;
             p.left.hasLazy = true;
             p.right.hasLazy = true;
-            p.left.val = mergeNFunc.modifyLR(l, mid, p.lazy);
-            p.right.val = mergeNFunc.modifyLR(mid + 1, r, p.lazy);
+            p.left.val = modifyFunc.modifyLR(l, mid, p.lazy);
+            p.right.val = modifyFunc.modifyLR(mid + 1, r, p.lazy);
             p.hasLazy = false;
         } else System.err.println("[SegmentTree]:unknown mode");
 
