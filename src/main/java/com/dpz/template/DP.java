@@ -456,8 +456,32 @@ public class DP {
             }
             return f[n];
         }
-        //相似题目 lc.1687 rating 2610  https://leetcode.cn/problems/delivering-boxes-from-storage-to-ports/
-        //submit: https://leetcode.cn/submissions/detail/369463120/
+
+        /**
+         * 烽火传递 所有长度为k的区间范围内至少选一个 求最小和
+         * https://www.acwing.com/problem/content/1091/
+         */
+        void AcWing1091(){
+            //f[i]= j in [i-m,i-1] min(f[j])+w[i]
+            //ans=min(f[j])  [n-m+1,n]
+            int n = ni(), m = ni();
+            int[] w = new int[n + 1];
+            for (int i = 1; i <= n; i++) w[i] = ni();
+            int[] f = new int[n + 1];
+            f[0] = 0;
+            Deque<Integer> deque = new ArrayDeque<>();
+            deque.addLast(0);
+            for (int i = 1; i <= n; i++) {
+                while (!deque.isEmpty() && deque.peekFirst() < i - m) deque.pollFirst();
+                f[i] = f[deque.peekFirst()] + w[i];
+                while (!deque.isEmpty() && f[i] <= f[deque.peekLast()]) deque.pollLast();
+                deque.addLast(i);
+            }
+            if (n - m + 1 > deque.peekFirst()) deque.pollFirst();
+            out.println(f[deque.peekFirst()]);
+        }
+
+        //其他题目 lc.1687 rating 2610  https://leetcode.cn/problems/delivering-boxes-from-storage-to-ports/
     }
 
     /**
