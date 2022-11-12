@@ -6,9 +6,12 @@ import java.util.*;
  * 字符串算法
  */
 public class StringAlg {
-    //给定一个表达式，其中运算符仅包含 +,-,*,/（加 减 乘 整除），
-    // 可能包含括号，请你求出表达式的最终值。
-    //详细条件见 https://www.acwing.com/problem/content/3305/
+    /**
+     * 表达式计算
+     * 给定一个表达式，其中运算符仅包含 +,-,*,/（加 减 乘 整除）
+     * 可能包含括号，请你求出表达式的最终值。
+     * 详细条件见 https://www.acwing.com/problem/content/3305/
+     */
     static int eval(String expression) {
         HashMap<Character, Integer> priority = new HashMap<>();
         priority.put('+', 1);
@@ -161,5 +164,10 @@ public class StringAlg {
     int zfunc() {
         return 0;//todo
     }
+
+    /**
+     * AC自动机 todo
+     */
+
 
 }
