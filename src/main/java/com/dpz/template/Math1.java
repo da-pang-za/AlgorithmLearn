@@ -316,77 +316,81 @@ public class Math1 {
     /**
      * 组合数
      */
-    //DP 求组合数   O(N^2)
-    static int[][] comb = new int[2001][2001];
+    static class COMBINE {
+        //DP 求组合数   O(N^2)
+        static int[][] comb = new int[2001][2001];
 
-    static void dpComb() {
-        comb[0][0] = 1;
-        for (int i = 1; i <= 2000; i++) {
-            comb[i][0] = 1;
-            for (int j = 1; j <= i; j++) {
-                comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % mod;//是否选当前数
+        static void dpComb() {
+            comb[0][0] = 1;
+            for (int i = 1; i <= 2000; i++) {
+                comb[i][0] = 1;
+                for (int j = 1; j <= i; j++) {
+                    comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % mod;//是否选当前数
+                }
             }
         }
-    }
 
-    //递推求阶乘
-    static long[] fac(int n, long p) {
-        long[] f = new long[n + 1];
-        f[0] = f[1] = 1;
-        for (int i = 2; i <= n; i++) {
-            f[i] = f[i - 1] * i % p;
+        //递推求阶乘
+        long[] fac(int n, long p) {
+            long[] f = new long[n + 1];
+            f[0] = f[1] = 1;
+            for (int i = 2; i <= n; i++) {
+                f[i] = f[i - 1] * i % p;
+            }
+            return f;
         }
-        return f;
-    }
 
-    //facR  利用逆元求阶乘的倒数 复杂度O(NlogP)
-    static long[] facR(int n, long p) {
-        long[] fr = new long[n + 1];
-        fr[0] = fr[1] = 1;
-        for (int i = 2; i <= n; i++) {
-            fr[i] = fr[i - 1] * pow(i, p - 2, p) % p;
+        //facR  利用逆元求阶乘的倒数 复杂度O(NlogP)
+        long[] facR(int n, long p) {
+            long[] fr = new long[n + 1];
+            fr[0] = fr[1] = 1;
+            for (int i = 2; i <= n; i++) {
+                fr[i] = fr[i - 1] * pow(i, p - 2, p) % p;
+            }
+            return fr;
         }
-        return fr;
+
+        int N = 10000;
+        long[] fac = fac(N, mod);
+        long[] facR = facR(N, mod);
+
+        //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
+        long combine(int a, int b, int p) {
+            //先预处理出阶乘   然后 每次 常数时间求解
+            return (fac[a] * facR[b] % p) * facR[a - b] % p;
+        }
+
+        /**
+         * 卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
+         * C(a/p ,b/p) 这部分可以递归求解
+         * https://www.acwing.com/problem/content/889/
+         * 1≤b≤a≤10^18    1≤p≤105  todo
+         */
+
+
+        /**
+         * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果  递推法
+         * 先用质因数分解预处理 todo
+         * 把组合数转化为质因子相乘的形式   然后用高精度乘法算
+         * 分子的质因子倍数-分母的质因子倍数
+         */
+
+
+        /**
+         * 卡特兰数
+         * <p>
+         * 括号序列问题https://www.acwing.com/problem/content/891/
+         * 出栈序列问题https://www.acwing.com/video/66/
+         * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
+         * 的路径方案数（只能向下或向右走）
+         * 转化为不经过y=x+1这条直线(红线)的路径数
+         * 每个经过红线到(n,n)的方案 都对应 一条到(n-1,n+1)的路径
+         * 所以答案为C(2n,n)-C(2n,n-1)
+         */
+        long Catalan(int n) {
+            int p = mod;
+            return (combine(2 * n, n, p) - combine(2 * n, n - 1, p) + p) % p;
+        }
     }
 
-    static long[] fac = fac(10000, mod);
-    static long[] facR = facR(10000, mod);
-
-    //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
-    static long combine(int a, int b, int p) {
-        //先预处理出阶乘   然后 每次 常数时间求解
-        return (fac[a] * facR[b] % p) * facR[a - b] % p;
-    }
-
-    /**
-     * 卢卡斯定理求组合数   C(a,b) 同余 C(a mod p , b mod p) * C(a/p ,b/p)    mod  p
-     * C(a/p ,b/p) 这部分可以递归求解
-     * https://www.acwing.com/problem/content/889/
-     * 1≤b≤a≤10^18    1≤p≤105  todo
-     */
-
-
-    /**
-     * 高精度求组合数   1≤b≤a≤5000    高精度得到实际结果  递推法
-     * 先用质因数分解预处理 todo
-     * 把组合数转化为质因子相乘的形式   然后用高精度乘法算
-     * 分子的质因子倍数-分母的质因子倍数
-     */
-
-
-    /**
-     * 卡特兰数
-     * <p>
-     * 括号序列问题https://www.acwing.com/problem/content/891/
-     * 出栈序列问题https://www.acwing.com/video/66/
-     * 从(0,0)走到(n,n) 且 路径上任意位置 (x,y) 都满足 x>=y  (在y=x直线之下)
-     * 的路径方案数（只能向下或向右走）
-     * 转化为不经过y=x+1这条直线(红线)的路径数
-     * 每个经过红线到(n,n)的方案 都对应 一条到(n-1,n+1)的路径
-     * 所以答案为C(2n,n)-C(2n,n-1)
-     */
-    static long Catalan(int n) {
-        int p = mod;
-        return (combine(2 * n, n, p) - combine(2 * n, n - 1, p) + p) % p;
-    }
 }
