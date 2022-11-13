@@ -494,19 +494,41 @@ public class API {
         return a;
     }
 
-    //单调栈  左边第一个小于当前位置的数
-    //note 抄板子的时候注意是要值还是要下标  模板里是值
-    int[] MonoStack(int[] nums, int n) {
+    /**
+     * 单调栈  左边第一个小于当前位置的数的位置
+     * https://www.acwing.com/problem/content/832/
+     * note 抄板子的时候注意是要值还是要下标  模板里是下标
+     * 2种写法
+     * 扩展:下下个更大元素 单调栈写法2+pq 或 双单调栈(数组实现)
+     * 下下个更大元素:https://leetcode.cn/problems/next-greater-element-iv/solution/by-newhar-k5l7/
+     */
+    //写法1
+    int[] MonoStack1(int[] nums, int n) {
         Deque<Integer> dq = new ArrayDeque<>();
         int[] ans = new int[n];
         //维护递增栈
         for (int i = 0; i < n; i++) {
             int v = nums[i];
-            while (!dq.isEmpty() && dq.peekLast() >= v) dq.pollLast();
+            while (!dq.isEmpty() && nums[dq.peekLast()] >= v) dq.pollLast();
             if (dq.isEmpty()) ans[i] = -1;
             else ans[i] = dq.peekLast();
-            dq.addLast(v);
+            dq.addLast(i);
         }
+        return ans;
+    }
+
+    //写法2
+    int[] MonoStack2(int[] nums, int n) {
+        Deque<Integer> dq = new ArrayDeque<>();
+        int[] ans = new int[n];
+        for (int i = n - 1; i >= 0; i--) {
+            int v = nums[i];
+            while (!dq.isEmpty() && nums[dq.peekLast()] > v) {
+                ans[dq.pollLast()] = i;
+            }
+            dq.addLast(i);
+        }
+        while (!dq.isEmpty()) ans[dq.pollLast()] = -1;
         return ans;
     }
 
