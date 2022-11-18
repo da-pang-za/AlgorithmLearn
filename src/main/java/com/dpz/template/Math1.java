@@ -211,12 +211,13 @@ public class Math1 {
          * https://www.acwing.com/problem/content/879/
          * 求 ax+by = gcd(a,b) 的解 (x,y)
          * <p>
-         * 裴蜀定理
-         * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
+         * 裴蜀定理  https://baike.baidu.com/item/%E8%A3%B4%E8%9C%80%E5%AE%9A%E7%90%86/5186593
+         * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)      //可推广到多个数
          * gcd(a,b)是a,b能构造出的最小正整数
          * 方程ax+by=c 有解的充要条件是c为gcd(a,b)的倍数
+         * </p>
          * 利用扩展欧几里得算法  构造(x,y)
-         * 公式推导：https://www.acwing.com/solution/content/1393/
+         * 公式推导：https://www.acwing.com/solution/content;/1393/
          */
         static long exGcd(long a, long b, long[] xy) {
             if (b == 0) {
