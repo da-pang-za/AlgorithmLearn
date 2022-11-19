@@ -97,6 +97,8 @@ public class Math1 {
         /**
          * 欧拉函数   [1,N]中和N互质的数的个数
          * 需要求出所有的质因子 公式见：https://www.acwing.com/problem/content/875/
+         *
+         * todo 欧拉定理    欧拉数&同余
          */
         static int EulerFun(int n) {
             var list = primeFact(n);
