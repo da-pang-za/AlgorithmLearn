@@ -219,6 +219,7 @@ public class Math1 {
          * 利用扩展欧几里得算法  构造(x,y)
          * 公式推导：https://www.acwing.com/solution/content;/1393/
          * 求 ax+by = gcd(a,b) 的系数   先求 bx + (a%b)y = gcd(a,b) = gcd(b,a%b)  再展开即可
+         * 通解ax + by = d 通解  x= x0 + k (b/d) y = y0 - k (a/d)
          */
         static long exGcd(long a, long b, long[] xy) {
             if (b == 0) {
