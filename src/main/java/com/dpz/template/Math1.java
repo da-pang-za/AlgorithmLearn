@@ -212,7 +212,11 @@ public class Math1 {
             return ans;
         }
 
-        //求最大公约数   欧几里得算法     辗转相除法
+        /**
+         * 求最大公约数   欧几里得算法     辗转相除法
+         * 正确性&复杂度证明:https://oi-wiki.org/math/number-theory/gcd/
+         */
+
         static long gcd(long a, long b) {
             if (b == 0) return a;
             return gcd(b, a % b);
@@ -231,7 +235,10 @@ public class Math1 {
          * 利用扩展欧几里得算法  构造(x,y)
          * 公式推导：https://www.acwing.com/solution/content;/1393/
          * 求 ax+by = gcd(a,b) 的系数   先求 bx + (a%b)y = gcd(a,b) = gcd(b,a%b)  再展开即可
-         * 通解ax + by = d 通解  x= x0 + k (b/d) y = y0 - k (a/d)
+         * 通解ax + by = g 通解  x= x0 + k (b/g) y = y0 - k (a/g)  证明 todo
+         * note 如果右侧 ax + by = t*g  通解只有x需要乘倍数 不乘倍数带入后发现仍然是解
+         * todo x0 y0的范围是多少 为什么不会爆long
+         * todo 扩展欧几里得是否要求ab都是正整数 还是任意整数
          */
         static long exGcd(long a, long b, long[] xy) {
             if (b == 0) {
