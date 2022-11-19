@@ -16,7 +16,19 @@ public class Math1 {
         while (k != 0) {
             if ((k & 1) != 0) res = res * x % p;
             x = x * x % p;
+//            x = mul(x, x, p);//龟速乘
             k >>= 1;
+        }
+        return res;
+    }
+
+    //龟速乘 防止快速幂中间值爆long
+    static long mul(long a, long b, long c) {
+        long res = 0;
+        while (b != 0) {
+            if ((b & 1) == 1) res = (res + a) % c;
+            a = (a + a) % c;
+            b >>= 1;
         }
         return res;
     }
