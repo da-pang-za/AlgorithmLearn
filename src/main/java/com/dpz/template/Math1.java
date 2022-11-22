@@ -144,7 +144,10 @@ public class Math1 {
     }
 
 
-    //约数相关
+    /**
+     * 约数 & 同余
+     * 同余知识点：https://zhuanlan.zhihu.com/p/96666921
+     */
     static class Divisor {
         /**
          * 试除法求约数 O(√n) 推论:约数个数不超过2√n
@@ -255,7 +258,10 @@ public class Math1 {
             return ans;
         }
 
+
     }
+
+
 
 
     //==============================博弈论 game===========================
