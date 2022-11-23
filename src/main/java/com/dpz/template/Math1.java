@@ -304,7 +304,11 @@ public class Math1 {
 
 
     //==============================排列组合===========================
-    //全排列  按字典序
+
+    /**
+     * 全排列  按字典序
+     */
+
     static class FullArray {
         static int n;
 
@@ -335,10 +339,13 @@ public class Math1 {
         }
     }
 
-    //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
-    //https://www.acwing.com/activity/content/problem/content/945/
-    //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
-    //因此b的逆元 b-1 = b^(p-2)
+    /**
+     *逆元(b mod p 的逆元  p是质数)     用乘法代替除法
+     * https://www.acwing.com/activity/content/problem/content/945/
+     * 利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
+     * 因此b的逆元 b-1 = b^(p-2)
+     *
+     */
     static int inverse(int b, int p) {
         return (int) pow(b, p - 2, p);
     }
@@ -422,5 +429,9 @@ public class Math1 {
             return (combine(2 * n, n, p) - combine(2 * n, n - 1, p) + p) % p;
         }
     }
+
+    //==============================二进制==================================
+
+    //  todo double何时会有精度问题
 
 }
