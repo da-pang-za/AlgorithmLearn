@@ -424,6 +424,7 @@ public class DP {
 
     /**
      * 斜率优化DP
+     * 特征:转移方程出现 fi = ci + min(yj+ ki*xj) 的形式
      * 任务安排系列:
      * 任务安排1(费用提前计算思想):https://www.acwing.com/solution/content/68062/
      * 任务安排2(斜率优化详解):https://www.acwing.com/solution/content/35208/
@@ -438,7 +439,7 @@ public class DP {
                 sc[i] = sc[i - 1] + ni();
             }
             // fi=sti×sci+S×scn+min(fj−S×scj−sti×scj)
-            // fj - (S+sti)scj = b    k = S+sti
+            // fj - (S+sti)scj = b    k = S+sti   i不变时,斜率是固定的,找到过哪个点截距最小
             // i ↑  任务安排2 k ↑  任务安排3 k 不一定
             // j ↑  scj ↑
             // 任务安排2  队头小于等于k的 可以去掉  任务安排3 用二分找到答案
