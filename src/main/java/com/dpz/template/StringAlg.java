@@ -266,9 +266,10 @@ public class StringAlg {
     }
 
     /**
-     * AC自动机 多个字符串 是否是 某个字符串的子串
+     * AC自动机 k个字符串Len 是否是 某个字符串N的子串 复杂度O(N+k*len)
      * 对Trie建立next数组 每个点的next存的是「以当前点为结尾的后缀」 和 「Trie的所有前缀」
      * 的最长(非平凡)公共前后缀对应的前缀的尾端点
+     *
      * 题解 https://www.acwing.com/solution/content/18275/
      * <p>
      * 模板题 https://www.acwing.com/problem/content/1284/
