@@ -393,6 +393,7 @@ public class Math1 {
 
         //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
         long combine(int a, int b, int p) {
+            if (a < b) return 0;
             //先预处理出阶乘   然后 每次 常数时间求解
             return (fac[a] * facR[b] % p) * facR[a - b] % p;
         }
