@@ -274,6 +274,7 @@ public class StringAlg {
      * 题解 https://www.acwing.com/solution/content/18275/
      * <p>
      * 模板题 https://www.acwing.com/problem/content/1284/
+     * cf:https://codeforces.com/contest/963/problem/D
      */
     static class AC_DFA {
         int N = 500010;
