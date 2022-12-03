@@ -101,7 +101,7 @@ public class StringAlg {
             cnt = new int[size];//字符串个数
         }
 
-        void insert(String s) {
+        int insert(String s) {
             int p = 0;
             for (int i = 0; i < s.length(); i++) {
                 int u = s.charAt(i) - 'a';
@@ -109,6 +109,7 @@ public class StringAlg {
                 p = tr[p][u];
             }
             cnt[p]++;
+            return p;
         }
     }
 
@@ -269,19 +270,22 @@ public class StringAlg {
      * AC自动机 k个字符串Len 是否是 某个字符串N的子串 复杂度O(N+k*len)
      * 对Trie建立next数组 每个点的next存的是「以当前点为结尾的后缀」 和 「Trie的所有前缀」
      * 的最长(非平凡)公共前后缀对应的前缀的尾端点
-     *
+     * <p>
      * 题解 https://www.acwing.com/solution/content/18275/
      * <p>
      * 模板题 https://www.acwing.com/problem/content/1284/
      */
     static class AC_DFA {
-        int N = 10010, S = 50;
-        Trie1 trie = new Trie1(N * S);
-        int[] next = new int[N * S];
-        boolean[] vis = new boolean[N * S];
+        int N = 500010;
+        Trie1 trie = new Trie1(N);
+        int[] next = new int[N];
+        int[] last = new int[N];//当前路径 上一个cnt>0的节点
+        //        boolean[] vis = new boolean[N];//如果只需要判断子串是否出现，不需要找出位置。避免重复访问
+        int[] sid = new int[N];//节点对应的单词编号,如果有重复单词会覆盖
+        int n;//AC自动机单词个数
 
         AC_DFA(List<String> ss) {
-            for (String s : ss) trie.insert(s);
+            for (String s : ss) sid[trie.insert(s)] = n++;
             build();
         }
 
@@ -292,9 +296,9 @@ public class StringAlg {
             for (int i = 0; i < 26; i++)
                 if (trie.tr[0][i] > 0) deque.addLast(trie.tr[0][i]);
             while (!deque.isEmpty()) {
-                int t = deque.pollFirst();//已匹配的
+                int u = deque.pollFirst();//已匹配的
                 for (int i = 0; i < 26; i++) {
-                    int p = trie.tr[t][i];
+                    int v = trie.tr[u][i];
                     //朴素写法
 //                    if (p == 0) continue;
 //                    int j = next[t];
@@ -303,38 +307,50 @@ public class StringAlg {
 //                    next[p] = j;
 
                     //优化写法
-                    if (p == 0) {
-                        trie.tr[t][i] = trie.tr[next[t]][i];
+                    if (v == 0) {
+                        trie.tr[u][i] = trie.tr[next[u]][i];//简历Trie图 匹配的时候间接使用了next
                         continue;
-                    } else next[p] = trie.tr[next[t]][i];
+                    } else {
+                        next[v] = trie.tr[next[u]][i];
+                        last[v] = trie.cnt[next[v]] > 0 ? next[v] : last[next[v]];
+                    }
 
-                    deque.addLast(p);//长度为len的位置计算之前,所有的长度<len的都已经计算过了
+                    deque.addLast(v);//长度为len的位置计算之前,所有的长度<len的都已经计算过了
                 }
             }
         }
 
-        int getAns(String s) {
-            int ans = 0;
+        List<List<Integer>> getEndPos(String s) {
+            List<List<Integer>> ans = new ArrayList<>();
+            for (int i = 0; i < n; i++) ans.add(new ArrayList<>());
             int j = 0;
-            for (char c : s.toCharArray()) {
-                int t = c - 'a';
-                //朴素写法
-//                while (j > 0 && trie.tr[j][t] == 0) j = next[j];
-//                if (trie.tr[j][t] > 0) j = trie.tr[j][t];
+            for (int i = 0; i < s.length(); i++) {
+                int t = s.charAt(i) - 'a';
+                /*
+                朴素写法
+                while (j > 0 && trie.tr[j][t] == 0) j = next[j];
+                if (trie.tr[j][t] > 0) j = trie.tr[j][t];
+                **/
+
                 //优化写法
                 j = trie.tr[j][t];
+                int p = trie.cnt[j] > 0 ? j : last[j];
+                /*
+                 while (!vis[p] && p > 0) {
+                 vis[p] = true;//记录某个单词有没有出现，出现过就不用再往回跳了
+                 ans += trie.cnt[p];
+                 trie.cnt[p] = 0;
+                 p = next[p];
+                 }
+                 **/
 
-                int p = j;
-                while (!vis[p] && p > 0) {
-                    vis[p] = true;//记录某个单词有没有出现，出现过就不用再往回跳了
-                    ans += trie.cnt[p];
-                    trie.cnt[p] = 0;
-                    p = next[p];
+                while (p > 0) {
+                    ans.get(sid[p]).add(i);
+                    p = last[p];
                 }
             }
             return ans;
         }
-
     }
 
     /**
