@@ -309,7 +309,7 @@ public class StringAlg {
 
                     //优化写法
                     if (v == 0) {
-                        trie.tr[u][i] = trie.tr[next[u]][i];//简历Trie图 匹配的时候间接使用了next
+                        trie.tr[u][i] = trie.tr[next[u]][i];//建立Trie图 匹配的时候间接使用了next
                         continue;
                     } else {
                         next[v] = trie.tr[next[u]][i];
