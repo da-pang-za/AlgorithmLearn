@@ -529,9 +529,12 @@ public class DP {
      * 状态机DP
      */
     static class DFA_DP {
-        //结合KMP的DP  todo
+        //结合KMP的DP
         //设计密码:https://www.acwing.com/activity/content/problem/content/1290/
         //加强版：https://leetcode.cn/problems/find-all-good-strings/
+
+        //AC自动机dp:https://www.acwing.com/problem/content/1055/
+        //题解：https://www.acwing.com/solution/content/56098/
 
 
         //编辑距离
