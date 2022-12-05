@@ -107,8 +107,31 @@ public class DP {
          * 多重背包——单调队列优化 复杂度O(N*V) todo
          * https://www.acwing.com/solution/content/6500/
          * 题解：https://www.acwing.com/solution/content/53507/
-         *
          */
+        static void monoQueueMultiBp() {
+//            int main()
+//            {
+//                cin >> n >> m;
+//                for (int i = 1; i <= n; ++ i) cin >> v[i] >> w[i] >> s[i];
+//                for (int i = 1; i <= n; ++ i)
+//                {
+//                    for (int r = 0; r < v[i]; ++ r)
+//                    {
+//                        int hh = 0, tt = -1;
+//                        for (int j = r; j <= m; j += v[i])
+//                        {
+//                            while (hh <= tt && j - q[hh] > s[i] * v[i]) hh ++ ;
+//                            //这里比较难理解 每次增加j max(xx,xx) 内部保留的项 都加了w !
+//                            while (hh <= tt && f[i - 1][q[tt]] + (j - q[tt]) / v[i] * w[i] <= f[i - 1][j]) -- tt;
+//                            q[ ++ tt] = j;
+//                            f[i][j] = f[i - 1][q[hh]] + (j - q[hh]) / v[i] * w[i];
+//                        }
+//                    }
+//                }
+//                cout << f[n][m] << endl;
+//                return 0;
+//            }
+        }
 
 
         /**
