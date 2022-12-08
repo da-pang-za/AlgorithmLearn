@@ -16,7 +16,19 @@ public class Math1 {
         while (k != 0) {
             if ((k & 1) != 0) res = res * x % p;
             x = x * x % p;
+//            x = mul(x, x, p);//龟速乘
             k >>= 1;
+        }
+        return res;
+    }
+
+    //龟速乘 防止快速幂中间值爆long
+    static long mul(long a, long b, long c) {
+        long res = 0;
+        while (b != 0) {
+            if ((b & 1) == 1) res = (res + a) % c;
+            a = (a + a) % c;
+            b >>= 1;
         }
         return res;
     }
@@ -85,6 +97,8 @@ public class Math1 {
         /**
          * 欧拉函数   [1,N]中和N互质的数的个数
          * 需要求出所有的质因子 公式见：https://www.acwing.com/problem/content/875/
+         *
+         * todo 欧拉定理    欧拉数&同余
          */
         static int EulerFun(int n) {
             var list = primeFact(n);
@@ -130,7 +144,10 @@ public class Math1 {
     }
 
 
-    //约数相关
+    /**
+     * 约数 & 同余
+     * 同余知识点：https://zhuanlan.zhihu.com/p/96666921
+     */
     static class Divisor {
         /**
          * 试除法求约数 O(√n) 推论:约数个数不超过2√n
@@ -200,7 +217,11 @@ public class Math1 {
             return ans;
         }
 
-        //求最大公约数   欧几里得算法     辗转相除法
+        /**
+         * 求最大公约数   欧几里得算法     辗转相除法
+         * 正确性&复杂度证明:https://oi-wiki.org/math/number-theory/gcd/
+         */
+
         static long gcd(long a, long b) {
             if (b == 0) return a;
             return gcd(b, a % b);
@@ -211,12 +232,18 @@ public class Math1 {
          * https://www.acwing.com/problem/content/879/
          * 求 ax+by = gcd(a,b) 的解 (x,y)
          * <p>
-         * 裴蜀定理
-         * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
+         * 裴蜀定理  https://baike.baidu.com/item/%E8%A3%B4%E8%9C%80%E5%AE%9A%E7%90%86/5186593
+         * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)      //可推广到多个数
          * gcd(a,b)是a,b能构造出的最小正整数
          * 方程ax+by=c 有解的充要条件是c为gcd(a,b)的倍数   note 如果右侧不是gcd的倍数说明无解(充要条件)
+         * </p>
          * 利用扩展欧几里得算法  构造(x,y)
-         * 公式推导：https://www.acwing.com/solution/content/1393/
+         * 公式推导：https://www.acwing.com/solution/content;/1393/
+         * 求 ax+by = gcd(a,b) 的系数   先求 bx + (a%b)y = gcd(a,b) = gcd(b,a%b)  再展开即可
+         * 通解ax + by = g 通解  x= x0 + k (b/g) y = y0 - k (a/g)  证明 todo
+         * note 如果右侧 ax + by = t*g  通解只有x需要乘倍数 不乘倍数带入后发现仍然是解
+         * todo x0 y0的范围是多少 为什么不会爆long
+         * todo 扩展欧几里得是否要求ab都是正整数 还是任意整数
          */
         static long exGcd(long a, long b, long[] xy) {
             if (b == 0) {
@@ -231,7 +258,10 @@ public class Math1 {
             return ans;
         }
 
+
     }
+
+
 
 
     //==============================博弈论 game===========================
@@ -274,7 +304,11 @@ public class Math1 {
 
 
     //==============================排列组合===========================
-    //全排列  按字典序
+
+    /**
+     * 全排列  按字典序
+     */
+
     static class FullArray {
         static int n;
 
@@ -305,10 +339,13 @@ public class Math1 {
         }
     }
 
-    //逆元(b mod p 的逆元  p是质数)     用乘法代替除法
-    //https://www.acwing.com/activity/content/problem/content/945/
-    //利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
-    //因此b的逆元 b-1 = b^(p-2)
+    /**
+     *逆元(b mod p 的逆元  p是质数)     用乘法代替除法
+     * https://www.acwing.com/activity/content/problem/content/945/
+     * 利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
+     * 因此b的逆元 b-1 = b^(p-2)
+     *
+     */
     static int inverse(int b, int p) {
         return (int) pow(b, p - 2, p);
     }
@@ -356,6 +393,7 @@ public class Math1 {
 
         //公式法求组合数 O(NlogP)  结合逆元  求  C(a,b) mod p      a!/(b! (a-b)!)   1≤b≤a≤10^5
         long combine(int a, int b, int p) {
+            if (a < b) return 0;
             //先预处理出阶乘   然后 每次 常数时间求解
             return (fac[a] * facR[b] % p) * facR[a - b] % p;
         }
@@ -392,5 +430,9 @@ public class Math1 {
             return (combine(2 * n, n, p) - combine(2 * n, n - 1, p) + p) % p;
         }
     }
+
+    //==============================二进制==================================
+
+    //  todo double何时会有精度问题
 
 }

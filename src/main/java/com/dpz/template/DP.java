@@ -1,6 +1,7 @@
 package com.dpz.template;
 
 import java.util.*;
+
 import static com.dpz.template.Const.*;
 
 public class DP {
@@ -101,10 +102,37 @@ public class DP {
                     f[j] = Math.max(f[j], f[j - v[i]] + w[i]);
             return f[m];
         }
+
         /**
          * 多重背包——单调队列优化 复杂度O(N*V) todo
          * https://www.acwing.com/solution/content/6500/
+         * 题解：https://www.acwing.com/solution/content/53507/
          */
+        static void monoQueueMultiBp() {
+//            int main()
+//            {
+//                cin >> n >> m;
+//                for (int i = 1; i <= n; ++ i) cin >> v[i] >> w[i] >> s[i];
+//                for (int i = 1; i <= n; ++ i)
+//                {
+//                    for (int r = 0; r < v[i]; ++ r)
+//                    {
+//                        int hh = 0, tt = -1;
+//                        for (int j = r; j <= m; j += v[i])
+//                        {
+//                            while (hh <= tt && j - q[hh] > s[i] * v[i]) hh ++ ;
+//                            //这里比较难理解 每次增加j max(xx,xx) 内部保留的项 都加了w !
+//                            while (hh <= tt && f[i - 1][q[tt]] + (j - q[tt]) / v[i] * w[i] <= f[i - 1][j]) -- tt;
+//                            q[ ++ tt] = j;
+//                            f[i][j] = f[i - 1][q[hh]] + (j - q[hh]) / v[i] * w[i];
+//                        }
+//                    }
+//                }
+//                cout << f[n][m] << endl;
+//                return 0;
+//            }
+        }
+
 
         /**
          * 分组背包 背个物品属于一个组  每个组最多只能选择一个物品
@@ -170,6 +198,11 @@ public class DP {
             }
             return f[n][m];
         }
+
+        /**
+         * 有依赖的背包问题  树上背包 todo
+         * https://www.acwing.com/problem/content/10/
+         */
     }
 
     //区间DP
@@ -278,12 +311,13 @@ public class DP {
                 System.out.println(dp[N][0]);
             }
         }
+
         /**
          * 集合类问题
          * 重复覆盖 从当前到之后的
-         * 精确覆盖 从之前的到当前的
+         * 精确覆盖 从之前的到当前的  todo
          */
-        static class Set{
+        static class Set {
             /**
              * 重复覆盖问题 愤怒的小鸟
              * https://www.acwing.com/problem/content/526/
@@ -421,11 +455,50 @@ public class DP {
     }
 
     /**
-     * 斜率优化DP todo
+     * 斜率优化DP
+     * 特征:转移方程出现 fi = ci + min(yj+ ki*xj) 的形式
+     * 任务安排系列:
+     * 任务安排1(费用提前计算思想):https://www.acwing.com/solution/content/68062/
+     * 任务安排2(斜率优化详解):https://www.acwing.com/solution/content/35208/
+     * 任务安排3(标准模板题 结合二分):https://www.acwing.com/problem/content/description/304/
      */
-    //费用提前计算思想：https://www.acwing.com/solution/content/68062/
     static class SlopeOptDP {
+        void go() {
+            int n = ni(), S = ni();
+            long[] st = new long[n + 1], sc = new long[n + 1];
+            for (int i = 1; i <= n; i++) {
+                st[i] = st[i - 1] + ni();
+                sc[i] = sc[i - 1] + ni();
+            }
+            // fi=sti×sci+S×scn+min(fj−S×scj−sti×scj)
+            // fj - (S+sti)scj = b    k = S+sti   i不变时,斜率是固定的,找到过哪个点截距最小
+            // i ↑  任务安排2 k ↑  任务安排3 k 不一定
+            // j ↑  scj ↑
+            // 任务安排2  队头小于等于k的 可以去掉  任务安排3 用二分找到答案
+            // 维护新加入的斜率 作为下凸壳 如果斜率小于等于当前队尾的斜率则替换
 
+            int[] q = new int[n + 1];
+            int hh = 0, tt = 0;
+            long[] f = new long[n + 1];
+            f[0] = 0;//sc0=0 f0=0
+            for (int i = 1; i <= n; i++) {
+                long k = S + st[i];
+                int l = 0, r = tt;
+                while (l < r) {
+                    int mid = l + r + 1 >> 1;
+                    if (f[q[mid]] - f[q[mid - 1]] <= k * (sc[q[mid]] - sc[q[mid - 1]])) l = mid;
+                    else r = mid - 1;
+                }
+//            out.println(q[l]);
+                f[i] = st[i] * sc[i] + S * sc[n] + (f[q[l]] - S * sc[q[l]] - st[i] * sc[q[l]]);
+                //这里有爆long的问题  用double
+                while (tt > hh && (double) (f[q[tt]] - f[q[tt - 1]]) * (sc[i] - sc[q[tt]])
+                        >= (double) (f[i] - f[q[tt]]) * (sc[q[tt]] - sc[q[tt - 1]]))
+                    tt--;
+                q[++tt] = i;
+            }
+            out.println(f[n]);
+        }
     }
 
     /**
@@ -461,7 +534,7 @@ public class DP {
          * 烽火传递 所有长度为k的区间范围内至少选一个 求最小和
          * https://www.acwing.com/problem/content/1091/
          */
-        void AcWing1091(){
+        void AcWing1091() {
             //f[i]= j in [i-m,i-1] min(f[j])+w[i]
             //ans=min(f[j])  [n-m+1,n]
             int n = ni(), m = ni();
@@ -488,9 +561,12 @@ public class DP {
      * 状态机DP
      */
     static class DFA_DP {
-        //结合KMP的DP  todo
+        //结合KMP的DP
         //设计密码:https://www.acwing.com/activity/content/problem/content/1290/
         //加强版：https://leetcode.cn/problems/find-all-good-strings/
+
+        //AC自动机dp:https://www.acwing.com/problem/content/1055/
+        //题解：https://www.acwing.com/solution/content/56098/
 
 
         //编辑距离
@@ -512,13 +588,13 @@ public class DP {
     }
 
     /**
-     *
+     * 前缀和优化DP、
      */
-    static class Other{
+    static class Other {
         /**
          * 前缀和优化DP  https://www.acwing.com/problem/content/description/274/
          */
-        static class SumOptDP{
+        static class SumOptDP {
             void go() {
                 int n = ni();
                 int[] a = new int[n + 1], b = new int[n + 1];
