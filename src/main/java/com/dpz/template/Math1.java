@@ -214,7 +214,7 @@ public class Math1 {
          * 裴蜀定理
          * 对于任意正整数a,b   一定存在整数x,y 使得 ax+by=gcd(a,b)
          * gcd(a,b)是a,b能构造出的最小正整数
-         * 方程ax+by=c 有解的充要条件是c为gcd(a,b)的倍数
+         * 方程ax+by=c 有解的充要条件是c为gcd(a,b)的倍数   note 如果右侧不是gcd的倍数说明无解(充要条件)
          * 利用扩展欧几里得算法  构造(x,y)
          * 公式推导：https://www.acwing.com/solution/content/1393/
          */
