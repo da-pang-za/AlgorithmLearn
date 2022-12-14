@@ -258,6 +258,11 @@ public class Math1 {
             return ans;
         }
 
+        /**
+         * 中国剩余定理 todo 求线性同余方程组的解 可求最小正整数解
+         * https://www.acwing.com/solution/content/83637/
+         * 模板题:https://www.acwing.com/problem/content/description/1300/
+         */
 
     }
 
