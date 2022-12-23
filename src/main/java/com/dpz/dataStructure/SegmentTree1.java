@@ -41,12 +41,11 @@ class SegmentTree1 {
      * @param modifyLR  区间每个位置增量/赋值d,区间[l,r],求区间整体增量、赋值
      * @param MODE      累加 or 赋值
      */
-    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MD modifyLR, int MODE, int BASE) {
+    public SegmentTree1(int[] nums, long start, long end, A add, M merge, MD modifyLR, int MODE) {
         this.mergeFunc = merge;
         this.modifyFunc = modifyLR;
         this.addFunc = add;
         this.MODE = MODE;
-        this.BASE = BASE;//note 合并前ans的初始值不一定是0  例如求最小
         this.nums = nums;
         if (this.nums != null) {
             start = 1;
@@ -62,11 +61,10 @@ class SegmentTree1 {
         if (l <= nl && nr <= r) return p.val;
 
         push_down(p);
-        long ans = BASE;
         long mid = (nl + nr) >> 1;
-        if (mid >= l) ans = mergeFunc.merge(ans, query(l, r, left(p)));
-        if (mid < r) ans = mergeFunc.merge(ans, query(l, r, right(p)));
-        return ans;
+        if (mid >= r) return query(l, r, left(p));
+        if (mid < l) return query(l, r, right(p));
+        return mergeFunc.merge(query(l, r, left(p)), query(l, r, right(p)));
     }
 
     private void update(long l, long r, long d, Node p) {
