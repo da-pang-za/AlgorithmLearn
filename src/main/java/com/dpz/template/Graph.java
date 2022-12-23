@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 public class Graph {
-    //========================建图  note  没有考虑重边
+    //========================建图 邻接表  note  没有考虑重边
     //建图 1 list 不带权   注意！！！  这里是无向图！！！
     static List<Integer>[] build1(int n, int[][] edges) {
         List<Integer>[]
