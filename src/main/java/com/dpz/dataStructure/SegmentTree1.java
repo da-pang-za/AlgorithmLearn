@@ -2,7 +2,8 @@ package com.dpz.dataStructure;
 
 /**
  * 线段树-动态开点
- * 例题：https://leetcode-cn.com/problems/my-calendar-iii/
+ * 例题：https://www.acwing.com/problem/content/244/
+ *
  */
 public
 class SegmentTree1 {
