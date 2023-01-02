@@ -97,7 +97,7 @@ public class Math1 {
         /**
          * 欧拉函数   [1,N]中和N互质的数的个数
          * 需要求出所有的质因子 公式见：https://www.acwing.com/problem/content/875/
-         *
+         * <p>
          * todo 欧拉定理    欧拉数&同余
          */
         static int EulerFun(int n) {
@@ -267,8 +267,6 @@ public class Math1 {
     }
 
 
-
-
     //==============================博弈论 game===========================
 
     //Nim游戏  https://www.acwing.com/activity/content/problem/content/961/
@@ -345,11 +343,10 @@ public class Math1 {
     }
 
     /**
-     *逆元(b mod p 的逆元  p是质数)     用乘法代替除法
+     * 逆元(b mod p 的逆元  p是质数)     用乘法代替除法
      * https://www.acwing.com/activity/content/problem/content/945/
      * 利用费马小定理求逆元     b^(p-1) mod p = 1      b * b^(p-2) mod p= 1
      * 因此b的逆元 b-1 = b^(p-2)
-     *
      */
     static int inverse(int b, int p) {
         return (int) pow(b, p - 2, p);
@@ -439,5 +436,38 @@ public class Math1 {
     //==============================二进制==================================
 
     //  todo double何时会有精度问题
+
+
+    /**
+     * 矩阵乘法   A*B
+     */
+    long[][] matrixMul(long[][] A, long[][] B) {
+        assert A[0].length == B.length;
+        long[][] ans = new long[A.length][B[0].length];
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B[0].length; j++) {
+                for (int k = 0; k < B.length; k++) {
+                    ans[i][j] += A[i][k] * B[k][j];
+//                    ans[i][j] %= mod;
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 矩阵快速幂  矩阵行列数要相同
+     */
+    long[][] matrixPow(long[][] A, long k) {
+        int n = A.length;
+        long[][] ans = new long[n][n];
+        for (int i = 0; i < n; i++) ans[i][i] = 1;
+        while (k > 0) {
+            if (k % 2 == 1) ans = matrixMul(ans, A);
+            A = matrixMul(A, A);
+            k /= 2;
+        }
+        return ans;
+    }
 
 }
