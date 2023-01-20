@@ -35,6 +35,7 @@ public class Math1 {
 
     /**
      * 质数
+     * [L,R]区间的质数:https://www.acwing.com/problem/content/198/
      */
     static class Prime {
         //试除法判断质数
