@@ -265,6 +265,11 @@ public class Math1 {
          * 模板题:https://www.acwing.com/problem/content/description/1300/
          */
 
+        /**
+         * 求阶乘每个质因子的次数
+         * 遍历质因子 枚举质因子的幂 求整个阶乘中这个因子的次数
+         * https://www.acwing.com/problem/content/199/
+         */
     }
 
 
