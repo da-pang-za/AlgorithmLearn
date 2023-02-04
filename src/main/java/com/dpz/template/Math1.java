@@ -463,6 +463,10 @@ public class Math1 {
 
     /**
      * 矩阵快速幂  矩阵行列数要相同
+     * 例题：
+     * * 佳佳的斐波那契 https://www.acwing.com/problem/content/1306/
+     * * 斐波那契前 n 项和 https://www.acwing.com/problem/content/1305/
+     * * 设计密码升级版 KMP+矩阵快速幂 https://www.acwing.com/problem/content/1307/
      */
     long[][] matrixPow(long[][] A, long k) {
         int n = A.length;
