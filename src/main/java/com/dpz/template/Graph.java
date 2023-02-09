@@ -2,17 +2,16 @@ package com.dpz.template;
 
 import com.dpz.dataStructure.UnionFind;
 
-import static com.dpz.template.Const.*;
-
-import java.io.*;
 import java.util.*;
+
+import static com.dpz.template.Const.ni;
+import static com.dpz.template.Const.out;
 
 public class Graph {
     //========================建图 邻接表  note  没有考虑重边
     //建图 1 list 不带权   注意！！！  这里是无向图！！！
     static List<Integer>[] build1(int n, int[][] edges) {
-        List<Integer>[]
-                adj = new ArrayList[n + 1];
+        List<Integer>[] adj = new ArrayList[n + 1];
         for (int i = 0; i <= n; i++) adj[i] = new ArrayList<>();
 
         for (int[] edge : edges) {
