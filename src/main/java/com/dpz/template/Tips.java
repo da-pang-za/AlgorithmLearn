@@ -25,4 +25,10 @@ public class Tips {
         System.out.println(list1);
 
     }
+
+    /**
+     *
+     * todo 四舍五入
+     * todo 截断
+     */
 }
